@@ -1,0 +1,76 @@
+<project name="DEEP" default="dist" basedir=".">
+
+  <property name="src" location="src"/>
+  <property name="build" location="classes"/>
+  <property name="dist"  location="dist"/>
+  <property name="base" value="pt.inescid.l2f"/>
+  <property name="lib.dir" value="lib"/>
+  <property name="main"  value="${base}.DeepExplorer"/>
+	
+  <path id="external.jars">
+  	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+  	
+  <path id="project.classpath">
+  	<pathelement location="${build}"/>
+  	<path refid="external.jars" />
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->  <!--adicionei includeantruntime="false"-->
+    <javac debug="true" srcdir="${src}" destdir="${build}" includeantruntime="false" classpathref="project.classpath"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}"/>
+  		<manifest>
+			<attribute name="Main-Class" value="${main}"/>
+  	    </manifest>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+  
+	<!--<target name="javadoc">
+			<javadoc
+		            excludepackagenames="org.test.supercsv.mock"
+		            access="private"
+		            destdir="${doc.dir}"
+		            author="true"
+		            version="true"
+		            use="true"
+		            windowtitle="Deep Explorer Modules Documentation"
+		            classpathref="classpath">
+				<link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+				<fileset dir="${src.dir}" defaultexcludes="yes">
+					<include name="**/*.java"/>-->
+					<!--<exclude name="test/**/*.java" />-->
+					<!--<exclude name="Resources/**/*.*" />-->
+		<!--</fileset>
+			</javadoc>
+		</target>-->
+	
+ 	<target name="run0" depends="compile" description="run" >
+	    <java classname="${main}" fork="true">
+			<classpath refid="project.classpath"/>
+	    	<!--<arg value="${base}.tests.Test0"/>-->
+		</java>
+	</target>
+</project>

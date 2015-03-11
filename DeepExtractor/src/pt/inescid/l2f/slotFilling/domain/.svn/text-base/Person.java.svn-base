@@ -1,0 +1,1214 @@
+package pt.inescid.l2f.slotFilling.domain;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+
+/**
+ * Stores information about a Person entity type.
+ * 
+ * @author Filipe Carapinha [2012/May]
+ * @version 1.0
+ */
+
+public class Person implements Comparable<Person>{
+
+	//##############################################################################
+	//  ###########################################################################
+	//     ATTRIBUTES
+	//  ###########################################################################
+	//##############################################################################
+	private String name;
+	private Collection<String> alternateNames;
+	private String gender;
+
+	/* LIFETIME*/
+	private TimeNorm age;
+	private GenericContainer birth;
+	private GenericContainer death;
+	private Collection<GenericContainer> education;
+	private Collection<GenericContainer> locationsOfResidence;
+
+	private Collection<GenericContainer> spouses;
+	private Collection<String> parents;
+	private Collection<String> children;
+	private Collection<String> siblings;
+	private Collection<String> cousins;
+	private Collection<String> grandParents;
+	private Collection<String> grandSons;
+	private Collection<String> uncles;
+	private Collection<String> nephews;
+	private Collection<String> grandUncles;
+	private Collection<String> grandNephews;
+	private Collection<String> parentsInLaw;
+	private Collection<String> sonsInLaw;
+	private Collection<String> godParents;
+	private Collection<String> godSons;
+	private Collection<String> brothersInLaw;
+
+	/* BUSSINESS*/
+
+	private Collection<GenericContainer> affiliations;
+	private Collection<String> globalAffiliations;
+	private Collection<GenericContainer> work;
+	private Collection<GenericContainer> owned;
+	private Collection<GenericContainer> founded;
+	private Collection<GenericContainer> clientOf;
+
+	//##############################################################################
+	//  ###########################################################################
+	//     CONSTUCTORS
+	//  ###########################################################################
+	//##############################################################################
+
+	/**
+	 * Constructor
+	 * 
+	 * @param name 	String that represents the person name.
+	 */
+	public Person(String name){
+		this.name					= name;
+		this.gender					= null;
+		this.alternateNames			= null;
+
+		/* LIFETIME*/
+		this.age					= null;
+		this.birth					= null;
+		this.death					= null;
+		this.locationsOfResidence	= null;
+
+		this.education				= null;
+
+		this.parents				= null;
+		this.children				= null;
+		this.siblings				= null;
+		this.cousins				= null;
+		this.spouses				= null;
+		this.grandParents			= null;
+		this.grandSons				= null;
+		this.uncles					= null;
+		this.nephews				= null;
+		this.grandUncles			= null;
+		this.grandNephews			= null;
+		this.parentsInLaw			= null;
+		this.sonsInLaw				= null;
+		this.godParents				= null;
+		this.godSons				= null;
+		this.brothersInLaw			= null;
+
+		/* BUSINESS*/
+		this.work					= null;
+		this.owned					= null;
+		this.founded				= null;
+		this.affiliations			= null;
+		this.globalAffiliations		= null;
+		this.clientOf				= null;
+
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param name 	String that represents the person name.
+	 * @param gender	String that represents the gender of the person.
+	 */
+	public Person(String name, String gender){
+		this.name = name;
+		this.gender = gender;
+		this.alternateNames = null;
+
+		/* LIFETIME*/
+		this.age = null;
+		this.birth = null;
+		this.death = null;
+		this.locationsOfResidence = null;
+
+		this.education = null;
+
+		this.parents = null;
+		this.children = null;
+		this.siblings = null;
+		this.cousins = null;
+		this.spouses = null;
+		this.grandParents = null;
+		this.grandSons = null;
+		this.uncles = null;
+		this.nephews = null;
+		this.grandUncles = null;
+		this.grandNephews = null;
+		this.parentsInLaw = null;
+		this.sonsInLaw = null;
+		this.godParents = null;
+		this.godSons = null;
+		this.brothersInLaw = null;
+
+		/* BUSINESS*/
+		this.work				= null;
+		this.owned				= null;
+		this.founded			= null;
+		this.affiliations		= null;
+		this.globalAffiliations	= null;
+		this.clientOf			= null;
+
+	}
+
+	//##############################################################################
+	//  ###########################################################################
+	//     GETTERS AND SETTERS
+	//  ###########################################################################
+	//##############################################################################
+
+	/**
+	 * Set the main name of the person
+	 * 
+	 * @param name 	String that represents the person name.
+	 */
+	public void setName(String name){
+		this.name = name;
+	}
+
+	/**
+	 * Adds a new name to the alternative names Array. 
+	 * This method does not guarantee uniqueness of the names.
+	 * 
+	 * @param name 	String that represents the person name.
+	 */
+	public void addName(String name){
+		if(this.alternateNames == null)
+			this.alternateNames = new ArrayList<String>();
+		this.alternateNames.add(name);
+	}
+
+	/**
+	 * Set the gender of the person.
+	 * This method is destructive.
+	 * 
+	 * @param gender	String M/F that represents the gender of the person.
+	 */
+	public void setGender(String gender){
+		this.gender = gender;
+	}
+
+	/* LOCATION*/
+
+	/**
+	 * Destructive Method.
+	 * @param birth 	GenericContainer that contains the person birth information.
+	 */
+	public void setBirth(GenericContainer birth){
+		if(this.birth == null)
+			this.birth = birth;
+		else
+			this.birth.merge(birth);
+	}
+
+	/**
+	 * Destructive Method.
+	 * @param death 	GenericContainer that contains the person death information.
+	 */
+	public void setDeath(GenericContainer death){
+		if(this.death == null)
+			this.death = death;
+		else
+			this.death.merge(death);
+	}
+
+	/**
+	 * Destructive Method.
+	 * @param age 	GenericContainer that contains the person age information.
+	 */
+	public void setAge(TimeNorm age){
+		this.age = age;
+
+	}
+
+
+	/**
+	 * Adds a String that represents the name of the affiliation to the Array that contains the parents information.
+	 * 
+	 * @param affiliation 	Person.
+	 */
+	public void addGlobalAffiliation(String affiliation){
+		if(this.globalAffiliations == null)
+			this.globalAffiliations = new ArrayList<String>();
+
+		if(this.globalAffiliations.contains(affiliation))
+			return;
+
+		this.globalAffiliations.add(affiliation);
+	}
+
+	/**
+	 * Adds a new set of work related informations to the work information Array. 
+	 * 
+	 * 
+	 * @param work 	GenericContainer that contains the person work information.
+	 */
+	public void addWork(GenericContainer work){
+		String profession = "";
+		if(this.work == null)
+			this.work = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.work, work))
+			return;
+
+		if(work.getCity().equals("") && work.getPlace().equals("") &&
+				work.getCoutry().equals("") && work.getDate() == null &&
+				work.getDateEnd() == null && work.getDateStart() == null &&
+				work.getDuration() == null && work.getOrganization().equals("") && 
+				!work.getProfession().equals("")){
+			profession = work.getProfession();
+		}
+
+		for(GenericContainer c : this.work){
+			if(!profession.equals("") && profession.equals(c.getProfession()))
+				return;
+
+			if(c.getCity().equals("") && c.getPlace().equals("") &&
+					c.getCoutry().equals("") && c.getDate() == null &&
+					c.getDateEnd() == null && c.getDateStart() == null &&
+					c.getDuration() == null && c.getOrganization().equals("") && 
+					!c.getProfession().equals("") && c.getProfession().equals(work.getProfession())){
+				c.merge(work);
+				return;
+			}
+		}
+
+		this.work.add(work);
+	}
+
+	/**
+	 * Adds a new set of education related informations to the education information Array.
+	 * 
+	 * 
+	 * @param education 	GenericContainer that contains the person education information.
+	 */
+	public void addEducation(GenericContainer education){
+		if(this.education == null)
+			this.education = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.education, education))
+			return;
+
+		this.education.add(education);
+
+	}
+
+	/**
+	 * Adds a new set of ownership related informations to the owned information Array.
+	 * 
+	 * 
+	 * @param owned 	GenericContainer that contains the person ownership information.
+	 */
+	public void addOwned(GenericContainer owned){
+		if(this.owned == null)
+			this.owned = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.owned, owned))
+			return;
+
+		this.owned.add(owned);
+	}
+
+	/**
+	 * Adds a new set of information related to the establishment of organizations to the founded information Array.
+	 * 
+	 * @param organization 	GenericContainer that contains the person information related to the establishment of organizations.
+	 */
+	public void addFounded(GenericContainer organization){
+		if(this.founded == null)
+			this.founded = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.founded, organization))
+			return;
+
+		this.founded.add(organization);
+	}
+
+	/**
+	 * Adds a new set of information related to the establishment of organizations to the founded information Array.
+	 * 
+	 * @param organization 	GenericContainer that contains the person information related to the organizations that this person is client of.
+	 */
+	public void addSupplier(GenericContainer organization){
+		if(this.clientOf == null)
+			this.clientOf = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.clientOf, organization))
+			return;
+
+		this.clientOf.add(organization);
+	}
+
+	/**
+	 * Adds a set of information related to the residence location to the locationsOfResidence information Array.
+	 * 
+	 * @param location 	GenericContainer that contains the person information related to the residence location.
+	 */
+	public void addLocationOfResidence(GenericContainer location){
+		if(this.locationsOfResidence == null)
+			this.locationsOfResidence = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.locationsOfResidence, location))
+			return;
+
+		this.locationsOfResidence.add(location);
+	}
+
+	/* FAMILY*/
+	/**
+	 * Adds a String that represents the name of one parent to the Array that contains the parents information.
+	 * 
+	 * @param parent 	Person.
+	 */
+	public void addParent(Person parent){
+		if(this.parents == null)
+			this.parents = new ArrayList<String>();
+
+		if(this.parents.contains(parent.getName()))
+			return;
+
+		if(addFamily(this.parents, parent))
+			return;
+
+		this.parents.add(parent.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one child to the Array that contains the children information.
+	 * 
+	 * @param person 	Person.
+	 */
+	public void addChildren(Person person){
+		if(this.children == null)
+			this.children = new ArrayList<String>();
+
+		if(this.children.contains(person.getName()))
+			return;
+
+		if(addFamily(this.children, person))
+			return;
+
+		this.children.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one sibling to the Array that contains the siblings information.
+	 * 
+	 * @param person 	Person.
+	 */
+	public void addSibling(Person person){
+		if(this.siblings == null)
+			this.siblings = new ArrayList<String>();
+
+		if(this.siblings.contains(person.getName()))
+			return;
+
+		if(addFamily(this.siblings, person))
+			return;
+
+		this.siblings.add(person.getName());
+
+	}
+
+	/**
+	 * Adds a String that represents the name of one cousin to the Array that contains the cousins information.
+	 * 
+	 * @param person 	Person.
+	 */
+	public void addCousin(Person person){
+		if(this.cousins == null)
+			this.cousins = new ArrayList<String>();
+
+		if(this.cousins.contains(person.getName()))
+			return;
+
+		if(addFamily(this.cousins, person))
+			return;
+
+		this.cousins.add(person.getName());
+
+	}
+
+	/**
+	 * Adds a String that represents the name of one spouse to the Array that contains the spouses information.
+	 * 
+	 * @param person 	Person.
+	 */
+	public void addSpouse(GenericContainer person){
+		if(this.spouses == null)
+			this.spouses = new ArrayList<GenericContainer>();
+
+		if(existsGenericContainer(this.spouses, person))
+			return;
+
+		if((person.getPerson() != null) && person.getPerson().alternateNames != null){
+			//System.err.println("estou cá******************");
+			for(GenericContainer p1 : this.spouses){
+				for(String al : person.getPerson().alternateNames){
+					//System.err.println(p1.getName());
+					//System.err.println(al);
+					if(p1.getName().equals(al)){
+						if(p1.sameInfo(person)){
+							this.spouses.remove(p1);
+							this.spouses.add(person);
+							return;
+						}else{
+							//Actualiza o nome.
+							p1.setName(person.getName());
+						}
+					}
+				}
+			}
+		}
+
+
+		this.spouses.add(person);
+
+	}
+
+
+	/**
+	 * Adds a String that represents the name of one grand parent to the Array that contains the grand parents information.
+	 * This method does not guarantee uniqueness of the elements.
+	 * 
+	 * @param person 	String that represents the name of a grand parent.
+	 */
+	public void addGrandParent(Person person){
+		if(this.grandParents == null)
+			this.grandParents = new ArrayList<String>();
+
+		if(this.grandParents.contains(person.getName()))
+			return;
+
+		if(addFamily(this.grandParents, person))
+			return;
+
+		this.grandParents.add(person.getName());
+	}
+
+
+	/**
+	 * Adds a String that represents the name of one grand child to the Array that contains the grand children information.
+	 * 
+	 * @param person 	String that represents the name of a grand child.
+	 */
+	public void addGrandSon(Person person){
+		if(this.grandSons == null)
+			this.grandSons = new ArrayList<String>();
+
+		if(this.grandSons.contains(person.getName()))
+			return;
+
+		if(addFamily(this.grandSons, person))
+			return;
+
+		this.grandSons.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one uncle/aunt to the Array that contains the uncles/aunts information.
+	 * This method does not guarantee uniqueness of the elements.
+	 * 
+	 * @param person 	String that represents the name of a uncle/aunt.
+	 */
+	public void addUncle(Person person){
+		if(this.uncles == null)
+			this.uncles = new ArrayList<String>();
+
+		if(this.uncles.contains(person.getName()))
+			return;
+
+		if(addFamily(this.uncles, person))
+			return;
+
+		this.uncles.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one nephew/niece to the Array that contains the nephews/nieces information.
+	 * 
+	 * @param person 	String that represents the name of a nephew/niece.
+	 */
+	public void addNephew(Person person){
+		if(this.nephews == null)
+			this.nephews = new ArrayList<String>();
+
+		if(this.nephews.contains(person.getName()))
+			return;
+
+		if(addFamily(this.nephews, person))
+			return;
+
+		this.nephews.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one grand uncle/aunt to the Array that contains the grand uncles/aunts information.
+	 * 
+	 * @param person 	String that represents the name of a grand uncle/aunt.
+	 */
+	public void addGrandUncle(Person person){
+		if(this.grandUncles == null)
+			this.grandUncles = new ArrayList<String>();
+
+		if(this.grandUncles.contains(person.getName()))
+			return;
+
+		if(addFamily(this.grandUncles, person))
+			return;
+
+		this.grandUncles.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one grand nephew/niece to the Array that contains the grand nephews/nieces information.
+	 * 
+	 * @param	person 	String that represents the name of a grand nephew/niece.
+	 */
+	public void addGrandNephew(Person person){
+		if(this.grandNephews == null)
+			this.grandNephews = new ArrayList<String>();
+
+		if(this.grandNephews.contains(person.getName()))
+			return;
+
+		if(addFamily(this.grandNephews, person))
+			return;
+
+		this.grandNephews.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one parent in law to the Array that contains the parents in law information.
+	 * 
+	 * @param	person 	String that represents the name of a parent in law.
+	 */
+	public void addParentInLaw(Person person){
+		if(this.parentsInLaw == null)
+			this.parentsInLaw = new ArrayList<String>();
+
+		if(this.parentsInLaw.contains(person.getName()))
+			return;
+
+		if(addFamily(this.parentsInLaw, person))
+			return;
+
+		this.parentsInLaw.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one son/daughter in law to the Array that contains the sons/daughters in law information.
+	 * 
+	 * 
+	 * @param	person	 String that represents the name of a son/daughter.
+	 */
+	public void addSonInLaw(Person person){
+		if(this.sonsInLaw == null)
+			this.sonsInLaw = new ArrayList<String>();
+
+		if(this.sonsInLaw.contains(person.getName()))
+			return;
+
+		if(addFamily(this.sonsInLaw, person))
+			return;
+
+		this.sonsInLaw.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one god parent to the Array that contains the god parents information.
+	 * 
+	 * @param	person 	String that represents the name of a god parent.
+	 */
+	public void addGodParent(Person person){
+		if(this.godParents == null)
+			this.godParents = new ArrayList<String>();
+
+		if(this.godParents.contains(person.getName()))
+			return;
+
+		if(addFamily(this.godParents, person))
+			return;
+
+		this.godParents.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one god son/daughter to the Array that contains the god sons/daughters information.
+	 * 
+	 * @param	person 	Person.
+	 */
+	public void addGodSon(Person person){
+		if(this.godSons == null)
+			this.godSons = new ArrayList<String>();
+
+		if(this.godSons.contains(person.getName()))
+			return;
+
+		if(addFamily(this.godSons, person))
+			return;
+
+		this.godSons.add(person.getName());
+	}
+
+	/**
+	 * Adds a String that represents the name of one brother/sister in law to the Array that contains the brothers/sisters in law information.
+	 * This method does not guarantee uniqueness of the elements.
+	 * 
+	 * @param person 	Person.
+	 */
+	public void addBrotherInLaw(Person person){
+		if(this.brothersInLaw == null)
+			this.brothersInLaw = new ArrayList<String>();
+
+		if(this.brothersInLaw.contains(person.getName()))
+			return;
+
+		if(addFamily(this.brothersInLaw, person))
+			return;
+
+		this.brothersInLaw.add(person.getName());
+	}
+
+	/*
+	 * BUSINESS
+	 */
+
+	/**
+	 * Adds a new set of affiliation related informations to the affiliation information Array.
+	 * This method does not guarantee uniqueness of the elements.
+	 * 
+	 * @param affiliation 	GenericContainer that contains the person affiliation information.
+	 */
+	public void addAffiliation(GenericContainer affiliation){
+		if(this.affiliations == null)
+			this.affiliations = new ArrayList<GenericContainer>();
+		this.affiliations.add(affiliation);
+	}
+
+	/**
+	 * Auxiliary function to avoid repeated entries on the family relations lists
+	 * 
+	 * @param list
+	 * @param p
+	 * @return boolean that is true if element was added else false.
+	 */
+	private boolean addFamily(Collection<String> list, Person p){
+		if(p.alternateNames != null)
+			for(String p1 : list){
+				for(String al : p.alternateNames){
+					if(p1.equals(al)){
+						list.remove(p1);
+						list.add(p.getName());
+						return true;
+					}
+				}
+			}
+		return false;
+	}
+
+
+	/**
+	 * Returns the person's main name.
+	 * 
+	 * @return	String	Returns a string that represents the person's longest name.
+	 */
+	public String getName(){
+		return this.name;
+	}
+
+	//##############################################################################
+	//  ###########################################################################
+	//     CONVERTERS
+	//  ###########################################################################
+	//##############################################################################
+
+	public void sort(){
+		if(this.alternateNames != null)
+			Collections.sort((List<String>)this.alternateNames);
+		if(this.parents != null)
+			Collections.sort((List<String>)this.parents);
+		if(this.children != null)
+			Collections.sort((List<String>)this.children);
+		if(this.siblings != null)
+			Collections.sort((List<String>)this.siblings);
+		if(this.cousins != null)
+			Collections.sort((List<String>)this.cousins);
+		if(this.grandParents != null)
+			Collections.sort((List<String>)this.grandParents);
+		if(this.grandSons != null)
+			Collections.sort((List<String>)this.grandSons);
+		if(this.uncles != null)
+			Collections.sort((List<String>)this.uncles);
+		if(this.nephews != null)
+			Collections.sort((List<String>)this.nephews);
+
+		if(this.grandUncles != null)
+			Collections.sort((List<String>)this.grandUncles);
+
+		if(this.grandNephews != null)
+			Collections.sort((List<String>)this.grandNephews);
+
+		if(this.parentsInLaw != null)
+			Collections.sort((List<String>)this.parentsInLaw);
+
+		if(this.sonsInLaw != null)
+			Collections.sort((List<String>)this.sonsInLaw);
+
+		if(this.godParents != null)
+			Collections.sort((List<String>)this.godParents);
+
+		if(this.godSons != null)
+			Collections.sort((List<String>)this.godSons);
+
+		if(this.brothersInLaw != null)
+			Collections.sort((List<String>)this.brothersInLaw);
+
+		if(this.globalAffiliations != null)
+			Collections.sort((List<String>)this.globalAffiliations);
+
+	}
+
+
+
+	/**
+	 * Redefinition of equals method. This is used for coreference analysis.
+	 * 
+	 * @param name	String that represents the name you want to compare.
+	 * @return true if the param name meets the conditions of this function, else false.
+	 */
+	public boolean equals(String name){
+		//Igual ao nome da pessoa
+		if(this.name.equals(name))
+			return true;
+
+		//Igual a algum nome alternativo
+		if(this.alternateNames != null && this.alternateNames.contains(name))
+			return true;
+
+		String[] t1 = this.name.split("\\s+");
+		String[] t2 = name.split("\\s+");
+		int l1 = t1.length;
+		int l2 = t2.length;
+
+		//TODO: Primeiro e último nome iguais
+		if(t1[0].equals(t2[0])){
+			if(t1[l1-1].equals(t2[l2-1])){
+				if(l1 >= l2){
+					this.addName(name);
+				}
+				else{
+					this.addName(this.name);
+					this.setName(name);
+				}
+				return true;
+			}
+		}
+
+		//TODO: Um dos nomes é único e é igual ao primeiro do mais longo.
+		if(l1 == 1 && t1[0].equals(t2[0])){
+			this.addName(this.name);
+			this.setName(name);
+			return true;
+		}
+		if(l2 == 1 && t2[0].equals(t1[0])){
+			this.addName(name);
+			return true;
+		}
+
+		//Old version
+		//		if(t1.length >= t2.length){
+		//			for(String s1 : t1){
+		//				for(String s2 : t2){
+		//					if(s1.equals(s2)){
+		//						this.addName(name);
+		//						return true;
+		//					}
+		//				}
+		//			}
+		//		}else{
+		//			for(String s1 : t1){
+		//				for(String s2 : t2){
+		//					if(s1.equals(s2)){
+		//						this.addName(this.name);
+		//						this.setName(name);
+		//						return true;
+		//					}
+		//				}
+		//			}
+		//		}
+
+		return false;			 
+	}
+
+	/**
+	 * XML Output function.
+	 * 
+	 * Filipe Carapinha [2012/Sep]
+	 */
+	private void exportXMLDOMstringPerson(Element parent, Document doc, Collection<String> list, String type){
+		Element node = doc.createElement(type);
+		for(String s : list){
+			Element childNode = doc.createElement("PERSON");
+			childNode.setAttribute("name", s);
+			node.appendChild(childNode);
+		}
+		parent.appendChild(node);
+	}
+
+	/**
+	 * XML Output function.
+	 * 
+	 * Filipe Carapinha [2012/Sep]
+	 */
+	private void exportXMLDOMContainer(Element parent, Document doc, Collection<GenericContainer> list, String type){
+		Element node = doc.createElement(type);
+		for(GenericContainer s : list){
+			Element subnode = doc.createElement("ELEM");
+			s.exportXMLDOMContents(subnode, doc);
+			node.appendChild(subnode);
+		}
+		parent.appendChild(node);
+	}
+
+
+	/**
+	 * XML Output function.
+	 * 
+	 * Filipe Carapinha [2012/Sep]
+	 */
+	public void exportXMLDOM(Element parent, Document doc){
+		Element thisNode = doc.createElement("FRAME");
+		thisNode.setAttribute("type", "PERSON");
+		thisNode.setAttribute("name", this.name);
+
+		if(alternateNames != null){
+			Element node = doc.createElement("ALTERNATE-NAMES");
+			for(String s : this.alternateNames){
+				Element childNode = doc.createElement("NAME");
+				childNode.setAttribute("val", s);
+				node.appendChild(childNode);
+			}
+			thisNode.appendChild(node);
+		}
+
+		if(this.gender != null){
+			Element node = doc.createElement("GENDER");
+			node.setAttribute("val", this.gender);
+			thisNode.appendChild(node);
+		}
+
+
+		if(birth != null){
+			Element node = doc.createElement("BIRTH");
+			try{
+				this.birth.exportXMLDOMbirthOrDeath(node, doc);
+				thisNode.appendChild(node);
+			}catch(NullPointerException e){
+				System.err.println("SlotFilling: Internal Error in exportXMLDOMbirthOrDeath.");
+				e.printStackTrace();
+			}
+
+		}
+
+		if(death != null){
+			Element node = doc.createElement("DEATH");
+			try{
+				this.death.exportXMLDOMbirthOrDeath(node, doc);
+				thisNode.appendChild(node);
+			}catch(NullPointerException e){
+				System.err.println("SlotFilling: Internal Error in exportXMLDOMbirthOrDeath.");
+				e.printStackTrace();
+			}
+
+		}
+
+
+		if(age != null){
+			Element node = doc.createElement("AGE");
+			this.age.exportXMLDOM(node, doc);
+			thisNode.appendChild(node);
+		}	
+
+		if(education != null)
+			exportXMLDOMContainer(thisNode, doc, education, "EDUCATION");
+
+		if(locationsOfResidence != null)
+			exportXMLDOMContainer(thisNode, doc, locationsOfResidence, "LOCATIONS-OF-RESIDENCE");
+
+		if(parents != null)
+			exportXMLDOMstringPerson(thisNode, doc, parents, "PARENTS");
+
+		if(children != null)
+			exportXMLDOMstringPerson(thisNode, doc, children, "CHILDREN");
+
+		if(siblings != null)
+			exportXMLDOMstringPerson(thisNode, doc, siblings, "SIBLINGS");
+
+		if(cousins != null)
+			exportXMLDOMstringPerson(thisNode, doc, cousins, "COUSINS");
+
+		if(spouses != null){
+			Element node = doc.createElement("SPOUSES");
+			for(GenericContainer s : spouses){
+				Element childNode = doc.createElement("ELEM");
+				s.exportXMLDOMContents(childNode, doc);
+				node.appendChild(childNode);
+			}
+			thisNode.appendChild(node);
+		}
+
+		if(grandParents != null)
+			exportXMLDOMstringPerson(thisNode, doc, grandParents, "GRANDPARENTS");
+
+		if(grandSons != null)
+			exportXMLDOMstringPerson(thisNode, doc, grandSons, "GRANDSONS");
+
+		if(uncles != null)
+			exportXMLDOMstringPerson(thisNode, doc, uncles, "UNCLES");
+
+		if(nephews != null)
+			exportXMLDOMstringPerson(thisNode, doc, nephews, "NEPHEWS");
+
+		if(grandUncles != null)
+			exportXMLDOMstringPerson(thisNode, doc, grandUncles, "GRANDUNCLES");
+
+		if(grandNephews != null)
+			exportXMLDOMstringPerson(thisNode, doc, grandNephews, "GRANDNEPHEWS");
+
+		if(parentsInLaw != null)
+			exportXMLDOMstringPerson(thisNode, doc, parentsInLaw, "PARENTS-IN-LAW");
+
+		if(sonsInLaw != null)
+			exportXMLDOMstringPerson(thisNode, doc, sonsInLaw, "SONS-IN-LAW");
+
+		if(brothersInLaw != null)
+			exportXMLDOMstringPerson(thisNode, doc, parents, "BROTHERS-IN-LAW");
+
+		if(godParents != null)
+			exportXMLDOMstringPerson(thisNode, doc, godParents, "GODPARENTS");
+
+		if(godSons != null)
+			exportXMLDOMstringPerson(thisNode, doc, godSons, "GODSONS");
+
+		/*
+		 * BUSINESS
+		 */
+		if(work != null)
+			exportXMLDOMContainer(thisNode, doc, work, "PROFESSIONS");
+
+		if(affiliations != null)
+			exportXMLDOMContainer(thisNode, doc, affiliations, "AFFILIATIONS");
+
+		if(globalAffiliations != null)
+		{
+			Element node = doc.createElement("GLOBAL-AFFILIATIONS");
+			for(String s : this.globalAffiliations){
+				Element childNode = doc.createElement("AFFILIATION");
+				childNode.setAttribute("name", s);
+				node.appendChild(childNode);
+			}
+			thisNode.appendChild(node);
+		}
+
+		if(owned != null)
+			exportXMLDOMContainer(thisNode, doc, owned, "OWNED");
+
+		if(founded != null)
+			exportXMLDOMContainer(thisNode, doc, founded, "FOUNDED");
+
+		if(clientOf != null)
+			exportXMLDOMContainer(thisNode, doc, clientOf, "CLIENT-OF");
+
+
+		parent.appendChild(thisNode);
+	}
+
+
+	/**
+	 * Returns a String that is a representation of a Person entity type. 
+	 * This method is used to return a human output for the Slot Filling tasks.
+	 * 
+	 * @return	String
+	 */
+	public String pprintPerson(){
+		String out = "";
+		out += "------ PERSON ------\n";
+		out += "NAME: " + this.name + "\n";
+
+		if(this.alternateNames != null){
+			out += "\tALTERNATIVE NAMES: \n";
+			for(String s : this.alternateNames){
+				out += "\t\t" + s + "\n";
+			}
+		}
+
+		if(this.gender != null){
+			out +="GENDER: " + this.gender + "\n";
+		}
+
+		if(this.birth != null)
+			out += "BIRTH: \n" + this.birth.pprintGenericContainer() + "\n";
+		if(this.death != null)
+			out += "DEATH: \n" + this.death.pprintGenericContainer() + "\n";
+		if(this.age != null)
+			out += "AGE: \n" + this.age.pprintTimeNorm() + "\n";
+		if(this.locationsOfResidence != null)
+			for(GenericContainer c : this.locationsOfResidence){
+				out += "RESIDENCE: \n" + c.pprintGenericContainer();
+			}
+		if(this.education != null)
+			for(GenericContainer c : this.education){
+				out += "EDUCATION: \n" + c.pprintGenericContainer();
+			}
+		if(this.spouses != null)
+			for(GenericContainer c : this.spouses){
+				out += "SPOUSE: \n" + c.pprintGenericContainer();
+			}
+
+		if(this.children != null){
+			out += "CHILDREN: \n";
+			for(String s : this.children){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.parents != null){
+			out += "PARENTS: \n";
+			for(String s : this.parents){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.siblings != null){
+			out += "SIBLINGS: \n";
+			for(String s : this.siblings){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.cousins != null){
+			out += "COUSINS: \n";
+			for(String s : this.cousins){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.uncles != null){
+			out += "UNCLES: \n";
+			for(String s : this.uncles){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.nephews != null){
+			out += "NEPHEWS: \n";
+			for(String s : this.nephews){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.grandParents != null){
+			out += "GRANDPARENTS: \n";
+			for(String s : this.grandParents){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.grandSons != null){
+			out += "GRANDCHILDS: \n";
+			for(String s : this.grandSons){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.parentsInLaw != null){
+			out += "PARENTS-IN-LAW: \n";
+			for(String s : this.parentsInLaw){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.sonsInLaw != null){
+			out += "SONS-IN-LAW: \n";
+			for(String s : this.sonsInLaw){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.brothersInLaw != null){
+			out += "BROTHERS-IN-LAW: \n";
+			for(String s : this.brothersInLaw){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.godParents != null){
+			out += "GODPARENTS: \n";
+			for(String s : this.godParents){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.godSons != null){
+			out += "GODSONS: \n";
+			for(String s : this.godSons){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.grandUncles != null){
+			out += "GRANDUNCLES: \n";
+			for(String s : this.grandUncles){
+				out += "\t" + s + "\n";
+			}
+		}
+		if(this.grandNephews != null){
+			out += "GRANDNEPHEWS: \n";
+			for(String s : this.grandNephews){
+				out += "\t" + s + "\n";
+			}
+		}
+
+		if(this.work != null)
+			for(GenericContainer c : this.work){
+				out += "WORK: \n" + c.pprintGenericContainer();
+			}
+		if(this.founded != null)
+			for(GenericContainer c : this.founded){
+				out += "FOUNDED: \n" + c.pprintGenericContainer();
+			}
+		if(this.affiliations != null)
+			for(GenericContainer c : this.affiliations){
+				out += "AFFILIATED-OF: \n" + c.pprintGenericContainer();
+			}
+
+		if(this.globalAffiliations != null){
+			out += "GLOBAL-AFFILIATION: \n";
+			for(String s : this.globalAffiliations){
+				out += "\t" + s + "\n";
+			}
+		}
+
+		if(this.owned != null)
+			for(GenericContainer c : this.owned){
+				out += "OWNER-OF: \n" + c.pprintGenericContainer();
+			}
+
+		if(this.clientOf != null)
+			for(GenericContainer c : this.clientOf){
+				out += "CLIENT-OF: \n" + c.pprintGenericContainer();
+			}
+
+		out += "\n--------------------\n";
+		return out;
+	}
+
+	@Override
+	public int compareTo(Person p) {
+		return this.name.compareTo(p.getName());
+	}
+
+	private boolean existsGenericContainer(Collection<GenericContainer> collection, GenericContainer container){
+		for(GenericContainer c : collection){
+			if(c.equals(container))
+				return true;
+		}
+		return false;
+	}
+
+
+}
