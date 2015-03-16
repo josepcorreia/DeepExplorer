@@ -1,13 +1,10 @@
 package pt.inescid.l2f;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
-import pt.inescid.l2f.xipapi.domain.Dependency;
 
 
 public class DeepExtractor {
@@ -25,7 +22,7 @@ public class DeepExtractor {
 			BufferedReader buffer = new BufferedReader(new FileReader(args[0]));
 			document = xipDocumentFactory.getXipResult(buffer);
 			
-			de.setDepedencyList(document.getDependencies());
+			de.Extract(document.getDependencies());
 			
 			System.out.println("FIM");
 			
