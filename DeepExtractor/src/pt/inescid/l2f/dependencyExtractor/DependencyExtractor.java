@@ -20,7 +20,7 @@ public class DependencyExtractor {
 
 		for (Dependency dependency : dep) {
 			if(map.containsKey(dependency.getName())){
-				map.get(dependency.getName()).Print();
+				map.get(dependency.getName()).getDepedencyInformation(dependency);
 			}
 		}
 	}

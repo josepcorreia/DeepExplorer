@@ -1,11 +1,12 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
+import pt.inescid.l2f.xipapi.domain.Dependency;
+
 public class Attrib extends DependencyType{
 
 	@Override
-	public void Print() {
-		System.out.println("ATRIBUTO");
-		
+	public void getDepedencyInformation(Dependency dep) {
+		// TODO Auto-generated method stub
 	}
 
 }
