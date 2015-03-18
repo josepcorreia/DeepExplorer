@@ -2,6 +2,7 @@ package pt.inescid.l2f;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import pt.inescid.l2f.connection.ConnectionMySQL;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
@@ -15,6 +16,8 @@ public class DeepExtractor {
 	 */
 	public static void main(String[] args) {
 		DependencyExtractor de = new DependencyExtractor();
+		ConnectionMySQL c_mysql = new ConnectionMySQL();
+		
 		XipDocument document = null;
 		try{
 			System.out.println("Inicio");
@@ -22,7 +25,11 @@ public class DeepExtractor {
 			BufferedReader buffer = new BufferedReader(new FileReader(args[0]));
 			document = xipDocumentFactory.getXipResult(buffer);
 			
-			de.Extract(document.getDependencies());
+			//System.out.println(document.getNumberOfSentences());
+			//de.Extract(document.getDependencies());
+			
+			c_mysql.getConnectionMySQL();
+			System.out.println(c_mysql.getStatusConnection());
 			
 			System.out.println("FIM");
 			

@@ -13,6 +13,10 @@ public class Cdir extends DependencyType{
 		System.out.println(dep.getSentenceNumber());
 		System.out.println(dep.printDependency());
 		System.out.println("--------");
+		for (XIPNode node : dep.getNodes()) {
+			System.out.println(node.getSentenceNumber());
+		}
+		System.out.println("##############");
 	}
 
 }
