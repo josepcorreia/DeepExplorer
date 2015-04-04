@@ -26,7 +26,7 @@ public class DeepExtractor {
 			document = xipDocumentFactory.getXipResult(buffer);
 			
 			//System.out.println(document.getNumberOfSentences());
-			//de.Extract(document.getDependencies());
+			de.Extract(document.getDependencies());
 			
 			c_mysql.getConnectionMySQL();
 			System.out.println(c_mysql.getStatusConnection());

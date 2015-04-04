@@ -63,4 +63,12 @@
 	    	<arg value="/Users/josecorreia/Projects/Parte01aaa.xml"/>
 		</java>
 	</target>
+	<target name="runElementary" depends="main" description="run" >
+		    <java classname="${main}" fork="true">
+				<classpath refid="classpath"/>
+		    	<arg value="/home/josecorreia/Projects/Parte01aaa.xml"/>
+			</java>
+		</target>
+	
+
 </project>

@@ -6,7 +6,7 @@ public class Subj extends DependencyType{
 
 	@Override
 	public void getDepedencyInformation(Dependency dep) {
-		// TODO Auto-generated method stub
+		//System.out.println(dep.printDependency());
 		
 	}
 }
