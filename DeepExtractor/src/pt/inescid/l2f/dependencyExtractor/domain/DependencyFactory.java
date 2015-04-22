@@ -14,7 +14,6 @@ public class DependencyFactory {
 	public DependencyFactory(){
 		_dependenciesMap = new HashMap<String,DependencyType>();
 		
-		//depois mudar
 		_dependenciesMap.put("ATTRIB", new Attrib());
 		_dependenciesMap.put("CDIR", new Cdir());
 		_dependenciesMap.put("MOD", new Mod());
