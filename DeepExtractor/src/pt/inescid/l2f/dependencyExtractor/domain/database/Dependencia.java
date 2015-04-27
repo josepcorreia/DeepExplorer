@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Dependencias extends RelationalElement{
+public class Dependencia extends RelationalElement{
 
-	public Dependencias(Connection conn) {
+	public Dependencia(Connection conn) {
 		super(conn);
 	}
 
-	public boolean insertDepedencia(String tipodepedencia){
+	public boolean insertNew(String tipodepedencia){
 		PreparedStatement preparedStatement = null;
 		
 		try {
