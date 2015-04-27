@@ -1,10 +1,16 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
+import java.sql.Connection;
+
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.Feature;
 import pt.inescid.l2f.xipapi.domain.XIPNode;
 
 public class Mod extends DependencyType{
+
+	public Mod(Connection conn) {
+		super(conn);
+	}
 
 	@Override
 	public void getDepedencyInformation(Dependency dep) {
