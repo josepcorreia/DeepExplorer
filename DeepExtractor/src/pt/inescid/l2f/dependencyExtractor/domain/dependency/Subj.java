@@ -15,21 +15,25 @@ public class Subj extends DependencyType{
 
 	@Override
 	public void getDepedencyInformation(Dependency dep) {
-		System.out.println(dep.getName());
+		//System.out.println(dep.getName());
 		
 		for (Feature f : dep.getFeatures()){
-		System.out.println(f.getName());
+			//Propriedade
+			//System.out.println("1"+f.getName());
 		}
+			//os dois nos da dependencia
+			for (XIPNode node : dep.getNodes()){
+				//System.out.println(node.getName());
+				String word = "";
+				for (Token token : node.getTokens()){
+					if(!word.isEmpty()){
+						word = word + " ";
+					}
+					word  = word + token.getLemmas().element();		
+				}
+				super.palavra.checkWord(word, node.getName(), "teste");
+			}
 		
-		for (XIPNode node : dep.getNodes()){
-			System.out.println(node.getName());
-			for (Token token : node.getTokens()){
-				System.out.println(token.getWord());
-				System.out.println(token.getLemmas());
-			}
-			System.out.println("--------");
-			}
 		System.out.println("##############");
-		System.exit(0);
 	}
 }

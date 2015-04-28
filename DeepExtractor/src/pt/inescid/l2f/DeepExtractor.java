@@ -30,8 +30,8 @@ public class DeepExtractor {
 			System.out.println(ConnectionMySQL.getStatusConnection());
 			
 			
-			//de.CorpusInformation(c_mysql);
-			//de.Extract(document.getDependencies(), c_mysql);
+			de.CorpusInformation();
+			de.Extract(document.getDependencies());
 			
 			
 			

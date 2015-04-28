@@ -10,7 +10,7 @@ public class Corpus extends RelationalElement{
 		super(conn);
 	}
 
-	public boolean insertCorpus(String nome, String  fonte, String ano, String genero, Boolean update){
+	public boolean insertNew(String nome, String  fonte, String ano, String genero, Boolean update){
 		PreparedStatement preparedStatement = null;
 		
 		try {
