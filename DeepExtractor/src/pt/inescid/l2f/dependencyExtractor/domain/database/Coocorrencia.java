@@ -44,10 +44,10 @@ public class Coocorrencia extends RelationalElement{
 			
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record is inserted into Coocorrencia table!");
+			//System.out.println("Record is inserted into Coocorrencia table!");
 
 		} catch (SQLException e) {
-
+			System.out.println("|| COOO A INSERIR" + wordId2);
 			System.out.println(e.getMessage());
 
 		} finally {
@@ -83,6 +83,7 @@ public class Coocorrencia extends RelationalElement{
     
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
+	    	System.out.println("|| COOO - a verificar se so ha 1");
 	       se.printStackTrace();
 	     
 	    }finally{
@@ -108,6 +109,7 @@ public class Coocorrencia extends RelationalElement{
 	
 		}catch(SQLException se){
 		      //Handle errors for JDBC
+			System.out.println("|| COOO frequencia");
 		      se.printStackTrace();
 		}finally{
 		      //finally block used to close resources

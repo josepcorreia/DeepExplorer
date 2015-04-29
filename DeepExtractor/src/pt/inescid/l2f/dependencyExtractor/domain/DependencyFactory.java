@@ -22,10 +22,10 @@ public class DependencyFactory {
 		Coocorrencia coo = new Coocorrencia(conn, corpusName);
 		Propriedade prop = new Propriedade(conn); 
 		
-		_dependenciesMap.put("ATTRIB", new Attrib(palavra, coo, prop));
-		_dependenciesMap.put("CDIR", new Cdir(palavra, coo, prop));
+		//_dependenciesMap.put("ATTRIB", new Attrib(palavra, coo, prop));
+		//_dependenciesMap.put("CDIR", new Cdir(palavra, coo, prop));
 		_dependenciesMap.put("MOD", new Mod(palavra, coo, prop));
-		_dependenciesMap.put("SUBJ", new Subj(palavra, coo, prop));
+		//_dependenciesMap.put("SUBJ", new Subj(palavra, coo, prop));
 	}	
 	
 	public HashMap<String,DependencyType> getDependenciesMap(){

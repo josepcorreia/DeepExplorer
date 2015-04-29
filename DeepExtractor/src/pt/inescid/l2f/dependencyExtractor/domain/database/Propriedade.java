@@ -29,7 +29,7 @@ public class Propriedade extends RelationalElement{
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-
+			System.out.println("|| propriedade");
 			System.out.println(e.getMessage());
 
 		} finally {
@@ -42,7 +42,7 @@ public class Propriedade extends RelationalElement{
 				}
 			}
 		}
-		System.out.println("Record is inserted into Propriedade table!");
+		//System.out.println("Record is inserted into Propriedade table!");
 	}
 
 	public boolean propertyExists(String prop, String dep){
@@ -64,7 +64,8 @@ public class Propriedade extends RelationalElement{
     
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
-	       se.printStackTrace();
+	    	System.out.println("|| propriedade");
+	    	se.printStackTrace();
 	     
 	    }finally{
 	       //finally block used to close resources

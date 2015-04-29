@@ -45,10 +45,10 @@ public class Palavra extends RelationalElement{
 			
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record is inserted into Palavra table!");
+			//System.out.println("Record is inserted into Palavra table!");
 
 		} catch (SQLException e) {
-
+			System.out.println("|| Palavra");
 			System.out.println(e.getMessage());
 			
 		} finally {
@@ -83,6 +83,7 @@ public class Palavra extends RelationalElement{
     
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
+	    	System.out.println("|| Palavra");
 	       se.printStackTrace();
 	    }finally{
 	       //finally block used to close resources
@@ -108,9 +109,9 @@ public class Palavra extends RelationalElement{
 			preparedStatement.setInt(3,1);
 			
 			preparedStatement.executeUpdate();
-			System.out.println("Record is inserted into Fornece table!");
+			//System.out.println("Record is inserted into Fornece table!");
 		} catch (SQLException e) {
-
+			System.out.println("|| Palavra");
 			System.out.println(e.getMessage());
 			return false;
 
@@ -146,6 +147,7 @@ public class Palavra extends RelationalElement{
   
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
+	    	System.out.println("|| Palavra");
 	       se.printStackTrace();
 	    }finally{
 	       //finally block used to close resources
@@ -170,6 +172,7 @@ public class Palavra extends RelationalElement{
 	
 		}catch(SQLException se){
 		      //Handle errors for JDBC
+			System.out.println("|| Palavra");
 		      se.printStackTrace();
 		}finally{
 		      //finally block used to close resources

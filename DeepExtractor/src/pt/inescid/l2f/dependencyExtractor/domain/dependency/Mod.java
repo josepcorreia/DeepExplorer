@@ -1,5 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
+import java.util.ArrayList;
+
 import pt.inescid.l2f.dependencyExtractor.domain.database.Coocorrencia;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Palavra;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Propriedade;
@@ -24,11 +26,12 @@ public class Mod extends DependencyType{
 		for (Feature f : dep.getFeatures()){
 			//Propriedade
 			prop = f.getName();
-			_propriedade.checkProperty(prop, depname);
-			
 		}
+		_propriedade.checkProperty(prop, depname);
+			//ArrayList<Long> a = new ArrayList<Long>();
+			ArrayList<String> a = new ArrayList<String>();
 			//os dois nós da dependencia
-			int i = 1;
+			
 			for (XIPNode node : dep.getNodes()){
 				String pos = node.getName();
 				String word = "";
@@ -38,17 +41,18 @@ public class Mod extends DependencyType{
 					}
 					word  = word + token.getLemmas().element();		
 				}
-				long wordId = super._palavra.checkWord(word, pos, "categoria");
-				if(i==1){
-					wordId1 = wordId;
-				}else{
-					wordId2 = wordId;
-				}
-				i++;
+				a.add(word);
+				//long wordId = super._palavra.checkWord(word, pos, "categoria");
+				//a.add(wordId);
 			}
+			if(a.size()!= 2){
+				System.out.println(depname + "_" + prop);
+				System.out.println(a);
+				System.out.println(dep.getNodes().size());
+				System.out.println("####");
+			}
+			//super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 
-			super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
-		
 	}
 
 }

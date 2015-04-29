@@ -26,9 +26,9 @@ public class Subj extends DependencyType{
 		for (Feature f : dep.getFeatures()){
 			//Propriedade
 			prop = f.getName();
-			_propriedade.checkProperty(prop, depname);
-			
 		}
+		_propriedade.checkProperty(prop, depname);
+			
 			//os dois nós da dependencia
 			int i = 1;
 			for (XIPNode node : dep.getNodes()){
