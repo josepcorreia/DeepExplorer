@@ -16,24 +16,20 @@ public class DeepExtractor {
 	 * @param args path/filename of the file that contains the XML output from XIP.
 	 */
 	public static void main(String[] args) {
+		System.out.println("Inicio");
 		Connection c_mysql = ConnectionMySQL.getConnectionMySQL();
-		DependencyExtractor de = new DependencyExtractor(c_mysql);
+		DependencyExtractor de = new DependencyExtractor(c_mysql, "CETEMPúblico");
 		
 		XipDocument document = null;
 		try{
-			System.out.println("Inicio");
 			XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 			BufferedReader buffer = new BufferedReader(new FileReader(args[0]));
 			document = xipDocumentFactory.getXipResult(buffer);
 			
 
 			System.out.println(ConnectionMySQL.getStatusConnection());
-			
-			
-			de.CorpusInformation();
+						
 			de.Extract(document.getDependencies());
-			
-			
 			
 			ConnectionMySQL.CloseConnection(c_mysql);
 			System.out.println("FIM");

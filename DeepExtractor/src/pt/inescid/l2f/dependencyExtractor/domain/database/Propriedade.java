@@ -2,7 +2,9 @@ package pt.inescid.l2f.dependencyExtractor.domain.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Propriedade extends RelationalElement{
 
@@ -10,23 +12,25 @@ public class Propriedade extends RelationalElement{
 		super(conn);
 	}
 
-	public boolean insertPropriedade(String propriedade, String tipodepedencia){
+	public void checkProperty(String prop, String dep){
+		if(!propertyExists(prop, dep)){
+			insertPropriedade(prop,dep);
+		}
+	}
+	public void insertPropriedade(String propriedade, String tipodepedencia){
 		PreparedStatement preparedStatement = null;
 		
 		try {
-			preparedStatement = connection.prepareStatement("insert into  Propriedade values (?, ?)");
+			preparedStatement = connection.prepareStatement("insert into Propriedade values (?, ?)");
 
 			preparedStatement.setString(1, propriedade);
 			preparedStatement.setString(2, tipodepedencia);
 			
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record is inserted into Propriedade table!");
-
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
-			return false;
 
 		} finally {
 
@@ -38,7 +42,38 @@ public class Propriedade extends RelationalElement{
 				}
 			}
 		}
-	  return true;
-}
+		System.out.println("Record is inserted into Propriedade table!");
+	}
 
+	public boolean propertyExists(String prop, String dep){
+		Statement stmt = null;
+	
+		try{
+			stmt = connection.createStatement();
+			String sql = "SELECT 1 FROM Propriedade WHERE nomeProp='"+ prop + 
+															"' AND tipoDep='" + dep + 
+															"' LIMIT 1";
+			ResultSet rs = stmt.executeQuery(sql);
+			if(!rs.next()){
+				rs.close();
+				return false;
+			}
+	
+			rs.close(); 	
+
+    
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	       se.printStackTrace();
+	     
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+		return true;
+	}
 }

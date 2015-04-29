@@ -13,20 +13,24 @@ import java.util.HashMap;
 
 public class DependencyExtractor {
 	private DependencyFactory _dfactory;
+	private String _corpusName;
+
 	private Corpus _corpus;
 	private Dependencia _dependencia;
 
-	public DependencyExtractor(Connection conn){
-		_dfactory = new DependencyFactory(conn);
+	public DependencyExtractor(Connection conn, String corpusName){
+		_corpusName = corpusName;
+		_dfactory = new DependencyFactory(conn,corpusName);
 		_corpus = new Corpus(conn);
 		_dependencia = new Dependencia(conn);
-
-		
+		this.CorpusInformation();
 	}
 
 	public void Extract(Collection<Dependency> dep){
+				
 		HashMap<String, DependencyType> map = _dfactory.getDependenciesMap(); 
- 
+		
+		//preenche a informação sobre as dependencias detectadas
 		for (String depname : map.keySet()) {
 			_dependencia.insertNew(depname);
 		}
@@ -39,6 +43,7 @@ public class DependencyExtractor {
 	}
 
 	public void CorpusInformation() {
-		_corpus.insertNew("CETEMPúblico", "Público", "2000", "Noticíario", false);
+		//depois completar isto
+		_corpus.insertNew(_corpusName, "Público", "2000", "Noticíario", false);
 	}
 }

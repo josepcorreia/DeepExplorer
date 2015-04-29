@@ -9,29 +9,36 @@ import java.sql.SQLException;
 public class Palavra extends RelationalElement{
 	private long  _idCounter;
 	private long _currentId;
+	private String _corpusName;
 	
 	
 	
-	public Palavra(Connection conn) {
+	public Palavra(Connection conn, String corpusName) {
 		super(conn);
 		_idCounter=1;
+		_corpusName = corpusName;
 	}
 
-	public void checkWord(String  word, String pos, String category){
+	public long checkWord(String  word, String pos, String category){
 		if(wordExists(word, pos)){
-			//verificar se existe no percente
-			//System.out.println("já existe");
+			if(wordExistsCorpus(_currentId)){
+				uptadeFrequency(_currentId);
+			}else{
+				insertPalavraCorpus(_currentId, _corpusName);
+			}
+			
 		}else{
 			insertNewPalavra(word, pos, category);
 		}
+		return _currentId;
 	}
 	
 	public void insertNewPalavra(String  palavra, String classe, String categoria){
 		PreparedStatement preparedStatement = null;
-		
+		_currentId = _idCounter++;
 		try {
-			preparedStatement = super.connection.prepareStatement("insert into  Palavra values (?, ?, ?,?)");
-			preparedStatement.setLong(1, _idCounter++);
+			preparedStatement = super.connection.prepareStatement("insert into Palavra values (?, ?, ?,?)");
+			preparedStatement.setLong(1, _currentId);
 			preparedStatement.setString(2, palavra);
 			preparedStatement.setString(3, classe);
 			preparedStatement.setString(4, categoria);
@@ -71,7 +78,7 @@ public class Palavra extends RelationalElement{
 				}
 			}
 			//caso não exista
-			rs.close();
+			rs.close(); 
 			return false;
     
 	    }catch(SQLException se){
@@ -95,10 +102,10 @@ public class Palavra extends RelationalElement{
 		PreparedStatement preparedStatement = null;
 			
 		try {
-			preparedStatement = connection.prepareStatement("insert into Fornece values (?, ?, ?)");
+			preparedStatement = connection.prepareStatement("insert into Pertence values (?, ?, ?)");
 			preparedStatement.setLong(1, id);
 			preparedStatement.setString(2,corpus);
-			preparedStatement.setInt(2,1);
+			preparedStatement.setInt(3,1);
 			
 			preparedStatement.executeUpdate();
 			System.out.println("Record is inserted into Fornece table!");
@@ -118,5 +125,60 @@ public class Palavra extends RelationalElement{
 		}
 	  return true;
   }
+  
+  public boolean wordExistsCorpus(long id){
+		Statement stmt = null;
+	
+		try{
+			stmt = connection.createStatement();
+			String sql = "SELECT idPalavra FROM Pertence WHERE idPalavra ='"+ id + "' AND nomeCorpus ='" + _corpusName +"'";
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs.next() ){
+				
+				if(rs.getLong("idPalavra") == id){
+					rs.close();
+					return true;
+				}
+			}
+			//caso não exista
+			rs.close();
+			return false;
+  
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	       se.printStackTrace();
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
 
+		return false;
+	}
+  public void uptadeFrequency(long wordId){
+		Statement stmt = null;
+		try{
+			stmt = connection.createStatement();
+			String sql = "UPDATE Pertence " +
+					     " SET frequencia = frequencia + 1 " +
+					     " WHERE idPalavra='"+ wordId +"' AND nomeCorpus= '"+ _corpusName +"'";
+						
+			stmt.executeUpdate(sql);
+	
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		}finally{
+		      //finally block used to close resources
+		      try{
+		         if(stmt!=null)
+		            stmt.close();
+		      }catch(SQLException se){
+		      }// do nothing
+
+		}//end finally try	   
+	}
 }

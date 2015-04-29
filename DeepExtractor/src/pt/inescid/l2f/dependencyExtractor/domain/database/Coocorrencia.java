@@ -2,25 +2,37 @@ package pt.inescid.l2f.dependencyExtractor.domain.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Coocorrencia extends RelationalElement{
-
-	public Coocorrencia(Connection conn) {
+	private String _corpusName;
+	
+	public Coocorrencia(Connection conn, String corpusName) {
 		super(conn);
+		_corpusName = corpusName;
 	}
 
-	public boolean insertCoocorrencia(long idpalavra1, long idpalavra2,String propriedade, String tipodepedencia){
+	public void checkCoocorrence(long wordId1, long wordId2, String prop, String dep){
+		if(coocorrenceExists(wordId1, wordId2, prop, dep)){
+			uptadeFrequency(wordId1, wordId2, prop, dep);
+		}else{
+			insertCoocorrence(wordId1, wordId2, prop, dep);
+		}
+	}
+	
+	public void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName){
 		PreparedStatement preparedStatement = null;
 		
 		try {
-			preparedStatement = connection.prepareStatement("insert into  Co-ocorrencia values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)");
+			preparedStatement = connection.prepareStatement("insert into  Coocorrencia values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-			preparedStatement.setLong(1, idpalavra1);
-			preparedStatement.setLong(2, idpalavra1);
-			preparedStatement.setString(3, propriedade);
-			preparedStatement.setString(4, tipodepedencia);
-			preparedStatement.setString(5, tipodepedencia);
+			preparedStatement.setLong(1, wordId1);
+			preparedStatement.setLong(2, wordId2);
+			preparedStatement.setString(3, property);
+			preparedStatement.setString(4, dependencyName);
+			preparedStatement.setString(5, _corpusName);
 			preparedStatement.setInt(6, 1);
 			//medidas inicializadas a 0
 			preparedStatement.setDouble(7, 0.0);
@@ -32,12 +44,11 @@ public class Coocorrencia extends RelationalElement{
 			
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record is inserted into Propriedade table!");
+			System.out.println("Record is inserted into Coocorrencia table!");
 
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
-			return false;
 
 		} finally {
 
@@ -49,7 +60,63 @@ public class Coocorrencia extends RelationalElement{
 				}
 			}
 		}
-	  return true;
-} 
+	} 
 	
+	public boolean coocorrenceExists(long wordId1, long wordId2, String prop, String dep){
+		Statement stmt = null;
+	
+		try{
+			stmt = connection.createStatement();
+			String sql = "SELECT 1 FROM Coocorrencia WHERE idPalavra1 ='" + wordId1 + 
+															"' AND idPalavra2 ='" + wordId2 + 
+															"' AND nomeProp='"+ prop + 
+															"' AND tipoDep='" + dep + 
+															"' AND nomeCorpus='" + _corpusName + "' LIMIT 1";
+			ResultSet rs = stmt.executeQuery(sql);
+			if(!rs.next()){
+				rs.close(); 
+				return false;
+			}
+	
+			rs.close(); 
+
+    
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	       se.printStackTrace();
+	     
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+ 
+		return true;
+	}
+	public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep){
+		Statement stmt = null;
+		try{
+			stmt = connection.createStatement();
+			String sql = "UPDATE Coocorrencia " +
+					     "SET frequencia = frequencia + 1 " +
+					     "WHERE idPalavra1='"+ wordId1 +"' AND idPalavra2='" + wordId2 + "' AND nomeProp='" + prop + "' AND tipoDep = '" + dep + "' AND nomeCorpus= '"+ _corpusName +"'";
+						
+			stmt.executeUpdate(sql);
+	
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		}finally{
+		      //finally block used to close resources
+		      try{
+		         if(stmt!=null)
+		            stmt.close();
+		      }catch(SQLException se){
+		      }// do nothing
+
+		}//end finally try	   
+	}
 }
