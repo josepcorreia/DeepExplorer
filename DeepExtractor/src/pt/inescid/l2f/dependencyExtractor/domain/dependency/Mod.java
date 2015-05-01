@@ -20,16 +20,18 @@ public class Mod extends DependencyType{
 	public void getDepedencyInformation(Dependency dep) {
 		long wordId1 = 0;
 		long wordId2 = 0;
-		String prop = "";
+		String prop = "SEM_PROP";
 		String depname = dep.getName();
 		
 		for (Feature f : dep.getFeatures()){
 			//Propriedade
-			prop = f.getName();
+			String aux = f.getName();
+			if (aux.equals("PRE")||aux.equals("POST")){
+				prop=aux;
+			}
 		}
 		_propriedade.checkProperty(prop, depname);
-			//ArrayList<Long> a = new ArrayList<Long>();
-			ArrayList<String> a = new ArrayList<String>();
+			ArrayList<Long> a = new ArrayList<Long>();
 			//os dois nós da dependencia
 			
 			for (XIPNode node : dep.getNodes()){
@@ -41,17 +43,19 @@ public class Mod extends DependencyType{
 					}
 					word  = word + token.getLemmas().element();		
 				}
-				a.add(word);
-				//long wordId = super._palavra.checkWord(word, pos, "categoria");
-				//a.add(wordId);
+				a.add(super._palavra.checkWord(word, pos, "categoria"));
 			}
-			if(a.size()!= 2){
+			/*if(a.size()!= 2){
 				System.out.println(depname + "_" + prop);
 				System.out.println(a);
 				System.out.println(dep.getNodes().size());
 				System.out.println("####");
+			}*/
+			if(a.size()== 2){
+				super._coocorrencia.checkCoocorrence(a.get(0), a.get(1), prop, depname);
+			}else{
+				//System.out.println("Depedencia com erro MOD");
 			}
-			//super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 
 	}
 

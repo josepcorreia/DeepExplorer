@@ -20,6 +20,12 @@ public class Palavra extends RelationalElement{
 	}
 
 	public long checkWord(String  word, String pos, String category){
+		
+		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
+			pos = "VERB";
+		}
+
+		
 		if(wordExists(word, pos)){
 			if(wordExistsCorpus(_currentId)){
 				uptadeFrequency(_currentId);
@@ -48,7 +54,7 @@ public class Palavra extends RelationalElement{
 			//System.out.println("Record is inserted into Palavra table!");
 
 		} catch (SQLException e) {
-			System.out.println("|| Palavra");
+			System.out.println("|| Palavra- inserir "+ palavra );
 			System.out.println(e.getMessage());
 			
 		} finally {
@@ -67,23 +73,24 @@ public class Palavra extends RelationalElement{
 	
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT idPalavra,palavra,classe FROM Palavra WHERE palavra ='"+ word + "' AND classe ='" + pos +"'";
+			
+			String sql = "SELECT EXISTS(SELECT 1 FROM Palavra WHERE palavra =\""+ word + "\" AND classe =\"" + pos +"\" LIMIT 1)";
+			
 			ResultSet rs = stmt.executeQuery(sql);
-			if(rs.next() ){
-				
-				if((rs.getString("palavra").equals(word) && rs.getString("classe").equals(pos))){
-					_currentId = rs.getLong("idPalavra");
-					rs.close();
-					return true;
-				}
+
+			rs.next();
+			if(rs.getInt(1)==1){
+				rs.close(); 
+				return true;
 			}
-			//caso não exista
+			
+			//caso nao exista
 			rs.close(); 
 			return false;
     
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
-	    	System.out.println("|| Palavra");
+	    	System.out.println("||wordExists Palavra " + word);
 	       se.printStackTrace();
 	    }finally{
 	       //finally block used to close resources
@@ -111,7 +118,7 @@ public class Palavra extends RelationalElement{
 			preparedStatement.executeUpdate();
 			//System.out.println("Record is inserted into Fornece table!");
 		} catch (SQLException e) {
-			System.out.println("|| Palavra");
+			System.out.println("|| Palavra insere no corpus");
 			System.out.println(e.getMessage());
 			return false;
 
@@ -132,17 +139,17 @@ public class Palavra extends RelationalElement{
 	
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT idPalavra FROM Pertence WHERE idPalavra ='"+ id + "' AND nomeCorpus ='" + _corpusName +"'";
+			String sql = "SELECT EXISTS(SELECT 1 FROM Pertence WHERE idPalavra =\""+ id + "\" AND nomeCorpus =\"" + _corpusName +"\" LIMIT 1)";
 			ResultSet rs = stmt.executeQuery(sql);
-			if(rs.next() ){
-				
-				if(rs.getLong("idPalavra") == id){
-					rs.close();
-					return true;
-				}
+
+			rs.next();
+			if(rs.getInt(1)==1){
+				rs.close(); 
+				return true;
 			}
-			//caso não exista
-			rs.close();
+			
+			//caso nao exista
+			rs.close(); 
 			return false;
   
 	    }catch(SQLException se){
@@ -166,7 +173,7 @@ public class Palavra extends RelationalElement{
 			stmt = connection.createStatement();
 			String sql = "UPDATE Pertence " +
 					     " SET frequencia = frequencia + 1 " +
-					     " WHERE idPalavra='"+ wordId +"' AND nomeCorpus= '"+ _corpusName +"'";
+					     " WHERE idPalavra=\""+ wordId +"\" AND nomeCorpus= \""+ _corpusName +"\"";
 						
 			stmt.executeUpdate(sql);
 	

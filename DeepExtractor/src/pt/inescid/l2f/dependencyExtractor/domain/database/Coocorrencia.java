@@ -67,18 +67,21 @@ public class Coocorrencia extends RelationalElement{
 	
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT 1 FROM Coocorrencia WHERE idPalavra1 ='" + wordId1 + 
+			String sql = "SELECT EXISTS(SELECT 1 FROM Coocorrencia WHERE idPalavra1 ='" + wordId1 + 
 															"' AND idPalavra2 ='" + wordId2 + 
 															"' AND nomeProp='"+ prop + 
 															"' AND tipoDep='" + dep + 
-															"' AND nomeCorpus='" + _corpusName + "' LIMIT 1";
+															"' AND nomeCorpus='" + _corpusName + "' LIMIT 1)";
 			ResultSet rs = stmt.executeQuery(sql);
-			if(!rs.next()){
+			rs.next();
+			if(rs.getInt(1)==1){
 				rs.close(); 
-				return false;
+				return true;
 			}
-	
+			
+			//caso nao exista
 			rs.close(); 
+			return false;
 
     
 	    }catch(SQLException se){

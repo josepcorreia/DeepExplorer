@@ -24,7 +24,7 @@ public class DependencyFactory {
 		
 		_dependenciesMap.put("ATTRIB", new Attrib(palavra, coo, prop));
 		_dependenciesMap.put("CDIR", new Cdir(palavra, coo, prop));
-		//_dependenciesMap.put("MOD", new Mod(palavra, coo, prop));
+		_dependenciesMap.put("MOD", new Mod(palavra, coo, prop));
 		_dependenciesMap.put("SUBJ", new Subj(palavra, coo, prop));
 	}	
 	

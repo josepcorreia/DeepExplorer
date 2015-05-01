@@ -21,12 +21,15 @@ public class Cdir extends DependencyType{
 	public void getDepedencyInformation(Dependency dep) {
 		long wordId1 = 0;
 		long wordId2 = 0;
-		String prop = "";
+		String prop = "SEM_PROP";
 		String depname = dep.getName();
 		
 		for (Feature f : dep.getFeatures()){
 			//Propriedade
-			prop = f.getName();
+			String aux = f.getName();
+			if (aux.equals("PRE")||aux.equals("POST")){
+				prop=aux;
+			}
 		}
 		_propriedade.checkProperty(prop, depname);
 			
@@ -49,7 +52,9 @@ public class Cdir extends DependencyType{
 				}
 				i++;
 			}
-
+			if(wordId1==0 || wordId2 == 0){
+				System.out.println("Depedencai com erro  CDIR");
+			}
 			super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 		
 	}

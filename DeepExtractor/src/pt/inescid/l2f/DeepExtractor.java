@@ -1,6 +1,8 @@
 package pt.inescid.l2f;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 
 import pt.inescid.l2f.connection.ConnectionMySQL;
@@ -23,7 +25,8 @@ public class DeepExtractor {
 		XipDocument document = null;
 		try{
 			XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
-			BufferedReader buffer = new BufferedReader(new FileReader(args[0]));
+			//BufferedReader buffer = new BufferedReader(new FileReader(args[0]));
+			BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), "UTF-8"));
 			document = xipDocumentFactory.getXipResult(buffer);
 			
 
