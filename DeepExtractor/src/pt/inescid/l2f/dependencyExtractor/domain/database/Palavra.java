@@ -27,14 +27,14 @@ public class Palavra extends RelationalElement{
 
 		
 		if(wordExists(word, pos)){
-			if(wordExistsCorpus(_currentId)){
+			//if(wordExistsCorpus(_currentId)){
 				uptadeFrequency(_currentId);
-			}else{
-				insertPalavraCorpus(_currentId, _corpusName);
-			}
+			//}else{
+			//}
 			
 		}else{
 			insertNewPalavra(word, pos, category);
+			insertPalavraCorpus(_currentId, _corpusName);
 		}
 		return _currentId;
 	}
@@ -74,12 +74,13 @@ public class Palavra extends RelationalElement{
 		try{
 			stmt = connection.createStatement();
 			
-			String sql = "SELECT EXISTS(SELECT 1 FROM Palavra WHERE palavra =\""+ word + "\" AND classe =\"" + pos +"\" LIMIT 1)";
+			String sql = "SELECT idPalavra FROM Palavra WHERE palavra =\""+ word + "\" AND classe =\"" + pos +"\" LIMIT 1";
 			
 			ResultSet rs = stmt.executeQuery(sql);
 
-			rs.next();
-			if(rs.getInt(1)==1){
+			
+			if(rs.next()){
+				_currentId = rs.getLong("idPalavra");
 				rs.close(); 
 				return true;
 			}
@@ -147,7 +148,6 @@ public class Palavra extends RelationalElement{
 				rs.close(); 
 				return true;
 			}
-			
 			//caso nao exista
 			rs.close(); 
 			return false;
