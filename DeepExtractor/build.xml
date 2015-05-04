@@ -63,8 +63,14 @@
 	    	<arg value="/Users/josecorreia/Projects/Parte01aaa.xml"/>
 		</java>
 	</target>
-	<target name="runW8" depends="main" description="run" >
+	<target name="runXub" depends="main" description="run" >
 		    <java classname="${main}" fork="true">
+				<classpath refid="classpath"/>
+		    	<arg value="/home/josecorreia/Projects/Parte01aaa.xml"/>
+			</java>
+	</target>
+	<target name="runW8" depends="main" description="run" >
+		    <java memoryMaximumSize="2048m" classname="${main}" fork="true">
 				<classpath refid="classpath"/>
 		    	<arg value="C:\Users\ze_mi_000\Projects\Parte01aaa.xml"/>
 			</java>

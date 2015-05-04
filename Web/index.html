@@ -1,43 +1,63 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html ng-app="deepApp" lang="pt">
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="Public/css/bootstrap.min.css">
-	<!-- Latest compiled and minified JavaScript -->
+  <link rel="stylesheet" href="Public/css/bootstrap-theme.min.css">
+	 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
 	<script src="Public/js/bootstrap.min.js"></script>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-   
+
 	<script src="Public/js/angular.min.js"></script>
 
 	<!--mine -->
 	<link rel="stylesheet" href="css/deepexplore.css">
+  <script src="js/deepApp.js"></script>
+  <script src="js/searchCtrl.js"></script>
+
 
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Deep Explorer</title>
 </head>
 
 
+ <body>
 
-  <body>
-  <nav class="navbar navbar-default navbar-static-top">
-  <div class="container">
-    <a class="navbar-brand" href="#">DeepExplorer</a>
-  </div>
-</nav>
-  	<div class="container inputword">
-  <form>
-    <div class="form-group">
-      <label for="Palavra">Introduza uma palavra</label>
-      <input type="text" class="form-control" placeholder="Palavra">
-      <button type="submit" class="btn btn-primary">Pesquisar</button>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">DeepExplorer</a>
+      </div>
+    </nav>
+    <div class="container">
+        <div class = "deepword" ng-controller="searchCtrl">
+          <label for="exampleInputEmail1">Introduzir uma palavra</label>
+          <div class="input-group">
+             <input type="text" class="form-control" placeholder="Palavra" ng-model="name">
+            <div class="input-group-btn">
+           
+              <button type="button" class=" btnmdl btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                Classe
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="">Nome</a></li>
+                <li><a href="">Verbo</a></li>
+                <li><a href="">Adjectivo</a></li>
+                <li><a href="">Advérbio</a></li>
+              </ul>
+              <button class="btn btn-default" type="submit" value="Mostrar" ng-click="search()">Mostrar</button>
+            </div>
+            
+          
+          </div>
+      </div> 
+         
+    {{name}}
     </div>
-    </form>
-</div>
   </body>
-  
-
 </html>
-
