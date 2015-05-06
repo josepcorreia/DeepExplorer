@@ -1,0 +1,24 @@
+<div class="container">
+        <div class = "deepword">
+          <label for="palavra">Introduzir palavra</label>
+          <div class="input-group">
+             <input type="text" class="form-control" placeholder="Palavra" ng-model="word">
+            <div class="input-group-btn">
+           
+              <button type="button" class=" btnmdl btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                {{pos}}
+                <span class="caret"></span>
+                <!--<span class="sr-only">Toggle Dropdown</span>-->
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                 <li ng-repeat="x in classes">
+                   <a ng-click="changePos(x)" href=""> {{ x }} </a>
+                  </li>
+              </ul>
+              <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+            </div>
+            
+          
+          </div>
+      </div> 
+    </div>
