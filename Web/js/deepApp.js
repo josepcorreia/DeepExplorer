@@ -31,7 +31,7 @@ deepApp.config(function($routeProvider, $locationProvider) {
 deepApp.service('sharedInfo', function () {
         var word = "";
         var pos = "";
-        var mod;
+        var deps;
         return {
             getWord: function () {
                 return word;
@@ -39,8 +39,8 @@ deepApp.service('sharedInfo', function () {
             getPos: function () {
                 return pos;
             },
-            getMod: function () {
-                return mod;
+            getDeps: function () {
+                return deps;
             },
             setWord: function(value) {
                 word = value;
@@ -48,8 +48,8 @@ deepApp.service('sharedInfo', function () {
             setPos: function(value) {
                 pos = value;
             },
-            setMod: function(value) {
-                mod = value;
+            setDeps: function(value) {
+                deps = value;
             }
             
         };
@@ -57,20 +57,30 @@ deepApp.service('sharedInfo', function () {
 
 deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
    $scope.classes=['Nome','Verbo','Adjectivo','Advérbio']
-   $scope.pos = "Classe"; 
+   $scope.pos = "Classe";
+
+   var posHash = new Array();
+    posHash['Nome'] = 'NOUN';
+    posHash['Verbo'] = 'VERB';
+    posHash['Adjectivo'] = 'ADJ'; 
+    posHash['Advérbio'] = 'ADV'; 
 
    $scope.changePos = function(value) {
 		 $scope.pos = value;
 	};
+  $scope.continueExecution = function (){
+    $location.path("/nome");
+  };
 
    $scope.searchWord = function() {
-   		if(angular.isString($scope.word)){
+   		var teste = false;
+      if(angular.isString($scope.word)){
    			if($scope.pos != "Classe"){
-   				sharedInfo.setWord($scope.word);
+   				
+          sharedInfo.setWord($scope.word);
    				sharedInfo.setPos($scope.pos);
-          $scope.pos = "VERB";
-          $scope.postPhp();
-          $location.path("/nome");
+
+          $scope.postPhp()
    			}
         else{
    				alert("Selecionar qual a classe da palavra");
@@ -83,7 +93,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
        var url = 'php/conn.php';
        var data = {
                     'word':$scope.word,
-                    'pos':$scope.pos
+                    'pos':posHash[$scope.pos]
           };
         // Variable to hold request
         var request;
@@ -98,34 +108,39 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
                     data: data,
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     async: true
-        });
+        });//request
         
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
-            sharedInfo.setMod(response.Mod);
-            console.log(response.Mod);
-         });
+            sharedInfo.setDeps(response.DEPS);
+            console.log(response);
+            $location.path("/nome");
+            $scope.$apply()
+         });//request done
 
         // Callback handler that will be called on failure
         request.fail(function (jqXHR, textStatus, errorThrown){
         // Log the error to the console
+        //return false;
         console.error(
             "The following error occurred: "+
             textStatus, errorThrown
         );
-    });
-
-    }
-      
-   
-});
+        });//fail
+    }//postPhp
+});//controller
 
 deepApp.controller("nameCtrl", function($scope, sharedInfo) {
-    $scope.Mod = sharedInfo.getMod();
+    var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
-    $scope.pos = "VERB";//sharedInfo.getPos();
+    $scope.pos =  sharedInfo.getPos();
     
-    console.log($scope.Mod);
-  
+    $scope.SUBJ = Deps.SUBJ;
+    $scope.CDIR = Deps.CDIR;
+    $scope.MOD = Deps.MOD;
+    $scope.ATTRIB = Deps.ATTRIB;
 
+    //console.log($scope.MOD);
+    
+    //console.log( Deps);
 });

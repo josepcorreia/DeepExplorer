@@ -1,31 +1,48 @@
 <h1>{{word}} ({{pos}})</h1>
 <div class="table-responsive">
-<table class="table table-bordered">
-<tr class="active">
-  <td >...</td>
-  <td>...</td>
-</tr>
-<tr ng-repeat="x in Mod">
-    	<td>{{ x.word}}</td>
-    	<td>{{ x.frequency}}</td>
-		</tr>
-</table>
-<!--<tr class="active">
-  <td >...</td>
-  <td>...</td>
-</tr>
-<tr  class="success">
-	<td > <table>
-		<tr ng-repeat="x in Mod">
-    	<td>{{ x.word}}</td>
-    	<td>{{ x.frequency}}</td>
-		</tr>
+	<table class="table">
 
-
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >Sujeito</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in SUBJ">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+    				
+					</tr>
+				</table>
+			<td>
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >Complemento Directo</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in CDIR">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					</tr>
+				</table>
+			<td>
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >ATTRIB</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in ATTRIB">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					</tr>
+				</table>
+			<td>
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >MOD</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in MOD">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					</tr>
+				</table>
+			<td>
 
 	</table>
-	</td>
-  	<td>...</td>
-</tr>
-</table>-->
 </div>
