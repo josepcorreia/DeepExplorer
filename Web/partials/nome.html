@@ -1,1 +1,31 @@
-<h1>{{word}}</h1>
+<h1>{{word}} ({{pos}})</h1>
+<div class="table-responsive">
+<table class="table table-bordered">
+<tr class="active">
+  <td >...</td>
+  <td>...</td>
+</tr>
+<tr ng-repeat="x in Mod">
+    	<td>{{ x.word}}</td>
+    	<td>{{ x.frequency}}</td>
+		</tr>
+</table>
+<!--<tr class="active">
+  <td >...</td>
+  <td>...</td>
+</tr>
+<tr  class="success">
+	<td > <table>
+		<tr ng-repeat="x in Mod">
+    	<td>{{ x.word}}</td>
+    	<td>{{ x.frequency}}</td>
+		</tr>
+
+
+
+	</table>
+	</td>
+  	<td>...</td>
+</tr>
+</table>-->
+</div>

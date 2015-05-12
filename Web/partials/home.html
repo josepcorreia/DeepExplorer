@@ -11,10 +11,11 @@
                 <!--<span class="sr-only">Toggle Dropdown</span>-->
               </button>
               <ul class="dropdown-menu" role="menu">
-                 <li ng-repeat="x in classes">
-                   <a ng-click="changePos(x)" href=""> {{ x }} </a>
+                 <li ng-repeat="x in classes" ng-click="changePos(x)">
+                   <a  href=""> {{ x }} </a>
                   </li>
               </ul>
+
               <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
             </div>
             
