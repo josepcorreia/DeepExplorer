@@ -1,6 +1,5 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
-import java.sql.Connection;
 import java.util.HashMap;
 
 import pt.inescid.l2f.dependencyExtractor.domain.database.Coocorrencia;
@@ -15,12 +14,8 @@ import pt.inescid.l2f.dependencyExtractor.domain.dependency.Subj;
 public class DependencyFactory {
 	private HashMap<String,DependencyType> _dependenciesMap;
 	
-	public DependencyFactory(Connection conn, String corpusName){
+	public DependencyFactory(String corpusName, Palavra palavra, Coocorrencia coo, Propriedade prop){
 		_dependenciesMap = new HashMap<String,DependencyType>();
-		
-		Palavra palavra = new Palavra(conn, corpusName);
-		Coocorrencia coo = new Coocorrencia(conn, corpusName);
-		Propriedade prop = new Propriedade(conn); 
 		
 		_dependenciesMap.put("ATTRIB", new Attrib(palavra, coo, prop));
 		_dependenciesMap.put("CDIR", new Cdir(palavra, coo, prop));

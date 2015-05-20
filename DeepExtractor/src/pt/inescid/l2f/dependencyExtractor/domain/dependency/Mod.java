@@ -45,16 +45,16 @@ public class Mod extends DependencyType{
 				}
 				a.add(super._palavra.checkWord(word, pos, "categoria"));
 			}
-			/*if(a.size()!= 2){
-				System.out.println(depname + "_" + prop);
-				System.out.println(a);
-				System.out.println(dep.getNodes().size());
-				System.out.println("####");
-			}*/
+			
 			if(a.size()== 2){
 				super._coocorrencia.checkCoocorrence(a.get(0), a.get(1), prop, depname);
-			}else{
-				//System.out.println("Depedencia com erro MOD");
+			}
+			else{
+				/*System.out.println("Depedencia com erro MOD");
+				System.out.println(dep.printDependency());
+				System.out.println(dep.getSentenceNumber());
+				System.out.println("####");*/
+				
 			}
 		
 	}

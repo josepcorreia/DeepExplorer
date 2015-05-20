@@ -53,7 +53,7 @@ public class Cdir extends DependencyType{
 				i++;
 			}
 			if(wordId1==0 || wordId2 == 0){
-				System.out.println("Depedencai com erro  CDIR");
+				System.out.println("Depedencia com erro  CDIR");
 			}
 			super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 		

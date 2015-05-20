@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
+
 
 public class Coocorrencia extends RelationalElement{
 	private String _corpusName;
@@ -15,6 +17,39 @@ public class Coocorrencia extends RelationalElement{
 		_corpusName = corpusName;
 	}
 
+	public int getNumberRows(){
+		Statement stmt = null;
+		int rows = 0;
+		
+		try{
+			stmt = connection.createStatement();
+			String sql = "SELECT count(*) FROM Coocorrencia;";
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs.next()){
+				rows = rs.getInt(1);
+			}
+			
+			rs.close(); 
+			    
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	    	System.out.println("|| COOO - a verificar se so ha 1");
+	       se.printStackTrace();
+	     
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+ 
+		return rows;
+	}
+	
+	
+	
 	public void checkCoocorrence(long wordId1, long wordId2, String prop, String dep){
 		if(coocorrenceExists(wordId1, wordId2, prop, dep)){
 			uptadeFrequency(wordId1, wordId2, prop, dep);
@@ -124,5 +159,125 @@ public class Coocorrencia extends RelationalElement{
 		      }// do nothing
 
 		}//end finally try	   
+	}
+	
+	public int getDependencyFrequency(long wordId1, long wordId2, String prop, String dep){
+		Statement stmt = null;
+		int freq = 0;
+		
+		try{
+			stmt = connection.createStatement();
+			String sql = "SELECT frequencia " + 
+						 "FROM Coocorrencia " +
+						 "WHERE idPalavra1 = "+ wordId1 + 
+						        " and idPalavra2 = " + wordId2 + 
+						        " and tipoDep=" + dep + 
+						        " and nomeProp = " + prop +
+						        " and nomeCorpus = " + _corpusName + ";";
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs.next()){  
+				freq = rs.getInt(1);
+			}
+
+			rs.close(); 
+	
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	    	System.out.println("Frequencia duma denpedencia");
+	       se.printStackTrace();
+	     
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+ 
+		return freq ;
+	}
+	
+	public void uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep, String measure, double value){
+		
+		
+		
+		Statement stmt = null;
+		try{
+			stmt = connection.createStatement();
+			String sql = "UPDATE Coocorrencia "+ 
+						 "SET "+ measure + " = " + value + 
+						 " WHERE idPalavra1 = " + wordId1+
+						 " and idPalavra2 = "+ wordId2 +
+						 " and nomeProp = '" + prop +
+						 "' and tipoDep = '"+ dep +
+						 "' and nomeCorpus = '" +  _corpusName + "'";
+						
+			stmt.executeUpdate(sql);
+	
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			System.out.println("Measure");
+		      se.printStackTrace();
+		}finally{
+		      //finally block used to close resources
+		      try{
+		         if(stmt!=null)
+		            stmt.close();
+		      }catch(SQLException se){
+		      }// do nothing
+
+		}//end finally try	   
+	}
+	
+	public void UpdateMeasures(Palavra pal){
+		int intervall = 1000;
+		int totalrows =  getNumberRows();
+		long nWords = pal.getNumberWords();
+		
+		int index = 0;
+		while(index < totalrows){
+			Statement stmt = null;
+
+			try{
+				
+				stmt = connection.createStatement();
+				String sql = "SELECT * FROM Coocorrencia LIMIT " + index + "," +  intervall +  ";" ;
+				ResultSet rs = stmt.executeQuery(sql);
+
+				while(rs.next()){  
+					long word1 = rs.getLong("idPalavra1");
+					long word2 = rs.getLong("idPalavra2");
+					long depfreq = rs.getLong("frequencia");
+					String dep = rs.getString("tipoDep");
+					String prop =  rs.getString("nomeProp");
+					
+					long word1freq = pal.getWordFrequency(word1);
+					long word2freq = pal.getWordFrequency(word2);
+					
+					double pmi = AssociationMeasures.PMI(nWords, depfreq, word1freq, word2freq);
+				
+					
+					uptadeAssociationMeasure(word1, word2,prop, dep, "PMI", pmi);
+				}
+				rs.close(); 
+
+
+
+			}catch(SQLException se){
+				//Handle errors for JDBC
+				System.out.println("ERROR: Update measures");
+				se.printStackTrace();
+
+			}finally{
+				//finally block used to close resources
+				try{
+					if(stmt!=null)
+						stmt.close();
+				}catch(SQLException se){
+				}// do nothing
+			}//end finally try
+		index = index + intervall;
+		}
 	}
 }

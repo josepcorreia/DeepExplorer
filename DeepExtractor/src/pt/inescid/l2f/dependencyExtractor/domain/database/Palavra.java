@@ -10,13 +10,80 @@ public class Palavra extends RelationalElement{
 	private long  _idCounter;
 	private long _currentId;
 	private String _corpusName;
+	private long _numberWords;//número total de palavras no corpus
 	
 	
 	
 	public Palavra(Connection conn, String corpusName) {
 		super(conn);
-		_idCounter=1;
+		_idCounter= getLastId() + 1;
 		_corpusName = corpusName;
+	}
+
+	public long getNumberWords() {
+		Statement stmt = null;
+		long totalFreq = 0;
+		try{
+			stmt = connection.createStatement();
+			
+			String sql = "Select sum(frequencia) as total from Pertence WHERE nomeCorpus = '"+ _corpusName +"'";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+
+			
+			if(rs.next()){
+				totalFreq = rs.getLong("total");
+			}
+			
+			rs.close(); 
+    
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	    	System.out.println("||numero total de palavras");
+	       se.printStackTrace();
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+		
+		return totalFreq;
+	}
+
+	private long getLastId() {
+		Statement stmt = null;
+		long id = 0;
+		try{
+			stmt = connection.createStatement();
+			
+			String sql = "SELECT idPalavra FROM Palavra ORDER BY idPalavra DESC LIMIT 1";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+
+			
+			if(rs.next()){
+				id = rs.getLong("idPalavra");
+			}
+			
+			rs.close(); 
+    
+	    }catch(SQLException se){
+	       //Handle errors for JDBC
+	    	System.out.println("||idPalavra ao inicio");
+	       se.printStackTrace();
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+		
+		return id;
 	}
 
 	public long checkWord(String  word, String pos, String category){
@@ -191,4 +258,41 @@ public class Palavra extends RelationalElement{
 
 		}//end finally try	   
 	}
+  
+  public long getWordFrequency(Long id){
+  		Statement stmt = null;
+  		long freq = 0;
+  		
+		try{
+			stmt = connection.createStatement();
+			String sql = "SELECT frequencia " +
+					     "FROM Pertence " +
+					     "Where idPalavra = "+ id + 
+					     		" and nomeCorpus = '"+ _corpusName +"';";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			
+			if(rs.next()){
+				freq = rs.getInt(1);//mudar
+			}
+
+			rs.close(); 
+
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			System.out.println("word freq");
+		      se.printStackTrace();
+		}finally{
+		      //finally block used to close resources
+		      try{
+		         if(stmt!=null)
+		            stmt.close();
+		      }catch(SQLException se){
+		      }// do nothing
+
+		}//end finally try	 
+		
+		return freq;
+		
+  	}
 }

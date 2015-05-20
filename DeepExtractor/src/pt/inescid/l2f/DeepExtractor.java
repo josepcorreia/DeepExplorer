@@ -2,7 +2,13 @@ package pt.inescid.l2f;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 
 import pt.inescid.l2f.connection.ConnectionMySQL;
@@ -22,25 +28,48 @@ public class DeepExtractor {
 		Connection c_mysql = ConnectionMySQL.getConnectionMySQL();
 		DependencyExtractor de = new DependencyExtractor(c_mysql, "CETEMPúblico");
 		
-		XipDocument document = null;
-		try{
-			XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
-			//BufferedReader buffer = new BufferedReader(new FileReader(args[0]));
-			BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), "UTF-8"));
-			document = xipDocumentFactory.getXipResult(buffer);
-			
-
+		//XipDocument document = null;
 			System.out.println(ConnectionMySQL.getStatusConnection());
-						
-			de.Extract(document.getDependencies());
+
+			XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
+					
+			Path dir = Paths.get(args[0]);
+			inspectDirectory(dir, xipDocumentFactory, de);
+			
+			de.CalculateAssociationMeasures();
 			
 			ConnectionMySQL.CloseConnection(c_mysql);
-			System.out.println("FIM");
-			
+			System.out.println("FIM");		
+		
+	}
+	
+	public static void inspectDirectory(Path path, XipDocumentFactory xipdc, DependencyExtractor de){
+		XipDocument document = null;
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+			for (Path file: stream) {
+				if(file.toFile().isDirectory()){
+					System.out.println("DIRECTORY " +file.getFileName());
+					inspectDirectory(file, xipdc, de);
+
+				}
+				if(file.toFile().isFile() && file.toString().endsWith(".xml")){
+					
+					System.out.println("FILE " +file.getFileName());
+					BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
+					document = xipdc.getXipResult(buffer);
+					de.Extract(document.getDependencies());
+				}
+
+			}
+		} catch (IOException | DirectoryIteratorException x) {
+			// IOException can never be thrown by the iteration.
+			// In this snippet, it can only be thrown by newDirectoryStream.
+			System.err.println(x);
 		}catch(Exception e1){
 			System.err.println("DeepExplorer: input error");
 			e1.printStackTrace();
-			return;
+		return;
 		}
-	}
+	} 
+	
 }

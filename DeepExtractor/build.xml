@@ -60,7 +60,8 @@
  	<target name="run0" depends="main" description="run" >
 	    <java classname="${main}" fork="true">
 			<classpath refid="classpath"/>
-	    	<arg value="/Users/josecorreia/Projects/Parte01aaa.xml"/>
+	    	<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
+	    	<!--<arg value="/Users/josecorreia/Projects/Parte01aaa.xml"/>-->
 		</java>
 	</target>
 	<target name="runXub" depends="main" description="run" >

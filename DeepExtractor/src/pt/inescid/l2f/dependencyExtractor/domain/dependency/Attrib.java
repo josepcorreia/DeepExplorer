@@ -50,7 +50,7 @@ public class Attrib extends DependencyType{
 				i++;
 			}
 			if(wordId1==0 || wordId2 == 0){
-				System.out.println("Depedencai com erro ATTRIB");
+				System.out.println("Depedencia com erro ATTRIB");
 			}
 			super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 		
