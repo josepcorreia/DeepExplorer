@@ -22,8 +22,8 @@ public class ConnectionMySQL {
 		  
 		  // Configuração da conexão à base de dados//
 		  	String serverName = "localhost"; 
-		  	String mydatabase = "db_deep";
-		  //	String mydatabase = "db_deep_aux"; 	
+		  	//String mydatabase = "db_deep";
+		  	String mydatabase = "db_deep_aux"; 	
 		  	String url = "jdbc:mysql://" + serverName + "/" + mydatabase; 
 		  	String username = "jcorreia";
 		  	String password = "deepexplorer";

@@ -1,9 +1,14 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
+import java.util.ArrayList;
+
 import pt.inescid.l2f.dependencyExtractor.domain.database.Coocorrencia;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Palavra;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Propriedade;
 import pt.inescid.l2f.xipapi.domain.Dependency;
+import pt.inescid.l2f.xipapi.domain.Feature;
+import pt.inescid.l2f.xipapi.domain.Token;
+import pt.inescid.l2f.xipapi.domain.XIPNode;
 
 
 public abstract class DependencyType{
@@ -17,5 +22,55 @@ public abstract class DependencyType{
 		_propriedade = prop;
 	}
 	
-	public abstract void getDepedencyInformation(Dependency dep);
+	public void getDepedencyInformation(Dependency dep, ArrayList<Integer> nodeInSetence){
+	
+		long wordId1 = 0;
+		long wordId2 = 0;
+		String prop = "SEM_PROP";
+		String depname = dep.getName();
+		
+		for (Feature f : dep.getFeatures()){
+			//Propriedade
+			String aux = f.getName();
+			if (aux.equals("PRE")||aux.equals("POST")){
+				prop=aux;
+			}
+		}
+		_propriedade.checkProperty(prop, depname);
+			ArrayList<Long> a = new ArrayList<Long>();
+			
+			for (XIPNode node : dep.getNodes()){
+				String pos = node.getName();
+				String word = "";
+				for (Token token : node.getTokens()){
+					if(!word.isEmpty()){
+						word = word + " ";
+					}
+					word  = word + token.getLemmas().element();		
+				}
+
+				//System.out.println(node.getNodeNumber() + " " + word);
+
+				Long wordId;
+				if(nodeInSetence.contains(Integer.parseInt(node.getNodeNumber()))){
+					wordId = _palavra.getWordId(word, pos, "categoria");
+				} 
+				else {
+					wordId = _palavra.checkWord(word, pos, "categoria");
+					nodeInSetence.add(Integer.parseInt(node.getNodeNumber()));
+				}
+				a.add(wordId);
+			}
+			
+			if(a.size()== 2){
+				_coocorrencia.checkCoocorrence(a.get(0), a.get(1), prop, depname);
+			}
+			else{
+				/*System.out.println("Depedencia com erro" + depname +");
+				System.out.println(dep.printDependency());
+				System.out.println(dep.getSentenceNumber());
+				System.out.println("####");*/
+				
+			}
+	}
 }

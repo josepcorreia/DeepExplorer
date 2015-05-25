@@ -2,7 +2,9 @@ package pt.inescid.l2f.dependencyExtractor.domain.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Dependencia extends RelationalElement{
 
@@ -12,12 +14,23 @@ public class Dependencia extends RelationalElement{
 
 	public boolean insertNew(String tipodepedencia){
 		PreparedStatement preparedStatement = null;
+		Statement stmt = null;
 		
 		try {
-			preparedStatement = connection.prepareStatement("insert into  Dependencia values (?)");
+			stmt = connection.createStatement();
+			String sql = "SELECT EXISTS(SELECT 1 FROM Dependencia WHERE tipoDep = '"+ tipodepedencia  + "' LIMIT 1)";
+			ResultSet rs = stmt.executeQuery(sql);
 
-			preparedStatement.setString(1, tipodepedencia);
+			if(rs.next()){
+				if(rs.getInt(1)==1){
+					rs.close(); 
+					return true;
+				}
+			}
+			rs.close();
 			
+			preparedStatement = connection.prepareStatement("insert into  Dependencia values (?)");
+			preparedStatement.setString(1, tipodepedencia);
 			preparedStatement.executeUpdate();
 
 			System.out.println("Record is inserted into Depedencia table!");

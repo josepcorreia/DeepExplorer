@@ -17,7 +17,7 @@ public class Cdir extends DependencyType{
 		super(palavra, coo, prop);
 	}
 
-	@Override
+	/*@Override
 	public void getDepedencyInformation(Dependency dep) {
 		long wordId1 = 0;
 		long wordId2 = 0;
@@ -44,6 +44,7 @@ public class Cdir extends DependencyType{
 					}
 					word  = word + token.getLemmas().element();		
 				}
+				System.out.println(node.getNodeNumber() + " " + word);
 				long wordId = super._palavra.checkWord(word, pos, "categoria");
 				if(i==1){
 					wordId1 = wordId;
@@ -57,6 +58,6 @@ public class Cdir extends DependencyType{
 			}
 			super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 		
-	}
+	}*/
 
 }

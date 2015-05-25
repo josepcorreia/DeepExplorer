@@ -34,6 +34,9 @@ public class DeepExtractor {
 			XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 					
 			Path dir = Paths.get(args[0]);
+			
+			de.CorpusInformation();
+			
 			inspectDirectory(dir, xipDocumentFactory, de);
 			
 			de.CalculateAssociationMeasures();
@@ -57,7 +60,8 @@ public class DeepExtractor {
 					System.out.println("FILE " +file.getFileName());
 					BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
 					document = xipdc.getXipResult(buffer);
-					de.Extract(document.getDependencies());
+										
+					de.Extract(document);
 				}
 
 			}

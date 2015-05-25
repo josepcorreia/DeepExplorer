@@ -10,7 +10,7 @@ public class Palavra extends RelationalElement{
 	private long  _idCounter;
 	private long _currentId;
 	private String _corpusName;
-	private long _numberWords;//número total de palavras no corpus
+	
 	
 	
 	
@@ -85,7 +85,19 @@ public class Palavra extends RelationalElement{
 		
 		return id;
 	}
+	
+	public long getWordId(String  word, String pos, String category){
+		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
+			pos = "VERB";
+		}
+		//wordExist actualiza _currentId caso a palavra exista
+		if(!wordExists(word, pos)){
+			//lançar excpção
+			System.out.println("a aplavra devia existir, qq cosia esta mal");
+		}
+		return _currentId;
 
+	}
 	public long checkWord(String  word, String pos, String category){
 		
 		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
@@ -94,11 +106,7 @@ public class Palavra extends RelationalElement{
 
 		
 		if(wordExists(word, pos)){
-			//if(wordExistsCorpus(_currentId)){
-				uptadeFrequency(_currentId);
-			//}else{
-			//}
-			
+			uptadeFrequency(_currentId);
 		}else{
 			insertNewPalavra(word, pos, category);
 			insertPalavraCorpus(_currentId, _corpusName);

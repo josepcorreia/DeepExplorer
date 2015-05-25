@@ -14,7 +14,7 @@ public class Attrib extends DependencyType{
 		super(palavra, coo, prop);
 	}
 
-	@Override
+	/*@Override
 	public void getDepedencyInformation(Dependency dep) {
 		long wordId1 = 0;
 		long wordId2 = 0;
@@ -54,6 +54,6 @@ public class Attrib extends DependencyType{
 			}
 			super._coocorrencia.checkCoocorrence(wordId1, wordId2, prop, depname);
 		
-	}
+	}*/
 
 }

@@ -16,7 +16,7 @@ public class Mod extends DependencyType{
 		super(palavra, coo, prop);
 	}
 
-	@Override
+	/*@Override
 	public void getDepedencyInformation(Dependency dep) {
 		long wordId1 = 0;
 		long wordId2 = 0;
@@ -33,7 +33,7 @@ public class Mod extends DependencyType{
 		_propriedade.checkProperty(prop, depname);
 			ArrayList<Long> a = new ArrayList<Long>();
 			//os dois nós da dependencia
-			
+			int i = 0;
 			for (XIPNode node : dep.getNodes()){
 				String pos = node.getName();
 				String word = "";
@@ -42,21 +42,24 @@ public class Mod extends DependencyType{
 						word = word + " ";
 					}
 					word  = word + token.getLemmas().element();		
+					System.out.println(node.getNodeNumber() + " " + word);
+				i = token.getSentenceNumber();
 				}
 				a.add(super._palavra.checkWord(word, pos, "categoria"));
 			}
-			
+			if (i == 3)
+				System.exit(0);
 			if(a.size()== 2){
 				super._coocorrencia.checkCoocorrence(a.get(0), a.get(1), prop, depname);
 			}
 			else{
-				/*System.out.println("Depedencia com erro MOD");
-				System.out.println(dep.printDependency());
-				System.out.println(dep.getSentenceNumber());
-				System.out.println("####");*/
+				//System.out.println("Depedencia com erro MOD");
+				//System.out.println(dep.printDependency());
+				//System.out.println(dep.getSentenceNumber());
+				//System.out.println("####");
 				
 			}
 		
-	}
+	}*/
 
 }

@@ -16,7 +16,7 @@ public class Subj extends DependencyType{
 		super(palavra,coo, prop);
 	}
 
-	@Override
+	/*@Override
 	public void getDepedencyInformation(Dependency dep) {
 		long wordId1 = 0;
 		long wordId2 = 0;
@@ -43,6 +43,7 @@ public class Subj extends DependencyType{
 					}
 					word  = word + token.getLemmas().element();		
 				}
+				System.out.println(node.getNodeNumber() + " " + word);
 				long wordId = super._palavra.checkWord(word, pos, "categoria");
 				if(i==1){
 					wordId1 = wordId;
@@ -60,5 +61,5 @@ public class Subj extends DependencyType{
 		
 		//System.out.println("##############");
 
-	}
+	}*/
 }
