@@ -83,11 +83,9 @@ public class DependencyExtractor {
 						
 			//System.out.println("##########");
 			
+			if(sentenceNumber ==  5)
+				return;
 		}
-	}
-	public void ExtractWords(String word){
-		
-
 	}
 	
 	public void CalculateAssociationMeasures(){

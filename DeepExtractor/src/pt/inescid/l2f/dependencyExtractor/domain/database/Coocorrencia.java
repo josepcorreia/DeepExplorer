@@ -256,9 +256,14 @@ public class Coocorrencia extends RelationalElement{
 					long word2freq = pal.getWordFrequency(word2);
 					
 					double pmi = AssociationMeasures.PMI(nWords, depfreq, word1freq, word2freq);
-				
-					
 					uptadeAssociationMeasure(word1, word2,prop, dep, "PMI", pmi);
+					
+					double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);
+					uptadeAssociationMeasure(word1, word2,prop, dep, "Dice", dice);
+					
+					double logDice = AssociationMeasures.LogDice(depfreq, word1freq, word2freq);
+					uptadeAssociationMeasure(word1, word2,prop, dep, "LogDice", logDice);
+					
 				}
 				rs.close(); 
 
