@@ -70,13 +70,13 @@
 			</java>
 		</target>
 	<target name="runLinParte1" depends="main" description="run" >
-			    <java classname="${main}" fork="true">
+			    <java memoryMaximumSize="2048m" classname="${main}" fork="true">
 					<classpath refid="classpath"/>
 			    	<arg value="/home/masp/josecorreia/Projects/Parte1"/>
 				</java>
 	</target>
 	<target name="runLin" depends="main" description="run" >
-		    <java classname="${main}" fork="true">
+		    <java memoryMaximumSize="2048m" classname="${main}" fork="true">
 				<classpath refid="classpath"/>
 		    	<arg value="/home/masp/josecorreia/Projects/CETEMPublico"/>
 			</java>
