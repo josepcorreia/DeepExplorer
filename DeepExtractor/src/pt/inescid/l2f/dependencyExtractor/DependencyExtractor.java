@@ -83,8 +83,6 @@ public class DependencyExtractor {
 						
 			//System.out.println("##########");
 			
-			if(sentenceNumber ==  5)
-				return;
 		}
 	}
 	
