@@ -252,8 +252,10 @@ public class Coocorrencia extends RelationalElement{
 					String dep = rs.getString("tipoDep");
 					String prop =  rs.getString("nomeProp");
 					
-					long word1freq = pal.getWordFrequency(word1);
-					long word2freq = pal.getWordFrequency(word2);
+					long word1freq = pal.getWordFrequency(word1,dep); 
+					
+					long word2freq = pal.getWordFrequency(word2, dep);
+				
 					
 					double pmi = AssociationMeasures.PMI(nWords, depfreq, word1freq, word2freq);
 					uptadeAssociationMeasure(word1, word2,prop, dep, "PMI", pmi);

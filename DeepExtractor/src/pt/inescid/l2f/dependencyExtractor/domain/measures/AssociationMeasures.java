@@ -8,17 +8,17 @@ public class AssociationMeasures {
 		double num = nwords * depfreq;
 		double den = word1freq * word2freq;
 		return Math.log10(num/den); 
+		
 	}
 	public  static double Dice(long depfreq, long word1freq, long word2freq ){
 		double num = 2 * depfreq;
 		double den = word1freq + word2freq;
-		return (num/den);
+		return  (num/den);
 	}
+	
 	public static double LogDice(long depfreq, long word1freq, long word2freq ){
-		return (14+log(Dice(depfreq,word1freq,word2freq),2));
+		return  (14+log(Dice(depfreq,word1freq,word2freq),2));
 	}
-
-
 
 	public static double log(double x, int base){
 		double num = Math.log(x);

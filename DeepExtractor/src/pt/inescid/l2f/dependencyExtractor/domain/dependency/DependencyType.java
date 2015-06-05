@@ -22,10 +22,8 @@ public abstract class DependencyType{
 		_propriedade = prop;
 	}
 	
-	public void getDepedencyInformation(Dependency dep, ArrayList<Integer> nodeInSetence){
+	public void getDepedencyInformation(Dependency dep){
 	
-		long wordId1 = 0;
-		long wordId2 = 0;
 		String prop = "SEM_PROP";
 		String depname = dep.getName();
 		
@@ -48,18 +46,9 @@ public abstract class DependencyType{
 					}
 					word  = word + token.getLemmas().element();		
 				}
+				a.add(_palavra.checkWord(word, pos, "categoria", depname));
 
 				//System.out.println(node.getNodeNumber() + " " + word);
-
-				Long wordId;
-				if(nodeInSetence.contains(Integer.parseInt(node.getNodeNumber()))){
-					wordId = _palavra.getWordId(word, pos, "categoria");
-				} 
-				else {
-					wordId = _palavra.checkWord(word, pos, "categoria");
-					nodeInSetence.add(Integer.parseInt(node.getNodeNumber()));
-				}
-				a.add(wordId);
 			}
 			
 			if(a.size()== 2){

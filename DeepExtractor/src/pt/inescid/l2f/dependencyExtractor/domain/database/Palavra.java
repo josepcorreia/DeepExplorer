@@ -85,31 +85,23 @@ public class Palavra extends RelationalElement{
 		
 		return id;
 	}
-	
-	public long getWordId(String  word, String pos, String category){
+
+	public long checkWord(String  word, String pos, String category, String depname){
+		
 		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
 			pos = "VERB";
 		}
-		//wordExist actualiza _currentId caso a palavra exista
+
 		if(!wordExists(word, pos)){
-			//lançar excpção
-			System.out.println("a aplavra devia existir, qq cosia esta mal");
-		}
-		return _currentId;
-
-	}
-	public long checkWord(String  word, String pos, String category){
-		
-		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
-			pos = "VERB";
-		}
-
-		
-		if(wordExists(word, pos)){
-			uptadeFrequency(_currentId);
-		}else{
 			insertNewPalavra(word, pos, category);
-			insertPalavraCorpus(_currentId, _corpusName);
+			insertPalavraCorpus(_currentId, depname);
+		}else{
+			if(wordExistsCorpus(_currentId, depname)){
+				uptadeFrequency(_currentId, depname);
+			}
+			else{
+				insertPalavraCorpus(_currentId, depname);
+			}
 		}
 		return _currentId;
 	}
@@ -118,7 +110,7 @@ public class Palavra extends RelationalElement{
 		PreparedStatement preparedStatement = null;
 		_currentId = _idCounter++;
 		try {
-			preparedStatement = super.connection.prepareStatement("insert into Palavra values (?, ?, ?,?)");
+			preparedStatement = super.connection.prepareStatement("insert into Palavra values (?, ?, ?, ?)");
 			preparedStatement.setLong(1, _currentId);
 			preparedStatement.setString(2, palavra);
 			preparedStatement.setString(3, classe);
@@ -129,7 +121,7 @@ public class Palavra extends RelationalElement{
 			//System.out.println("Record is inserted into Palavra table!");
 
 		} catch (SQLException e) {
-			System.out.println("|| Palavra- inserir "+ palavra );
+			System.out.println("|| Palavra - inserir "+ palavra );
 			System.out.println(e.getMessage());
 			
 		} finally {
@@ -182,14 +174,15 @@ public class Palavra extends RelationalElement{
 	
 	
 	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
-  public boolean insertPalavraCorpus(long id, String corpus){
+  public boolean insertPalavraCorpus(long id, String depname){
 		PreparedStatement preparedStatement = null;
 			
 		try {
-			preparedStatement = connection.prepareStatement("insert into Pertence values (?, ?, ?)");
+			preparedStatement = connection.prepareStatement("insert into Pertence values (?, ?, ?, ?)");
 			preparedStatement.setLong(1, id);
-			preparedStatement.setString(2,corpus);
-			preparedStatement.setInt(3,1);
+			preparedStatement.setString(2,depname);
+			preparedStatement.setString(3,_corpusName);
+			preparedStatement.setInt(4,1);
 			
 			preparedStatement.executeUpdate();
 			//System.out.println("Record is inserted into Fornece table!");
@@ -210,12 +203,12 @@ public class Palavra extends RelationalElement{
 	  return true;
   }
   
-  public boolean wordExistsCorpus(long id){
+  public boolean wordExistsCorpus(long id, String depname){
 		Statement stmt = null;
 	
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT EXISTS(SELECT 1 FROM Pertence WHERE idPalavra =\""+ id + "\" AND nomeCorpus =\"" + _corpusName +"\" LIMIT 1)";
+			String sql = "SELECT EXISTS(SELECT 1 FROM Pertence WHERE idPalavra = " + id + " AND tipoDep = '" + depname + "' AND nomeCorpus = '" + _corpusName +"' LIMIT 1)";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			rs.next();
@@ -242,13 +235,15 @@ public class Palavra extends RelationalElement{
 
 		return false;
 	}
-  public void uptadeFrequency(long wordId){
+  public void uptadeFrequency(long wordId, String depname){
 		Statement stmt = null;
 		try{
 			stmt = connection.createStatement();
 			String sql = "UPDATE Pertence " +
 					     " SET frequencia = frequencia + 1 " +
-					     " WHERE idPalavra=\""+ wordId +"\" AND nomeCorpus= \""+ _corpusName +"\"";
+					     " WHERE idPalavra = "+ wordId +
+					     				" AND tipoDep = '"+ depname +
+					     				"' AND nomeCorpus= '"+ _corpusName + "';";
 						
 			stmt.executeUpdate(sql);
 	
@@ -267,7 +262,7 @@ public class Palavra extends RelationalElement{
 		}//end finally try	   
 	}
   
-  public long getWordFrequency(Long id){
+  public long getWordFrequency(Long id, String depname){
   		Statement stmt = null;
   		long freq = 0;
   		
@@ -276,7 +271,8 @@ public class Palavra extends RelationalElement{
 			String sql = "SELECT frequencia " +
 					     "FROM Pertence " +
 					     "Where idPalavra = "+ id + 
-					     		" and nomeCorpus = '"+ _corpusName +"';";
+					     		" and tipoDep = '" + depname +  
+					     		"' and nomeCorpus = '"+ _corpusName +"';";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			
