@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
 
@@ -233,7 +234,8 @@ public class Coocorrencia extends RelationalElement{
 	public void UpdateMeasures(Palavra pal){
 		int intervall = 1000;
 		int totalrows =  getNumberRows();
-		long nWords = pal.getNumberWords();
+		//long nWords = pal.getNumberWords();
+		HashMap<String, Long> nWords = new HashMap<String, Long>();
 		
 		int index = 0;
 		while(index < totalrows){
@@ -251,13 +253,22 @@ public class Coocorrencia extends RelationalElement{
 					long depfreq = rs.getLong("frequencia");
 					String dep = rs.getString("tipoDep");
 					String prop =  rs.getString("nomeProp");
+					long nWordDep = 0;
 					
+					if(nWords.containsKey(dep)){
+						nWordDep = nWords.get(dep); 
+					}
+					else{
+						nWordDep = pal.getNumberWords(dep);
+						nWords.put(dep, nWordDep);
+					}
+						
 					long word1freq = pal.getWordFrequency(word1,dep); 
 					
 					long word2freq = pal.getWordFrequency(word2, dep);
-				
+				//System.out.println(nWordDep);
 					
-					double pmi = AssociationMeasures.PMI(nWords, depfreq, word1freq, word2freq);
+					double pmi = AssociationMeasures.PMI(nWordDep, depfreq, word1freq, word2freq);
 					uptadeAssociationMeasure(word1, word2,prop, dep, "PMI", pmi);
 					
 					double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);

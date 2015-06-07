@@ -57,22 +57,23 @@ public class DependencyExtractor {
 		int sentenceNumber = 0;
 		for (XIPNode sentence : document.getSentences()) {
 			//String Frase =  "";		
+			
+			//número da frase, sentence.getSentenceNumber() não está a funcinar
 			sentenceNumber = sentence.getNodes().get(0).getSentenceNumber();
+			
 			/*for (XIPNode node : sentence.getNodes()) {
 				sentenceNumber = node.getSentenceNumber();
 				_wordCount.checkNode(node);
 			}	
-			*/	
+				
 			//System.out.println("Frase n :" + sentenceNumber);
-		
+			 */
 			for (Dependency dependency : document.getSentenceDependecies(sentenceNumber)) {
 			
 				if(map.containsKey(dependency.getName())){
 					map.get(dependency.getName()).getDepedencyInformation(dependency);
 				}
 			}
-			/*if (sentenceNumber == 1)
-				return;*/			
 			
 			
 		}

@@ -12,21 +12,22 @@ public class Palavra extends RelationalElement{
 	private String _corpusName;
 	
 	
-	
-	
 	public Palavra(Connection conn, String corpusName) {
 		super(conn);
 		_idCounter= getLastId() + 1;
 		_corpusName = corpusName;
 	}
 
-	public long getNumberWords() {
+	public long getNumberWords(String depname) {
 		Statement stmt = null;
 		long totalFreq = 0;
 		try{
 			stmt = connection.createStatement();
 			
-			String sql = "Select sum(frequencia) as total from Pertence WHERE nomeCorpus = '"+ _corpusName +"'";
+			String sql = "Select sum(frequencia) as total " + 
+						 "from Pertence " + 
+						 "WHERE tipoDep = '" + depname +
+						 "' and nomeCorpus = '"+ _corpusName +"'";
 			
 			ResultSet rs = stmt.executeQuery(sql);
 
