@@ -2,9 +2,9 @@ var deepApp = angular.module("deepApp", ['ngRoute']);
 
 
 deepApp.config(function($routeProvider, $locationProvider) {
-      	
+        
 
- 		$routeProvider.
+    $routeProvider.
             // route for the home page
             when('/', {
                 templateUrl : 'partials/home.html',
@@ -16,14 +16,26 @@ deepApp.config(function($routeProvider, $locationProvider) {
                 templateUrl : 'partials/nome.html',
                 controller  : 'nameCtrl'
             }).
+            when('/verbo', {
+                templateUrl : 'partials/verbo.html',
+                controller  : 'nameCtrl'
+            }).
+             when('/adverbio', {
+                templateUrl : 'partials/adverbio.html',
+                controller  : 'nameCtrl'
+            }).
+            when('/adjectivo', {
+                templateUrl : 'partials/adjectivo.html',
+                controller  : 'nameCtrl'
+            }).
 
             otherwise({
-            	redirectTo: '/'
-        	});
+              redirectTo: '/'
+          });
 
         // use the HTML5 History API
-      	//$locationProvider.html5Mode(true);
-      	//problema do refresh http://stackoverflow.com/questions/16569841/angularjs-html5-mode-reloading-the-page-gives-wrong-get-request?lq=1
+        //$locationProvider.html5Mode(true);
+        //problema do refresh http://stackoverflow.com/questions/16569841/angularjs-html5-mode-reloading-the-page-gives-wrong-get-request?lq=1
   });
        
     
@@ -65,29 +77,38 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
     posHash['Adjectivo'] = 'ADJ'; 
     posHash['Advérbio'] = 'ADV'; 
 
+    var urlHash = new Array();
+    urlHash['Nome'] = 'nome';
+    urlHash['Verbo'] = 'verbo';
+    urlHash['Adjectivo'] = 'adjectivo'; 
+    urlHash['Advérbio'] = 'adverbio'; 
+
    $scope.changePos = function(value) {
-		 $scope.pos = value;
-	};
-  $scope.continueExecution = function (){
-    $location.path("/nome");
+     $scope.pos = value;
+  };
+  
+  var selectPath = function (){
+    var path = "/" + urlHash[$scope.pos];
+
+    $location.path(path);
   };
 
    $scope.searchWord = function() {
-   		var teste = false;
+    
       if(angular.isString($scope.word)){
-   			if($scope.pos != "Classe"){
-   				
+        if($scope.pos != "Classe"){
+          
           sharedInfo.setWord($scope.word);
-   				sharedInfo.setPos($scope.pos);
+          sharedInfo.setPos($scope.pos);
 
           $scope.postPhp()
-   			}
+        }
         else{
-   				alert("Selecionar qual a classe da palavra");
-   			}
-   		}else{
-   			alert("Introduzir uma palavra");
-   		}
+          alert("Selecionar qual a classe da palavra");
+        }
+      }else{
+        alert("Introduzir uma palavra");
+      }
    };
     $scope.postPhp = function() {
        var url = 'php/conn.php';
@@ -114,7 +135,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
         request.done(function (response, textStatus, jqXHR){
             sharedInfo.setDeps(response.DEPS);
             console.log(response);
-            $location.path("/nome");
+            selectPath();
             $scope.$apply()
          });//request done
 

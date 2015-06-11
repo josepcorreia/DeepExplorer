@@ -1,0 +1,26 @@
+<h1>{{word}} ({{pos}})</h1>
+<div class="table-responsive">
+	<table class="table">
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >ATTRIB</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in ATTRIB">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >MOD</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in MOD">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					</tr>
+				</table>
+			</td>
+
+	</table>
+</div>

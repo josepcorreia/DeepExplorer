@@ -72,7 +72,7 @@
 	<target name="runLinParte1" depends="main" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
-			    	<arg value="/home/masp/josecorreia/Projects/Parte1"/>
+			    	<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
 				</java>
 	</target>
 	<target name="runLin" depends="main" description="run" >

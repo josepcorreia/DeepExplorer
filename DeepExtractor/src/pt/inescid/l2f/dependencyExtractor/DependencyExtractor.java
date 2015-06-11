@@ -7,8 +7,7 @@ import pt.inescid.l2f.dependencyExtractor.domain.database.Dependencia;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Palavra;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Propriedade;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
-import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
-import pt.inescid.l2f.dependencyExtractor.domain.word.WordCount;
+
 import pt.inescid.l2f.xipapi.domain.Dependency;
 
 import pt.inescid.l2f.xipapi.domain.XIPNode;
@@ -27,7 +26,7 @@ public class DependencyExtractor {
 	private Propriedade _prop;
 	private Corpus _corpus;
 	private Dependencia _dependencia;
-	private WordCount _wordCount;
+
 
 	public DependencyExtractor(Connection conn, String corpusName){
 		_corpusName = corpusName;
@@ -36,7 +35,6 @@ public class DependencyExtractor {
 		_coo = new Coocorrencia(conn, corpusName);
 		_prop = new Propriedade(conn); 
 		_dfactory = new DependencyFactory(corpusName, _palavra, _coo, _prop);
-		_wordCount = new WordCount(_palavra);
 		_dependencia = new Dependencia(conn);
 	}
 
