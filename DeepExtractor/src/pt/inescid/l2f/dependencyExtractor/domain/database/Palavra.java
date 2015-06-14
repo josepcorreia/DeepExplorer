@@ -7,14 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Palavra extends RelationalElement{
-	private long  _idCounter;
 	private long _currentId;
 	private String _corpusName;
-	
+	//private HashMap<String,String> 
 	
 	public Palavra(Connection conn, String corpusName) {
 		super(conn);
-		_idCounter= getLastId() + 1;
 		_corpusName = corpusName;
 	}
 
@@ -54,39 +52,6 @@ public class Palavra extends RelationalElement{
 		return totalFreq;
 	}
 
-	private long getLastId() {
-		Statement stmt = null;
-		long id = 0;
-		try{
-			stmt = connection.createStatement();
-			
-			String sql = "SELECT idPalavra FROM Palavra ORDER BY idPalavra DESC LIMIT 1";
-			
-			ResultSet rs = stmt.executeQuery(sql);
-
-			
-			if(rs.next()){
-				id = rs.getLong("idPalavra");
-			}
-			
-			rs.close(); 
-    
-	    }catch(SQLException se){
-	       //Handle errors for JDBC
-	    	System.out.println("||idPalavra ao inicio");
-	       se.printStackTrace();
-	    }finally{
-	       //finally block used to close resources
-	       try{
-	          if(stmt!=null)
-	             stmt.close();
-	       }catch(SQLException se){
-	       }// do nothing
-	    }//end finally try
-		
-		return id;
-	}
-
 	public long checkWord(String  word, String pos, String category, String depname){
 		
 		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
@@ -108,33 +73,37 @@ public class Palavra extends RelationalElement{
 	}
 	
 	public void insertNewPalavra(String  palavra, String classe, String categoria){
-		PreparedStatement preparedStatement = null;
-		_currentId = _idCounter++;
+		Statement stmt = null;
 		try {
-			preparedStatement = super.connection.prepareStatement("insert into Palavra values (?, ?, ?, ?)");
-			preparedStatement.setLong(1, _currentId);
-			preparedStatement.setString(2, palavra);
-			preparedStatement.setString(3, classe);
-			preparedStatement.setString(4, categoria);
+			stmt = connection.createStatement();
+			String query = "Insert into db_deep_aux.Palavra (palavra, classe) " +
+						   "VALUES(\""+ palavra +"\",\"" + classe +"\" );";
+						   
 			
-			preparedStatement.executeUpdate();
+			stmt.executeUpdate(query);
+	
+			ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
+			if(rs.next()){
+				_currentId = rs.getLong("LAST_INSERT_ID()");
+			}
+			rs.close();
 
 			//System.out.println("Record is inserted into Palavra table!");
-
+			
 		} catch (SQLException e) {
-			System.out.println("|| Palavra - inserir "+ palavra );
+			System.out.println("Inserir Nova Palavra: "+ palavra );
 			System.out.println(e.getMessage());
 			
 		} finally {
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				} catch (SQLException e) {
-						e.printStackTrace();
-				}
-			}
-		}
+			//finally block used to close resources
+		       try{
+		          if(stmt!=null)
+		             stmt.close();
+		       }catch(SQLException se){
+		       }// do nothing
+		}//end finally try	
   }
+	
 	//verifica se uma palavra existe na bd e actualiza o atributo currentId, caso a palavra exista
 	public boolean wordExists(String  word, String pos){
 		Statement stmt = null;

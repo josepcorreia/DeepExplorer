@@ -9,10 +9,12 @@ import pt.inescid.l2f.dependencyExtractor.domain.dependency.Attrib;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.Cdir;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.Mod;
+import pt.inescid.l2f.dependencyExtractor.domain.dependency.NE;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.Subj;
 
 public class DependencyFactory {
 	private HashMap<String,DependencyType> _dependenciesMap;
+	private NE _ne;
 	
 	public DependencyFactory(String corpusName, Palavra palavra, Coocorrencia coo, Propriedade prop){
 		_dependenciesMap = new HashMap<String,DependencyType>();
@@ -21,9 +23,15 @@ public class DependencyFactory {
 		_dependenciesMap.put("CDIR", new Cdir(palavra, coo, prop));
 		_dependenciesMap.put("MOD", new Mod(palavra, coo, prop));
 		_dependenciesMap.put("SUBJ", new Subj(palavra, coo, prop));
+		
+		_ne = new NE(); 
 	}	
 	
 	public HashMap<String,DependencyType> getDependenciesMap(){
 		return _dependenciesMap;
+	}
+	
+	public NE NE(){
+		return _ne;
 	}
 }

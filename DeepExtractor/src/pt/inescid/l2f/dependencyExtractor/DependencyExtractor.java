@@ -7,14 +7,16 @@ import pt.inescid.l2f.dependencyExtractor.domain.database.Dependencia;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Palavra;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Propriedade;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
-
 import pt.inescid.l2f.xipapi.domain.Dependency;
-
 import pt.inescid.l2f.xipapi.domain.XIPNode;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 
 
@@ -47,7 +49,10 @@ public class DependencyExtractor {
 	public void Extract(XipDocument document){
 		HashMap<String, DependencyType> map = _dfactory.getDependenciesMap(); 
 		
-		//preenche a informação sobre as dependencias detectadas
+		
+		
+		
+		//preenche a informação sobre as dependencias detetadas
 		for (String depname : map.keySet()) {
 			_dependencia.insertNew(depname);
 		}
@@ -66,14 +71,27 @@ public class DependencyExtractor {
 				
 			//System.out.println("Frase n :" + sentenceNumber);
 			 */
-			for (Dependency dependency : document.getSentenceDependecies(sentenceNumber)) {
 			
-				if(map.containsKey(dependency.getName())){
-					map.get(dependency.getName()).getDepedencyInformation(dependency);
+			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
+			for (Dependency dependency : deps) {
+				
+				if("NE".equals(dependency.getName())){
+					_dfactory.NE().getDepedencyInformation(dependency);
 				}
 			}
 			
+			for (Dependency dependency : deps) {
 			
+				if(map.containsKey(dependency.getName())){
+					map.get(dependency.getName()).getDepedencyInformation(dependency, _dfactory.NE().getNamedEnteties());
+				}
+			}
+			
+			_dfactory.NE().ClearNamedEnteties();
+			//if(sentenceNumber==10){
+				//System.exit(0);
+			//}
+
 		}
 	}
 

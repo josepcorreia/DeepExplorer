@@ -3,7 +3,6 @@ package pt.inescid.l2f.connection;
 //Classes necessárias para a conexão à base de dados
 import java.sql.Connection; 
 import java.sql.DriverManager; 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ConnectionMySQL {
@@ -21,8 +20,8 @@ public class ConnectionMySQL {
 		  Class.forName(driverName); 
 		  
 		  // Configuração da conexão à base de dados//
-		  	//String serverName = "localhost"; 
-		  	String serverName = "81.193.142.31";
+		  	String serverName = "localhost"; 
+		  	//String serverName = "81.193.142.31";
 		  	//String mydatabase = "db_deep";
 		  	String mydatabase = "db_deep_aux"; 	
 		  	String url = "jdbc:mysql://" + serverName + "/" + mydatabase; 
