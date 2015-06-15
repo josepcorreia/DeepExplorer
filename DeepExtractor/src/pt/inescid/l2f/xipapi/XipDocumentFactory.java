@@ -265,9 +265,17 @@ public class XipDocumentFactory {
 						// String word = child.getAttribute("word");
 						try {
 							XIPNode node = xipDocument.getNode(sentenceNumber, num);
+							
 							dependency.addNode(node);
 						} catch (NodeDoesNotExistException e) {
-							// System.out.println(e.toString() + ": " + id);
+							//System.out.println(e.toString() + ": " + num);
+														
+							//if the node is the "top" one, it's necessary to get the sentence instead
+							XIPNode top =(XIPNode) xipDocument.getSentences().toArray()[sentenceNumber];
+							if(top.getNodeNumber().equals(num)){
+								dependency.addNode(top);
+							}
+							
 						}
 					} else if (child.getNodeName().equals("FEATURE")) {
 						String name = child.getAttribute("attribute");

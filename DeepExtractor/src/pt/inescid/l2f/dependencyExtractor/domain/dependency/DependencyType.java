@@ -94,10 +94,11 @@ public abstract class DependencyType{
 			_coocorrencia.checkCoocorrence(a.get(0), a.get(1), prop, depname);
 		}
 		else{
-			/*System.out.println("Depedencia com erro" + depname +");
+			System.out.println("Depedencia com erro " + depname );
 				System.out.println(dep.printDependency());
 				System.out.println(dep.getSentenceNumber());
-				System.out.println("####");*/
+				System.out.println("####");
+				
 
 		}
 	}
