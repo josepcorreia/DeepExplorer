@@ -88,10 +88,12 @@ public class DependencyExtractor {
 			}
 			
 			_dfactory.NE().ClearNamedEnteties();
-			//if(sentenceNumber==10){
-				//System.exit(0);
-			//}
-
+			
+			/*if(sentenceNumber==10){
+				System.exit(0);
+			}
+			*/
+			
 		}
 	}
 
