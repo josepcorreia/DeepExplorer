@@ -5,15 +5,40 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class Palavra extends RelationalElement{
 	private long _currentId;
 	private String _corpusName;
-	//private HashMap<String,String> 
+//	private HashMap<Long,String> _cachePalavra ;
+//	private HashMap<Long,String> _cachePertence;
 	
 	public Palavra(Connection conn, String corpusName) {
 		super(conn);
 		_corpusName = corpusName;
+		
+	}
+
+	
+	
+	public long checkWord(String  word, String pos, String category, String depname){
+		
+		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
+			pos = "VERB";
+		}
+		
+		if(!wordExists(word, pos)){
+			insertNewPalavra(word, pos, category);
+			insertPalavraCorpus(_currentId, depname);
+		}else{
+			if(wordExistsCorpus(_currentId, depname)){
+				uptadeFrequency(_currentId, depname);
+			}
+			else{
+				insertPalavraCorpus(_currentId, depname);
+			}
+		}
+		return _currentId;
 	}
 
 	public long getNumberWords(String depname) {
@@ -52,31 +77,12 @@ public class Palavra extends RelationalElement{
 		return totalFreq;
 	}
 
-	public long checkWord(String  word, String pos, String category, String depname){
-		
-		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
-			pos = "VERB";
-		}
-
-		if(!wordExists(word, pos)){
-			insertNewPalavra(word, pos, category);
-			insertPalavraCorpus(_currentId, depname);
-		}else{
-			if(wordExistsCorpus(_currentId, depname)){
-				uptadeFrequency(_currentId, depname);
-			}
-			else{
-				insertPalavraCorpus(_currentId, depname);
-			}
-		}
-		return _currentId;
-	}
 	
 	public void insertNewPalavra(String  palavra, String classe, String categoria){
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
-			String query = "Insert into db_deep_aux.Palavra (palavra, classe) " +
+			String query = "Insert into Palavra (palavra, classe) " +
 						   "VALUES(\""+ palavra +"\",\"" + classe +"\" );";
 						   
 			

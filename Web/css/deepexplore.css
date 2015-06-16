@@ -11,9 +11,17 @@ padding-top: 2%;
 position: relative;
 text-align:center
 }
-.btnmdl{ //button in the midle
+
+.buttonMiddle{ //button in the midle
 	border-top-left-radius: 0;
   	border-bottom-left-radius: 0;
   	border-top-right-radius: 0;
   	border-bottom-right-radius: 0;
+}
+
+.showButton{
+	position: relative;
+	padding-top: 2%;
+	margin-right: auto;
+	margin-left: auto;
 }

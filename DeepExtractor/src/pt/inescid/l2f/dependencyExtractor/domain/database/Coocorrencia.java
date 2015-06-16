@@ -12,6 +12,7 @@ import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
 
 public class Coocorrencia extends RelationalElement{
 	private String _corpusName;
+	private Statement s;
 	
 	public Coocorrencia(Connection conn, String corpusName) {
 		super(conn);
@@ -199,15 +200,21 @@ public class Coocorrencia extends RelationalElement{
 		return freq ;
 	}
 	
-	public void uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep, String measure, double value){
+	public void uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep, double pmi, double dice, double logDice) throws SQLException{
 		
-		
-		
-		Statement stmt = null;
+		String sql = "UPDATE Coocorrencia "+ 
+					 "SET PMI = " + pmi + " , Dice = " + dice + " , LogDice = " + logDice + 
+					 " WHERE idPalavra1 = " + wordId1+
+					 " and idPalavra2 = "+ wordId2 +
+					 " and nomeProp = '" + prop +
+					 "' and tipoDep = '"+ dep +
+					 "' and nomeCorpus = '" +  _corpusName + "'";
+		s.addBatch(sql);
+		/*Statement stmt = null;
 		try{
 			stmt = connection.createStatement();
 			String sql = "UPDATE Coocorrencia "+ 
-						 "SET "+ measure + " = " + value + 
+						 "SET PMI = " + pmi + " , Dice = " + dice + " , LogDice = " + logDice + 
 						 " WHERE idPalavra1 = " + wordId1+
 						 " and idPalavra2 = "+ wordId2 +
 						 " and nomeProp = '" + prop +
@@ -228,13 +235,13 @@ public class Coocorrencia extends RelationalElement{
 		      }catch(SQLException se){
 		      }// do nothing
 
-		}//end finally try	   
+		}//end finally try	*/   
 	}
 	
 	public void UpdateMeasures(Palavra pal){
-		int intervall = 1000;
+		int intervall = 2000;
 		int totalrows =  getNumberRows();
-		//long nWords = pal.getNumberWords();
+		
 		HashMap<String, Long> nWords = new HashMap<String, Long>();
 		
 		int index = 0;
@@ -246,7 +253,8 @@ public class Coocorrencia extends RelationalElement{
 				stmt = connection.createStatement();
 				String sql = "SELECT * FROM Coocorrencia LIMIT " + index + "," +  intervall +  ";" ;
 				ResultSet rs = stmt.executeQuery(sql);
-
+				s = connection.createStatement();
+				
 				while(rs.next()){  
 					long word1 = rs.getLong("idPalavra1");
 					long word2 = rs.getLong("idPalavra2");
@@ -269,18 +277,15 @@ public class Coocorrencia extends RelationalElement{
 				//System.out.println(nWordDep);
 					
 					double pmi = AssociationMeasures.PMI(nWordDep, depfreq, word1freq, word2freq);
-					uptadeAssociationMeasure(word1, word2,prop, dep, "PMI", pmi);
-					
-					double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);
-					uptadeAssociationMeasure(word1, word2,prop, dep, "Dice", dice);
-					
+					double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);					
 					double logDice = AssociationMeasures.LogDice(depfreq, word1freq, word2freq);
-					uptadeAssociationMeasure(word1, word2,prop, dep, "LogDice", logDice);
+					
+					uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice);
 					
 				}
 				rs.close(); 
-
-
+				s.executeBatch();
+				s.clearBatch();
 
 			}catch(SQLException se){
 				//Handle errors for JDBC
@@ -295,7 +300,9 @@ public class Coocorrencia extends RelationalElement{
 				}catch(SQLException se){
 				}// do nothing
 			}//end finally try
-		index = index + intervall;
+			
+			index = index + intervall;
+		
 		}
 	}
 }

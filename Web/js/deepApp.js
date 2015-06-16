@@ -70,6 +70,8 @@ deepApp.service('sharedInfo', function () {
 deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
    $scope.classes=['Nome','Verbo','Adjectivo','Advérbio']
    $scope.pos = "Classe";
+   $scope.measures=['PMI','Dice','LogDice']
+   $scope.measure = "Medida";
 
    var posHash = new Array();
     posHash['Nome'] = 'NOUN';
@@ -85,7 +87,10 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
 
    $scope.changePos = function(value) {
      $scope.pos = value;
-  };
+   };
+   $scope.changeMeasure = function(value) {
+     $scope.measure = value;  
+   };
   
   var selectPath = function (){
     var path = "/" + urlHash[$scope.pos];
