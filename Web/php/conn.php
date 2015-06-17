@@ -18,8 +18,10 @@ $word = $_POST['word'];
 $pos = $_POST['pos'];
 $Measure = $_POST['measure'];
 
+if($Measure == 'Frequência'){
+	$Measure = 'frequencia';
+}
 
-$measure = 'PMI';
 function getDepQuery($conn, $word, $pos, $dep, $measure, $limit) {
 $query1= "	SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
 			FROM Coocorrencia
@@ -37,23 +39,20 @@ $result = $conn->query($query1);
 return $result;
 }
 
-
 function getAllDependencies($conn, $word, $pos,  $measure){
 	//dependencias que existem no sistema
 	$dependencies = array("SUBJ", "CDIR", "MOD", "ATTRIB");
 	$outp = "";
 	foreach ($dependencies as $dep){ 
 		//por defenição fica agora 25, depois mudar
-		if($Measure == 'Frequência'){
-			$Measure = 'frequencia';
-		}
+		
 		$result = getDepQuery($conn, $word, $pos, $dep, $measure ,25);
 		$outp_aux = "";
 		while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
    			 if ($outp_aux != "") {$outp_aux .= ",";}
 				$outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
  				$outp_aux .= '"prop":"'  . $rs["nomeProp"] . '",';
-    			$outp_aux .= '"frequency":"'. $rs["frequencia"] . '"}'; 
+    			$outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
 		}
 		if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
 		$outp .= '"'.$dep.'":['.$outp_aux.']';
@@ -62,12 +61,10 @@ function getAllDependencies($conn, $word, $pos,  $measure){
 	return $outp;
 }
 
-
 $deps = '{"DEPS":'.getAllDependencies($conn, $word, $pos, $Measure).'}';
 
 echo($deps);
 
 $conn->close();
-
 
 ?>
