@@ -37,12 +37,11 @@ deepApp.config(function($routeProvider, $locationProvider) {
         //$locationProvider.html5Mode(true);
         //problema do refresh http://stackoverflow.com/questions/16569841/angularjs-html5-mode-reloading-the-page-gives-wrong-get-request?lq=1
   });
-       
-    
 
 deepApp.service('sharedInfo', function () {
         var word = "";
         var pos = "";
+        var measure = "";
         var deps;
         return {
             getWord: function () {
@@ -50,6 +49,9 @@ deepApp.service('sharedInfo', function () {
             },
             getPos: function () {
                 return pos;
+            },
+            getMeasure: function () {
+                return measure;
             },
             getDeps: function () {
                 return deps;
@@ -60,17 +62,20 @@ deepApp.service('sharedInfo', function () {
             setPos: function(value) {
                 pos = value;
             },
+            setMeasure: function(value) {
+                measure = value;
+            },
             setDeps: function(value) {
                 deps = value;
             }
             
         };
-    });
+});
 
 deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
    $scope.classes=['Nome','Verbo','Adjectivo','Advérbio']
    $scope.pos = "Classe";
-   $scope.measures=['PMI','Dice','LogDice']
+   $scope.measures=['PMI','Dice','LogDice', 'Frequência']
    $scope.measure = "Medida";
 
    var posHash = new Array();
@@ -102,11 +107,16 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
     
       if(angular.isString($scope.word)){
         if($scope.pos != "Classe"){
-          
-          sharedInfo.setWord($scope.word);
-          sharedInfo.setPos($scope.pos);
+          if($scope.measure != "Medida"){
+            sharedInfo.setWord($scope.word);
+            sharedInfo.setPos($scope.pos);
+            sharedInfo.setMeasure($scope.measure);
 
-          $scope.postPhp()
+            $scope.postPhp()
+          }
+          else{
+            alert("Selecionar qual a Medida a usar");
+          }
         }
         else{
           alert("Selecionar qual a classe da palavra");
@@ -119,7 +129,8 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
        var url = 'php/conn.php';
        var data = {
                     'word':$scope.word,
-                    'pos':posHash[$scope.pos]
+                    'pos':posHash[$scope.pos],
+                    'measure':$scope.measure
           };
         // Variable to hold request
         var request;
