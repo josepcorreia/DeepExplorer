@@ -20,8 +20,8 @@ public class ConnectionMySQL {
 		  Class.forName(driverName); 
 		  
 		  // Configuração da conexão à base de dados//
-		  	//String serverName = "localhost"; 
-		  	String serverName = "85.247.198.76";
+		  	String serverName = "localhost"; 
+		  	//String serverName = "85.247.198.76";
 		  	// String mydatabase = "db_deep";
 		  	String mydatabase = "db_deep_aux"; 	
 		  	String url = "jdbc:mysql://" + serverName + "/" + mydatabase; 
