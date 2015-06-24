@@ -1,6 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
 public class Word {
+	private Long _id;
 	private String _lemma;
 	private String _pos;
 	private long _count;
@@ -10,7 +11,14 @@ public class Word {
 		this._pos = pos;
 		this._count = 1;
 	}
-
+	
+	public void setId(Long id) {
+		_id = id;
+	}
+	
+	public Long getId() {
+		return _id;
+	}
 	public String getLemma() {
 		return _lemma;
 	}

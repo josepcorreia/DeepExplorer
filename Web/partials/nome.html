@@ -4,9 +4,9 @@
 			<td>
 				<table class="table table-bordered">
 					<tr class="active">
-  						<td >ATTRIB</td>
+  						<td >Pré-Modificadores </td>
 					</tr>	
-					<tr class="success" ng-repeat="x in ATTRIB">
+					<tr class="warning" ng-repeat="x in PRE-MOD">
     					<td>{{ x.word  + "  " +  x.frequency}}</td>
 					</tr>
 				</table>
@@ -14,9 +14,19 @@
 			<td>
 				<table class="table table-bordered">
 					<tr class="active">
-  						<td >MOD</td>
+  						<td >Modificadores PP </td>
 					</tr>	
-					<tr class="success" ng-repeat="x in MOD">
+					<tr class="success" ng-repeat="x in MOD-PP">
+    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table class="table table-bordered">
+					<tr class="active">
+  						<td >Pós Modificadores Adjetivais</td>
+					</tr>	
+					<tr class="success" ng-repeat="x in POST-MOD">
     					<td>{{ x.word  + "  " +  x.frequency}}</td>
 					</tr>
 				</table>

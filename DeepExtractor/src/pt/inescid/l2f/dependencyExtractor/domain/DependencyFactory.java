@@ -16,13 +16,14 @@ public class DependencyFactory {
 	private HashMap<String,DependencyType> _dependenciesMap;
 	private NE _ne;
 	
-	public DependencyFactory(String corpusName, Palavra palavra, Coocorrencia coo, Propriedade prop){
+	public DependencyFactory(String corpusName){
 		_dependenciesMap = new HashMap<String,DependencyType>();
 		
-		_dependenciesMap.put("ATTRIB", new Attrib(palavra, coo, prop));
-		_dependenciesMap.put("CDIR", new Cdir(palavra, coo, prop));
-		_dependenciesMap.put("MOD", new Mod(palavra, coo, prop));
-		_dependenciesMap.put("SUBJ", new Subj(palavra, coo, prop));
+		//_dependenciesMap.put("ATTRIB", new Attrib(palavra, coo, prop));
+		_dependenciesMap.put("CDIR", new Cdir());
+		_dependenciesMap.put("CINDIR", new Cdir());
+		_dependenciesMap.put("MOD", new Mod());
+		_dependenciesMap.put("SUBJ", new Subj());
 		
 		_ne = new NE(); 
 	}	

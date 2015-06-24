@@ -1,11 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor;
 
 import pt.inescid.l2f.dependencyExtractor.domain.DependencyFactory;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Coocorrencia;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Corpus;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Dependencia;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Palavra;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Propriedade;
+import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.XIPNode;
@@ -18,43 +14,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-
-
 public class DependencyExtractor {
-	private DependencyFactory _dfactory;
 	private String _corpusName;
-	private Palavra _palavra;
-	private Coocorrencia _coo;
-	private Propriedade _prop;
-	private Corpus _corpus;
-	private Dependencia _dependencia;
-
+	private DependencyFactory _dependencyFactory;
+	private RelationalFactory _relationalFactory;
 
 	public DependencyExtractor(Connection conn, String corpusName){
 		_corpusName = corpusName;
-		_corpus = new Corpus(conn);
-		_palavra = new Palavra(conn, corpusName);
-		_coo = new Coocorrencia(conn, corpusName);
-		_prop = new Propriedade(conn); 
-		_dfactory = new DependencyFactory(corpusName, _palavra, _coo, _prop);
-		_dependencia = new Dependencia(conn);
+		_dependencyFactory = new DependencyFactory(corpusName);
+		_relationalFactory = new RelationalFactory(conn, corpusName);
 	}
 
 
 	public void CorpusInformation() {
 		//depois completar isto
-		_corpus.insertNew(_corpusName, "Público", "2000", "Noticíario", false);
+		RelationalFactory.getCorpus().insertNew(_corpusName, "Público", "2000", "Noticíario", false);
 	}
 	
 	public void Extract(XipDocument document){
-		HashMap<String, DependencyType> map = _dfactory.getDependenciesMap(); 
+		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
 		
-		
-		
+
 		
 		//preenche a informação sobre as dependencias detetadas
 		for (String depname : map.keySet()) {
-			_dependencia.insertNew(depname);
+			RelationalFactory.getDependencia().insertNew(depname);
 		}
 		
 		int sentenceNumber = 0;
@@ -76,20 +60,20 @@ public class DependencyExtractor {
 			for (Dependency dependency : deps) {
 				
 				if("NE".equals(dependency.getName())){
-					_dfactory.NE().getDepedencyInformation(dependency);
+					_dependencyFactory.NE().getDepedencyInformation(dependency);
 				}
 			}
 			
 			for (Dependency dependency : deps) {
 			
 				if(map.containsKey(dependency.getName())){
-					map.get(dependency.getName()).getDepedencyInformation(dependency, _dfactory.NE().getNamedEnteties());
+					map.get(dependency.getName()).getDepedencyInformation(dependency, _dependencyFactory.NE().getNamedEnteties());
 				}
 			}
 			
-			_dfactory.NE().ClearNamedEnteties();
+			_dependencyFactory.NE().ClearNamedEnteties();
 			
-			/*if(sentenceNumber==1){
+			/*if(sentenceNumber==2){
 				System.exit(0);
 			}*/
 			
@@ -98,6 +82,6 @@ public class DependencyExtractor {
 	}
 
 	public void CalculateAssociationMeasures(){
-		_coo.UpdateMeasures(_palavra);
+		RelationalFactory.getCoocorrencia().UpdateMeasures();
 	}
 }

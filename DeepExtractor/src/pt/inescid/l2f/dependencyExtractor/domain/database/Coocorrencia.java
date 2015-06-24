@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
 
 
@@ -52,7 +53,10 @@ public class Coocorrencia extends RelationalElement{
 	
 	
 	
-	public void checkCoocorrence(long wordId1, long wordId2, String prop, String dep){
+	public void checkCoocorrence(Word word1, Word word2, String prop, String dep){
+		Long wordId1 = word1.getId();
+		Long wordId2 = word2.getId();
+		
 		if(coocorrenceExists(wordId1, wordId2, prop, dep)){
 			uptadeFrequency(wordId1, wordId2, prop, dep);
 		}else{
@@ -238,7 +242,7 @@ public class Coocorrencia extends RelationalElement{
 		}//end finally try	*/   
 	}
 	
-	public void UpdateMeasures(Palavra pal){
+	public void UpdateMeasures(){
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 		
@@ -249,7 +253,7 @@ public class Coocorrencia extends RelationalElement{
 			Statement stmt = null;
 
 			try{
-				
+				Palavra pal = RelationalFactory.getPalavra();
 				stmt = connection.createStatement();
 				String sql = "SELECT * FROM Coocorrencia LIMIT " + index + "," +  intervall +  ";" ;
 				ResultSet rs = stmt.executeQuery(sql);
@@ -271,9 +275,9 @@ public class Coocorrencia extends RelationalElement{
 						nWords.put(dep, nWordDep);
 					}
 						
-					long word1freq = pal.getWordFrequency(word1,dep); 
+					long word1freq = pal.getWordFrequency(word1,dep, prop); 
 					
-					long word2freq = pal.getWordFrequency(word2, dep);
+					long word2freq = pal.getWordFrequency(word2, dep, prop);
 				//System.out.println(nWordDep);
 					
 					double pmi = AssociationMeasures.PMI(nWordDep, depfreq, word1freq, word2freq);

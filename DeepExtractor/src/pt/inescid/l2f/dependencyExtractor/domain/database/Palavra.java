@@ -21,21 +21,17 @@ public class Palavra extends RelationalElement{
 
 	
 	
-	public long checkWord(String  word, String pos, String category, String depname){
-		
-		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
-			pos = "VERB";
-		}
+	public long checkWord(String  word, String pos, String category, String depname, String prop){
 		
 		if(!wordExists(word, pos)){
 			insertNewPalavra(word, pos, category);
-			insertPalavraCorpus(_currentId, depname);
+			insertPalavraCorpus(_currentId, depname, prop);
 		}else{
-			if(wordExistsCorpus(_currentId, depname)){
-				uptadeFrequency(_currentId, depname);
+			if(wordExistsCorpus(_currentId, depname, prop)){
+				uptadeFrequency(_currentId, depname, prop);
 			}
 			else{
-				insertPalavraCorpus(_currentId, depname);
+				insertPalavraCorpus(_currentId, depname, prop);
 			}
 		}
 		return _currentId;
@@ -150,15 +146,16 @@ public class Palavra extends RelationalElement{
 	
 	
 	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
-  public boolean insertPalavraCorpus(long id, String depname){
+  public boolean insertPalavraCorpus(long id, String depname, String prop){
 		PreparedStatement preparedStatement = null;
 			
 		try {
-			preparedStatement = connection.prepareStatement("insert into Pertence values (?, ?, ?, ?)");
+			preparedStatement = connection.prepareStatement("insert into Pertence values (?, ?, ?, ?, ?)");
 			preparedStatement.setLong(1, id);
-			preparedStatement.setString(2,depname);
-			preparedStatement.setString(3,_corpusName);
-			preparedStatement.setInt(4,1);
+			preparedStatement.setString(2,_corpusName);
+			preparedStatement.setString(3,prop);
+			preparedStatement.setString(4,depname);
+			preparedStatement.setInt(5,1);
 			
 			preparedStatement.executeUpdate();
 			//System.out.println("Record is inserted into Fornece table!");
@@ -179,12 +176,17 @@ public class Palavra extends RelationalElement{
 	  return true;
   }
   
-  public boolean wordExistsCorpus(long id, String depname){
+  public boolean wordExistsCorpus(long id, String depname, String prop){
 		Statement stmt = null;
 	
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT EXISTS(SELECT 1 FROM Pertence WHERE idPalavra = " + id + " AND tipoDep = '" + depname + "' AND nomeCorpus = '" + _corpusName +"' LIMIT 1)";
+			String sql = "SELECT EXISTS(SELECT 1 FROM Pertence WHERE idPalavra = " + id + 
+																" AND tipoDep = '" + depname + 
+																"' AND nomeProp = '" + prop +
+																"' AND nomeCorpus = '" + _corpusName +"' LIMIT 1)";
+			
+			
 			ResultSet rs = stmt.executeQuery(sql);
 
 			rs.next();
@@ -198,7 +200,7 @@ public class Palavra extends RelationalElement{
   
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
-	    	System.out.println("|| Palavra");
+	    	System.out.println("Pertence ao Coupus?");
 	       se.printStackTrace();
 	    }finally{
 	       //finally block used to close resources
@@ -211,7 +213,7 @@ public class Palavra extends RelationalElement{
 
 		return false;
 	}
-  public void uptadeFrequency(long wordId, String depname){
+  public void uptadeFrequency(long wordId, String depname, String prop){
 		Statement stmt = null;
 		try{
 			stmt = connection.createStatement();
@@ -219,6 +221,7 @@ public class Palavra extends RelationalElement{
 					     " SET frequencia = frequencia + 1 " +
 					     " WHERE idPalavra = "+ wordId +
 					     				" AND tipoDep = '"+ depname +
+					     				"' AND nomeProp = '"+ prop +
 					     				"' AND nomeCorpus= '"+ _corpusName + "';";
 						
 			stmt.executeUpdate(sql);
@@ -238,7 +241,7 @@ public class Palavra extends RelationalElement{
 		}//end finally try	   
 	}
   
-  public long getWordFrequency(Long id, String depname){
+  public long getWordFrequency(Long id, String depname, String prop){
   		Statement stmt = null;
   		long freq = 0;
   		
@@ -248,6 +251,7 @@ public class Palavra extends RelationalElement{
 					     "FROM Pertence " +
 					     "Where idPalavra = "+ id + 
 					     		" and tipoDep = '" + depname +  
+					     		"' and nomeProp = '"+ prop +
 					     		"' and nomeCorpus = '"+ _corpusName +"';";
 			ResultSet rs = stmt.executeQuery(sql);
 

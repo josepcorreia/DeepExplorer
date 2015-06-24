@@ -1,13 +1,13 @@
 <h1>{{word}} ({{pos}})</h1>
 <div class="table-responsive">
 	<table class="table">
-
+		<tr>
 			<td>
 				<table class="table table-bordered">
 					<tr class="active">
   						<td >Sujeito</td>
 					</tr>	
-					<tr class="success" ng-repeat="x in SUBJ">
+					<tr class="warning" ng-repeat="x in SUBJ">
     					<td>{{ x.word  + "  " +  x.frequency}}</td>
     				
 					</tr>
@@ -26,23 +26,23 @@
 			<td>
 				<table class="table table-bordered">
 					<tr class="active">
-  						<td >ATTRIB</td>
+  						<td >Complemento Indirecto</td>
 					</tr>	
-					<tr class="success" ng-repeat="x in ATTRIB">
+					<tr class="success" ng-repeat="x in CINDIR">
     					<td>{{ x.word  + "  " +  x.frequency}}</td>
 					</tr>
 				</table>
 			<td>
-			<td>
+		</tr>
+		<tr>
 				<table class="table table-bordered">
 					<tr class="active">
-  						<td >MOD</td>
+  						<td >Advérvios</td>
 					</tr>	
 					<tr class="success" ng-repeat="x in MOD">
     					<td>{{ x.word  + "  " +  x.frequency}}</td>
 					</tr>
 				</table>
-			<td>
-
+		</tr>
 	</table>
 </div>
