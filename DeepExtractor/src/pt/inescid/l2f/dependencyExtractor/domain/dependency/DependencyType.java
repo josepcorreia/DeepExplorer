@@ -32,29 +32,19 @@ public abstract class DependencyType{
 
 		for (XIPNode node : dep.getNodes()){
 			String word = "";
-			String pos = node.getName();
-
-			if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
-				pos = "VERB";
-			}
-
-			if(prop.contains("POST")){
-				prop += "_" + pos;
-			}
-
+			String pos = getPOS(node);
 			String ne = CheckNomedEntity(node, namedEnteties); 
+			
+			prop = getTracos(prop ,pos);
+			
+			
 			if(!ne.equals("noNE")){
 				word = ne;
-				//pos = "NAMED_ENTITY";
-			}else{
 
+			}else{
 				switch (pos) {
-				case "PUNTC":  word = "PUNCT";
-				break;
 				case "TOP":  word = "Frase";
 				break;
-				/*case "NAMED_ENTITY":  word = ne;
-			break;*/
 				default: 	
 					word="";
 					for (Token token : node.getTokens()){
@@ -70,6 +60,7 @@ public abstract class DependencyType{
 			}
 			words.add(new Word(word, pos));
 		}
+		
 		RelationalFactory.getPropriedade().checkProperty(prop, depname);
 
 		for (Word w : words) {
@@ -82,6 +73,13 @@ public abstract class DependencyType{
 		else{
 			System.out.println("Depedencia com erro " + depname +" na frase " + dep.getSentenceNumber());
 		}
+	}
+
+	protected String getTracos(String prop, String pos) {
+		if(!prop.contains("SEM_PROP")){
+			prop += "_" + pos;
+		}
+		return prop;
 	}
 
 	protected String CheckNomedEntity(XIPNode node, HashMap<String, String> namedEnteties){
@@ -105,5 +103,14 @@ public abstract class DependencyType{
 			}
 		}
 		return prop;
+	}
+	protected String getPOS(XIPNode node) {
+		String pos = node.getName();
+
+		if(pos.equals("PASTPART")|| pos.equals("VINF") || pos.equals("VF")){
+			pos = "VERB";
+		}
+		
+		return pos;
 	}
 }

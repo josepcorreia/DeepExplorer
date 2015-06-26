@@ -1,8 +1,8 @@
  package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
-public class Attrib extends DependencyType{
+public class COMPL extends DependencyType{
 
-	public Attrib() {
+	public COMPL() {
 		super();
 	}
 }

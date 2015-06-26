@@ -13,5 +13,4 @@ public class Cdir extends DependencyType{
 		String prop = "SEM_PROP";
 		return prop;
 	}
-
 }

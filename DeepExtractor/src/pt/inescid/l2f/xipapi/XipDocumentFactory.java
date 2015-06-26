@@ -270,7 +270,8 @@ public class XipDocumentFactory {
 						} catch (NodeDoesNotExistException e) {
 							//System.out.println(e.toString() + ": " + num);
 														
-							//if the node is the "top" one, it's necessary to get the sentence instead
+							//if the node is the "top" one, it's necessary to get the sentence instead 
+							//José Correia 06/2015
 							XIPNode top =(XIPNode) xipDocument.getSentences().toArray()[sentenceNumber];
 							if(top.getNodeNumber().equals(num)){
 								dependency.addNode(top);

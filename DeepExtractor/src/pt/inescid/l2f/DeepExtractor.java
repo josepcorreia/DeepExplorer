@@ -28,22 +28,20 @@ public class DeepExtractor {
 		Connection c_mysql = ConnectionMySQL.getConnectionMySQL();
 		DependencyExtractor de = new DependencyExtractor(c_mysql, "CETEMPúblico");
 		
-		//XipDocument document = null;
-			System.out.println(ConnectionMySQL.getStatusConnection());
+		System.out.println(ConnectionMySQL.getStatusConnection());
 
-			XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
+		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 					
-			Path dir = Paths.get(args[0]);
-			
-			de.CorpusInformation();
-			
-			inspectDirectory(dir, xipDocumentFactory, de);
-			
-			de.CalculateAssociationMeasures();
-			
-			ConnectionMySQL.CloseConnection(c_mysql);
-			System.out.println("FIM");		
+		Path dir = Paths.get(args[0]);
 		
+		de.CorpusInformation();
+			
+		inspectDirectory(dir, xipDocumentFactory, de);
+			
+		de.CalculateAssociationMeasures();
+			
+		ConnectionMySQL.CloseConnection(c_mysql);
+		System.out.println("FIM");		
 	}
 	
 	public static void inspectDirectory(Path path, XipDocumentFactory xipdc, DependencyExtractor de){

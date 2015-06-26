@@ -1,7 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor;
 
-import pt.inescid.l2f.dependencyExtractor.domain.DependencyFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
+import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.XIPNode;
@@ -9,15 +9,12 @@ import pt.inescid.l2f.xipapi.domain.XipDocument;
 
 import java.sql.Connection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 public class DependencyExtractor {
 	private String _corpusName;
 	private DependencyFactory _dependencyFactory;
-	private RelationalFactory _relationalFactory;
+	private RelationalFactory _relationalFactory;//alterar e tornar a classe compeltamente estatica
 
 	public DependencyExtractor(Connection conn, String corpusName){
 		_corpusName = corpusName;
@@ -27,14 +24,11 @@ public class DependencyExtractor {
 
 
 	public void CorpusInformation() {
-		//depois completar isto
 		RelationalFactory.getCorpus().insertNew(_corpusName, "Público", "2000", "Noticíario", false);
 	}
 	
 	public void Extract(XipDocument document){
 		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
-		
-
 		
 		//preenche a informação sobre as dependencias detetadas
 		for (String depname : map.keySet()) {
