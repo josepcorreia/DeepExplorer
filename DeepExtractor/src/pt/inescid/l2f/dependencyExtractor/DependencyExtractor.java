@@ -14,12 +14,12 @@ import java.util.Vector;
 public class DependencyExtractor {
 	private String _corpusName;
 	private DependencyFactory _dependencyFactory;
-	private RelationalFactory _relationalFactory;//alterar e tornar a classe compeltamente estatica
+	
 
-	public DependencyExtractor(Connection conn, String corpusName){
+	public DependencyExtractor(String corpusName){
 		_corpusName = corpusName;
 		_dependencyFactory = new DependencyFactory(corpusName);
-		_relationalFactory = new RelationalFactory(conn, corpusName);
+		
 	}
 
 
@@ -30,26 +30,19 @@ public class DependencyExtractor {
 	public void Extract(XipDocument document){
 		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
 		
-		//preenche a informação sobre as dependencias detetadas
-		for (String depname : map.keySet()) {
-			RelationalFactory.getDependencia().insertNew(depname);
-		}
-		
 		int sentenceNumber = 0;
 		for (XIPNode sentence : document.getSentences()) {
-			//String Frase =  "";		
-			
+					
 			//número da frase, sentence.getSentenceNumber() não está a funcinar
 			sentenceNumber = sentence.getNodes().get(0).getSentenceNumber();
 			
-			/*for (XIPNode node : sentence.getNodes()) {
-				sentenceNumber = node.getSentenceNumber();
-				_wordCount.checkNode(node);
-			}	
+			/*String Frase = "";
+				for (XIPNode node : sentence.getNodes()) {
+					Frase += node.getSentence();
 				
-			//System.out.println("Frase n :" + sentenceNumber);
-			 */
-			
+				}
+				System.out.println("Frase:" + Frase);
+			*/
 			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
 			for (Dependency dependency : deps) {
 				if("NE".equals(dependency.getName())){
@@ -65,7 +58,7 @@ public class DependencyExtractor {
 			}
 			
 			_dependencyFactory.NE().ClearNamedEnteties();
-			
+		
 			/*if(sentenceNumber==2){
 				System.exit(0);
 			}*/

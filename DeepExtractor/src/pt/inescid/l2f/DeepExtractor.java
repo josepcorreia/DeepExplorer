@@ -13,6 +13,7 @@ import java.sql.Connection;
 
 import pt.inescid.l2f.connection.ConnectionMySQL;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
+import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
 
@@ -26,7 +27,11 @@ public class DeepExtractor {
 	public static void main(String[] args) {
 		System.out.println("Inicio");
 		Connection c_mysql = ConnectionMySQL.getConnectionMySQL();
-		DependencyExtractor de = new DependencyExtractor(c_mysql, "CETEMPúblico");
+		
+		String corpusName = "CETEMPúblico";
+		
+		RelationalFactory relationalFactory  = new RelationalFactory(c_mysql, corpusName);//alterar e tornar a classe compeltamente estatica
+		DependencyExtractor de = new DependencyExtractor(corpusName);
 		
 		System.out.println(ConnectionMySQL.getStatusConnection());
 

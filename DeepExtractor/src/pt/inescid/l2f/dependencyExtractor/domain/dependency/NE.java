@@ -23,6 +23,28 @@ public class NE extends DependencyType{
 	  _entetiesTable = getEntetiesTable();
 	}
 	
+	public void getDepedencyInformation(Dependency dep){
+		for (XIPNode node : dep.getNodes()) {
+			
+			String features = ""; 
+			for (Feature feature : dep.getFeatures()) {
+				if(!features.isEmpty()){
+					features += " " + feature.getName();
+				}
+				else{
+					features += feature.getName();
+				}
+			}
+			if(_entetiesTable.containsKey(features)){
+				_namedEnteties.put(node.getNodeNumber(), _entetiesTable.get(features));
+			}
+			else{
+				_namedEnteties.put(node.getNodeNumber(), features);
+				//escrever num ficheiro as novas features
+			}
+		}
+	}
+	
 	private HashMap<String, String> getEntetiesTable() {
 		HashMap<String, String> entetiesTable = new HashMap<String, String>();
 		
@@ -46,24 +68,6 @@ public class NE extends DependencyType{
 		}
 		return entetiesTable;
 		
-	}
-
-	public void getDepedencyInformation(Dependency dep){
-		for (XIPNode node : dep.getNodes()) {
-		
-			String features = ""; 
-			for (Feature feature : dep.getFeatures()) {
-				if(!features.isEmpty()){
-					features += " " + feature.getName();
-				}
-				else{
-					features += feature.getName();
-				}
-			}
-			//System.out.println(node.getNodeNumber());
-			_namedEnteties.put(node.getNodeNumber(), _entetiesTable.get(features));
-				
-		}
 	}
 	
 	public void ClearNamedEnteties(){

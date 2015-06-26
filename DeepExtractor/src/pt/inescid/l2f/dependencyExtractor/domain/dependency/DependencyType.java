@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.dependencyExtractor.domain.database.Coocorrencia;
@@ -29,6 +31,7 @@ public abstract class DependencyType{
 	
 	public DependencyType(){
 		_depPropTable = getDepPropTable();
+		 depInformation();
 	}
 
 	public void getDepedencyInformation(Dependency dep, HashMap<String, String> namedEnteties){
@@ -97,7 +100,6 @@ public abstract class DependencyType{
 		return pos;
 	}
 	protected Word getWord(XIPNode node, String pos, HashMap<String, String> namedEnteties) {
-		
 		String lemma = CheckNomedEntity(node, namedEnteties); 
 
 		switch (pos) {
@@ -149,6 +151,19 @@ public abstract class DependencyType{
 			e.printStackTrace();
 		}
 		return depPropTable;
+	}
+	
+	private void depInformation(){
+		HashSet<String> depnames = new HashSet<String>();
 		
+		for(Entry<String, String> entry : _depPropTable.entrySet()) {
+		
+			String depname = entry.getValue().split(" ")[0];
+		    depnames.add(depname);
+		}
+
+		for(String depname : depnames) {
+			RelationalFactory.getDependencia().insertNew(depname);			
+		}
 	}
 }
