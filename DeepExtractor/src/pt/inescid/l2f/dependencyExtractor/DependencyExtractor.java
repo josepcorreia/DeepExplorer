@@ -52,7 +52,6 @@ public class DependencyExtractor {
 			
 			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
 			for (Dependency dependency : deps) {
-				
 				if("NE".equals(dependency.getName())){
 					_dependencyFactory.NE().getDepedencyInformation(dependency);
 				}

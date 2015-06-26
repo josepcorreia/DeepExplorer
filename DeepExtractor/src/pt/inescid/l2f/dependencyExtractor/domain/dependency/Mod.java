@@ -7,7 +7,7 @@ public class Mod extends DependencyType{
 	}
 	
 	@Override
-	protected String getTracos(String prop, String pos) {
+	protected String getPropPOS(String prop, String pos) {
 		if(prop.contains("SEM_PROP")){
 			prop = "";
 			prop += pos;

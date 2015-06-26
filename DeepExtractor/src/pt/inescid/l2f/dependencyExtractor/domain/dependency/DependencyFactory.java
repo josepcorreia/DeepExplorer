@@ -15,6 +15,8 @@ public class DependencyFactory {
 		_dependenciesMap.put("MOD", new Mod());
 		_dependenciesMap.put("SUBJ", new Subj());
 		
+		_dependenciesMap.put("COMPLEMENTOS",null);
+		
 		_ne = new NE(); 
 	}	
 	
