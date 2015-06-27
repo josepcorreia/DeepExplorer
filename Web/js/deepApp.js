@@ -126,7 +126,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
       }
    };
     $scope.postPhp = function() {
-       var url = 'php/conn.php';
+       var url = 'php/deep.php';
        var data = {
                     'word':$scope.word,
                     'pos':posHash[$scope.pos],
@@ -172,10 +172,11 @@ deepApp.controller("nameCtrl", function($scope, sharedInfo) {
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
     
-    $scope.SUBJ = Deps.SUBJ;
-    $scope.CDIR = Deps.CDIR;
-    $scope.MOD = Deps.MOD;
-    $scope.ATTRIB = Deps.ATTRIB;
+    $scope.MOD_PRE_NOUN_ADV = Deps.MOD_PRE_NOUN_ADV;
+    $scope.MOD_PRE_NOUN_ADJ = Deps.MOD_PRE_NOUN_ADJ;
+    $scope.MOD_POST_NOUN_PP = Deps.MOD_POST_NOUN_PP;
+    $scope.MOD_POST_NOUN_ADJ = Deps.MOD_POST_NOUN_ADJ;
+    
 
     //console.log($scope.MOD);
     
