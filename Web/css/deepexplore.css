@@ -1,11 +1,24 @@
+
+@media (max-width:960px){
+.deepword{
+ padding-top: 2%;
+position: relative;
+width: 80%;
+margin-right: auto;
+margin-left: auto;
+}
+}
+@media (min-width:960px){
 .deepword{
 padding-top: 2%;
 position: relative;
 width: 40%;
 margin-right: auto;
 margin-left: auto;
-
 }
+}
+
+
 .showword{
 padding-top: 2%;
 position: relative;

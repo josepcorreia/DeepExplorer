@@ -1,6 +1,5 @@
 <?php
 require_once("StrategyInterface.php"); 
-//use Abraham\TwitterOAuth\TwitterOAuth;
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -24,6 +23,10 @@ $Measure = $_POST['measure'];
 if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
+
+$word = "ser";
+$pos = "VERB";
+$Measure = "PMI";
 
 $strategyContext = new StrategyContext($pos);
 

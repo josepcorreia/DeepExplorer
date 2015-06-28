@@ -24,13 +24,32 @@ class StrategyContext {
     }
 }
 
-interface DeepStrategyInterface {
-    public function getDeps($conn, $word, $pos,  $measure, $limit);
-}
- 
-class StrategyNoun implements DeepStrategyInterface {
-    private function getDepQuery($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
-        $query1= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
+abstract class DeepStrategyInterface {
+    abstract public function getDeps($conn, $word, $pos,  $measure, $limit);
+
+    //"The first argument of a binary dependency corresponds to  the governor while the second to a dependent of this governor."
+    //retorna as palavras que se relacionam com a palavra gorvernadora da dependencia
+    protected function getDepGovernor($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
+        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
+            FROM Coocorrencia
+            Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
+            WHERE Coocorrencia.idPalavra2 = (SELECT idPalavra
+                                                          from Palavra
+                                                          where palavra= '$word' and 
+                                                                classe= '$pos' LIMIT 1) 
+                                                        and Coocorrencia.tipoDep = '$dep'
+                                                        and Coocorrencia.nomeProp = '$prop'
+            ORDER BY Coocorrencia.".$measure." DESC
+            LIMIT $limit";
+
+        $result = $conn->query($query);
+
+        return $result;
+    }
+
+    //retorna as palavras governadoras da palavra dependece
+    protected function getDepDependent($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
+        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
             WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
@@ -42,10 +61,13 @@ class StrategyNoun implements DeepStrategyInterface {
             ORDER BY Coocorrencia.".$measure." DESC
             LIMIT $limit";
 
-        $result = $conn->query($query1);
+        $result = $conn->query($query);
 
         return $result;
     }
+}
+ 
+class StrategyNoun extends DeepStrategyInterface {
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
         //dependencias que existem no sistema
@@ -79,25 +101,7 @@ class StrategyNoun implements DeepStrategyInterface {
     
 }
 
-class StrategyVerb implements DeepStrategyInterface {
-    
-    private function getDepQuery($conn, $word, $pos, $dep, $prop, $measure, $limit) {
-        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
-            FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
-                                                          from Palavra
-                                                          where palavra= '$word' and 
-                                                                classe= '$pos' LIMIT 1) 
-                                                        and Coocorrencia.tipoDep = '$dep'
-                                                        and Coocorrencia.nomeProp = '$prop'
-            ORDER BY Coocorrencia.".$measure." DESC
-            LIMIT $limit";
-
-        $result = $conn->query($query);
-
-        return $result;
-    }
+class StrategyVerb extends DeepStrategyInterface {
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
@@ -127,25 +131,7 @@ class StrategyVerb implements DeepStrategyInterface {
     }
 }
 
-class StrategyAdj implements DeepStrategyInterface {
-    
-      private function getDepQuery($conn, $word, $pos, $dep, $prop, $measure, $limit) {
-        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
-            FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
-                                                          from Palavra
-                                                          where palavra= '$word' and 
-                                                                classe= '$pos' LIMIT 1) 
-                                                        and Coocorrencia.tipoDep = '$dep'
-                                                        and Coocorrencia.nomeProp = '$prop'
-            ORDER BY Coocorrencia.".$measure." DESC
-            LIMIT $limit";
-
-        $result = $conn->query($query);
-
-        return $result;
-    }
+class StrategyAdj extends DeepStrategyInterface {
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
@@ -175,26 +161,8 @@ class StrategyAdj implements DeepStrategyInterface {
     }
 }
 
-class StrategyAdv implements DeepStrategyInterface {
+class StrategyAdv extends DeepStrategyInterface {
    
-    private function getDepQuery($conn, $word, $pos, $dep, $prop, $measure, $limit) {
-        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
-            FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
-                                                          from Palavra
-                                                          where palavra= '$word' and 
-                                                                classe= '$pos' LIMIT 1) 
-                                                        and Coocorrencia.tipoDep = '$dep'
-                                                        and Coocorrencia.nomeProp = '$prop'
-            ORDER BY Coocorrencia.".$measure." DESC
-            LIMIT $limit";
-
-        $result = $conn->query($query);
-
-        return $result;
-    }
-
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
