@@ -14,19 +14,19 @@ deepApp.config(function($routeProvider, $locationProvider) {
             // route for the about page
             when('/nome', {
                 templateUrl : 'partials/nome.html',
-                controller  : 'nameCtrl'
+                controller  : 'nounCtrl'
             }).
             when('/verbo', {
                 templateUrl : 'partials/verbo.html',
-                controller  : 'nameCtrl'
+                controller  : 'verbCtrl'
             }).
              when('/adverbio', {
                 templateUrl : 'partials/adverbio.html',
-                controller  : 'nameCtrl'
+                controller  : 'advCtrl'
             }).
             when('/adjectivo', {
                 templateUrl : 'partials/adjectivo.html',
-                controller  : 'nameCtrl'
+                controller  : 'adjCtrl'
             }).
 
             otherwise({
@@ -167,7 +167,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
     }//postPhp
 });//controller
 
-deepApp.controller("nameCtrl", function($scope, sharedInfo) {
+deepApp.controller("nounCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
@@ -177,8 +177,46 @@ deepApp.controller("nameCtrl", function($scope, sharedInfo) {
     $scope.MOD_POST_NOUN_PP = Deps.MOD_POST_NOUN_PP;
     $scope.MOD_POST_NOUN_ADJ = Deps.MOD_POST_NOUN_ADJ;
     
+    //console.log( Deps);
+});
 
-    //console.log($scope.MOD);
+deepApp.controller("verbCtrl", function($scope, sharedInfo) {
+    var Deps = sharedInfo.getDeps();
+    $scope.word = sharedInfo.getWord();
+    $scope.pos =  sharedInfo.getPos();
     
+    $scope.SUBJ_SEM_PROP = Deps.SUBJ_SEM_PROP;
+    $scope.CDIR_SEM_PROP = Deps.CDIR_SEM_PROP;
+    $scope.COMPLEMENTOS_SEM_PROP = Deps.COMPLEMENTOS_SEM_PROP;
+    $scope.MOD_VERB_ADV = Deps.MOD_VERB_ADV;
+    
+    //console.log( Deps);
+});
+
+deepApp.controller("advCtrl", function($scope, sharedInfo) {
+    var Deps = sharedInfo.getDeps();
+    $scope.word = sharedInfo.getWord();
+    $scope.pos =  sharedInfo.getPos();
+    
+    $scope.MOD_PRE_NOUN_ADV = Deps.MOD_PRE_NOUN_ADV;
+    $scope.MOD_VERB_ADV = Deps.MOD_VERB_ADV;
+    $scope.MOD_PRE_ADJ_ADV = Deps.MOD_PRE_ADJ_ADV;
+    $scope.MOD_ADV_ADV = Deps.MOD_ADV_ADV;
+     $scope.MOD_TOP_ADV = Deps.MOD_TOP_ADV;
+
+    //console.log( Deps);
+});
+
+deepApp.controller("adjCtrl", function($scope, sharedInfo) {
+    var Deps = sharedInfo.getDeps();
+    $scope.word = sharedInfo.getWord();
+    $scope.pos =  sharedInfo.getPos();
+    
+    $scope.MOD_PRE_ADJ_ADJ = Deps.MOD_PRE_ADJ_ADJ;
+    $scope.MOD_PRE_ADJ_ADV = Deps.MOD_PRE_ADJ_ADV;
+    $scope.MOD_PRE_NOUN_ADJ = Deps.MOD_PRE_NOUN_ADJ;
+    $scope.MOD_POST_NOUN_ADJ = Deps.MOD_POST_NOUN_ADJ;
+    $scope.MOD_POST_ADJ_PP = Deps.MOD_POST_ADJ_PP;
+ 
     //console.log( Deps);
 });

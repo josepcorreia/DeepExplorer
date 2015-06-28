@@ -7,8 +7,8 @@
 					<tr class="active">
   						<td >Sujeito</td>
 					</tr>	
-					<tr class="warning" ng-repeat="x in SUBJ">
-    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					<tr class="warning" ng-repeat="x in SUBJ_SEM_PROP">
+    					<td>{{ x.word}}</td>
     				
 					</tr>
 				</table>
@@ -18,18 +18,18 @@
 					<tr class="active">
   						<td >Complemento Directo</td>
 					</tr>	
-					<tr class="success" ng-repeat="x in CDIR">
-    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					<tr class="success" ng-repeat="x in CDIR_SEM_PROP">
+    					<td>{{ x.word}}</td>
 					</tr>
 				</table>
 			<td>
 			<td>
 				<table class="table table-bordered">
 					<tr class="active">
-  						<td >Complemento Indirecto</td>
+  						<td >Complementos</td>
 					</tr>	
-					<tr class="success" ng-repeat="x in CINDIR">
-    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					<tr class="success" ng-repeat="x in COMPLEMENTOS_SEM_PROP">
+    					<td>{{ x.word}}</td>
 					</tr>
 				</table>
 			<td>
@@ -39,8 +39,8 @@
 					<tr class="active">
   						<td >Advérvios</td>
 					</tr>	
-					<tr class="success" ng-repeat="x in MOD">
-    					<td>{{ x.word  + "  " +  x.frequency}}</td>
+					<tr class="success" ng-repeat="x in MOD_VERB_ADV">
+    					<td>{{ x.word}}</td>
 					</tr>
 				</table>
 		</tr>

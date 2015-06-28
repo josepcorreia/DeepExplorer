@@ -82,7 +82,7 @@ class StrategyNoun implements DeepStrategyInterface {
 class StrategyVerb implements DeepStrategyInterface {
     
     private function getDepQuery($conn, $word, $pos, $dep, $prop, $measure, $limit) {
-        $query1= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
+        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
             WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
@@ -94,16 +94,22 @@ class StrategyVerb implements DeepStrategyInterface {
             ORDER BY Coocorrencia.".$measure." DESC
             LIMIT $limit";
 
-        $result = $conn->query($query1);
+        $result = $conn->query($query);
 
         return $result;
     }
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
-        $dependencies = array("SUBJ", "CDIR", "MOD", "COMPLEMENTOS");
+        $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
         $outp = "";
-        foreach ($dependencies as $dep){ 
+        
+        foreach ($depProps as $depProp){ 
+            $split = split(" ",$depProp);
+            $dep = $split[0];
+            $prop = $split[1];
+            $depProp = $dep."_".$prop;
+
         //por defenição fica agora 25, depois mudar
         
         $result = $this->getDepQuery($conn, $word, $pos, $dep, $prop, $measure ,25);
@@ -111,11 +117,10 @@ class StrategyVerb implements DeepStrategyInterface {
         while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
              if ($outp_aux != "") {$outp_aux .= ",";}
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"prop":"'  . $rs["nomeProp"] . '",';
                 $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
         }
         if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
-            $outp .= '"'.$dep.'":['.$outp_aux.']';
+            $outp .= '"'.$depProp.'":['.$outp_aux.']';
         }
         $outp .= "}";
         return $outp;
@@ -124,8 +129,8 @@ class StrategyVerb implements DeepStrategyInterface {
 
 class StrategyAdj implements DeepStrategyInterface {
     
-    private function getDepQuery($conn, $word, $pos, $dep, $measure, $limit) {
-        $query1= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
+      private function getDepQuery($conn, $word, $pos, $dep, $prop, $measure, $limit) {
+        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
             WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
@@ -133,31 +138,37 @@ class StrategyAdj implements DeepStrategyInterface {
                                                           where palavra= '$word' and 
                                                                 classe= '$pos' LIMIT 1) 
                                                         and Coocorrencia.tipoDep = '$dep'
+                                                        and Coocorrencia.nomeProp = '$prop'
             ORDER BY Coocorrencia.".$measure." DESC
             LIMIT $limit";
 
-        $result = $conn->query($query1);
+        $result = $conn->query($query);
 
         return $result;
     }
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
-        //dependencias que existem no sistema
-        $dependencies = array("MOD");
+       //dependencias que existem no sistema
+        $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
         $outp = "";
-        foreach ($dependencies as $dep){ 
+        
+        foreach ($depProps as $depProp){ 
+            $split = split(" ",$depProp);
+            $dep = $split[0];
+            $prop = $split[1];
+            $depProp = $dep."_".$prop;
+
         //por defenição fica agora 25, depois mudar
         
-        $result = $this->getDepQuery($conn, $word, $pos, $dep, $measure ,$limit);
+        $result = $this->getDepQuery($conn, $word, $pos, $dep, $prop, $measure ,25);
         $outp_aux = "";
         while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
              if ($outp_aux != "") {$outp_aux .= ",";}
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"prop":"'  . $rs["nomeProp"] . '",';
                 $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
         }
         if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
-            $outp .= '"'.$dep.'":['.$outp_aux.']';
+            $outp .= '"'.$depProp.'":['.$outp_aux.']';
         }
         $outp .= "}";
         return $outp;
@@ -166,8 +177,8 @@ class StrategyAdj implements DeepStrategyInterface {
 
 class StrategyAdv implements DeepStrategyInterface {
    
-    private function getDepQuery($conn, $word, $pos, $dep, $measure, $limit) {
-        $query1= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
+    private function getDepQuery($conn, $word, $pos, $dep, $prop, $measure, $limit) {
+        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
             WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
@@ -175,31 +186,37 @@ class StrategyAdv implements DeepStrategyInterface {
                                                           where palavra= '$word' and 
                                                                 classe= '$pos' LIMIT 1) 
                                                         and Coocorrencia.tipoDep = '$dep'
+                                                        and Coocorrencia.nomeProp = '$prop'
             ORDER BY Coocorrencia.".$measure." DESC
             LIMIT $limit";
 
-        $result = $conn->query($query1);
+        $result = $conn->query($query);
 
         return $result;
     }
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
-        //dependencias que existem no sistema
-        $dependencies = array("SUBJ", "CDIR", "MOD", "COMPLEMENTOS");
+       //dependencias que existem no sistema
+        $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
         $outp = "";
-        foreach ($dependencies as $dep){ 
+        
+        foreach ($depProps as $depProp){ 
+            $split = split(" ",$depProp);
+            $dep = $split[0];
+            $prop = $split[1];
+            $depProp = $dep."_".$prop;
+
         //por defenição fica agora 25, depois mudar
         
-        $result = $this->getDepQuery($conn, $word, $pos, $dep, $measure ,$limit);
+        $result = $this->getDepQuery($conn, $word, $pos, $dep, $prop, $measure ,25);
         $outp_aux = "";
         while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
              if ($outp_aux != "") {$outp_aux .= ",";}
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"prop":"'  . $rs["nomeProp"] . '",';
                 $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
         }
         if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
-            $outp .= '"'.$dep.'":['.$outp_aux.']';
+            $outp .= '"'.$depProp.'":['.$outp_aux.']';
         }
         $outp .= "}";
         return $outp;
