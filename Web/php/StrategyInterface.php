@@ -32,8 +32,8 @@ abstract class DeepStrategyInterface {
     protected function getDepGovernor($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra2 = (SELECT idPalavra
+            Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
+            WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
                                                           from Palavra
                                                           where palavra= '$word' and 
                                                                 classe= '$pos' LIMIT 1) 
@@ -51,8 +51,8 @@ abstract class DeepStrategyInterface {
     protected function getDepDependent($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
+            Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
+            WHERE Coocorrencia.idPalavra2 = (SELECT idPalavra
                                                           from Palavra
                                                           where palavra= '$word' and 
                                                                 classe= '$pos' LIMIT 1) 
@@ -130,7 +130,8 @@ class StrategyVerb extends DeepStrategyInterface {
 }
 
 class StrategyAdj extends DeepStrategyInterface {
-
+    private $pos = "ADJ";
+    
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
@@ -140,7 +141,26 @@ class StrategyAdj extends DeepStrategyInterface {
             $split = split(" ",$depProp);
             $dep = $split[0];
             $prop = $split[1];
-            $depProp = $dep."_".$prop;
+            $depProp = $dep."_".$prop;    
+            
+            $depPos_aux = split("_",$prop);
+
+            if(sizeof($depPos_aux)==3){
+                $depPos[0]=$depPos_aux[1];
+                $depPos[1]=$depPos_aux[2];
+            } else{
+                if(sizeof($depPos_aux)==2){
+                    $depPos = $depPos_aux;
+                }
+            }
+            
+            if($pos == $depPos[0]){
+                $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+            }else{
+               if($pos == $depPos[1]){
+                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);    
+                }
+            }
 
         
         $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
@@ -174,17 +194,29 @@ class StrategyAdv extends DeepStrategyInterface {
             
             $depPos_aux = split("_",$prop);
 
-            if(sizeof($depPos_aux)==2){
-                $depPos = $depPos_aux;
-            } else{
+            if(sizeof($depPos_aux)==3){
                 $depPos[0]=$depPos_aux[1];
                 $depPos[1]=$depPos_aux[2];
+            } else{
+                if(sizeof($depPos_aux)==2){
+                    $depPos = $depPos_aux;
+                }
             }
             
-            if($pos == $depPos[1]){
+            if($pos == $depPos[0]){
+                //echo "string1    ";
+                $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+            }else{
+               if($pos == $depPos[1]){
+               // echo "string2    ";
+                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);    
+                }
+            }
+            
+            if($pos == $depPos[0]){
                     $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
             }else{
-               if($pos == $depPos[2]){
+               if($pos == $depPos[1]){
                   $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);    
                 }
             }
