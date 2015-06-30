@@ -24,8 +24,8 @@ deepApp.config(function($routeProvider, $locationProvider) {
                 templateUrl : 'partials/adverbio.html',
                 controller  : 'advCtrl'
             }).
-            when('/adjectivo', {
-                templateUrl : 'partials/adjectivo.html',
+            when('/adjetivo', {
+                templateUrl : 'partials/adjetivo.html',
                 controller  : 'adjCtrl'
             }).
 
@@ -73,7 +73,7 @@ deepApp.service('sharedInfo', function () {
 });
 
 deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
-   $scope.classes=['Nome','Verbo','Adjectivo','Advérbio']
+   $scope.classes=['Nome','Verbo','Adjetivo','Advérbio']
    $scope.pos = "Classe";
    $scope.measures=['PMI','Dice','LogDice', 'Frequência']
    $scope.measure = "Medida";
