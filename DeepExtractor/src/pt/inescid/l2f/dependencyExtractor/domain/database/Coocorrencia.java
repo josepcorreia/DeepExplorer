@@ -148,7 +148,11 @@ public class Coocorrencia extends RelationalElement{
 			stmt = connection.createStatement();
 			String sql = "UPDATE Coocorrencia " +
 					     "SET frequencia = frequencia + 1 " +
-					     "WHERE idPalavra1='"+ wordId1 +"' AND idPalavra2='" + wordId2 + "' AND nomeProp='" + prop + "' AND tipoDep = '" + dep + "' AND nomeCorpus= '"+ _corpusName +"'";
+					     "WHERE idPalavra1='"+ wordId1 +
+					     		"' AND idPalavra2='" + wordId2 + 
+					     		"' AND nomeProp='" + prop + 
+					     		"' AND tipoDep = '" + dep + 
+					     		"' AND nomeCorpus= '"+ _corpusName +"'";
 						
 			stmt.executeUpdate(sql);
 	
@@ -182,7 +186,7 @@ public class Coocorrencia extends RelationalElement{
 						        "' and nomeCorpus = '" + _corpusName + "';";
 			ResultSet rs = stmt.executeQuery(sql);
 			if(rs.next()){  
-				freq = rs.getInt(1);
+				freq = rs.getInt("frequencia");
 			}
 
 			rs.close(); 
