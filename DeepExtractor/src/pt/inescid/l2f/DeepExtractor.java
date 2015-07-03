@@ -27,7 +27,7 @@ public class DeepExtractor {
 	public static void main(String[] args) {
 		System.out.println("Inicio");
 		//Connection connection = ConnectionMySQL.getConnectionMySQL();
-		Connection connection = ConnectionSQLite.getConnectionSQLite();
+		Connection connection = ConnectionSQLite.getConnectionSQLite(args[1]);
 		
 		String corpusName = "CETEMPúblico";
 		

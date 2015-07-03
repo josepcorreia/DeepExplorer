@@ -61,24 +61,28 @@
 	    <java classname="${main}" fork="true">
 			<classpath refid="classpath"/>
 	    	<arg value="/Users/josecorreia/Projects/Parte1"/>
+	    	<arg value="/Users/josecorreia/Projects/DB/"/>
 		</java>
 	</target>
 	<target name="runTudo" depends="main" description="run" >
 		    <java classname="${main}" fork="true">
 				<classpath refid="classpath"/>
 		    	<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
+		    	<arg value="/Users/josecorreia/Projects/DB/"/>
 			</java>
 		</target>
-	<target name="runLinParte1" depends="main" description="run" >
+	<target name="runLinInesc" depends="main" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
 			    	<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
+			    	<arg value="/afs/l2f/home/jcorreia/Projects/DB/"/>
 				</java>
 	</target>
-	<target name="runLin" depends="main" description="run" >
+	<target name="runCorpus" depends="main" description="run" >
 		    <java  classname="${main}" fork="true">
 				<classpath refid="classpath"/>
 		    	<arg value="/home/masp/josecorreia/Projects/CETEMPublico"/>
+		    	<arg value="/afs/l2f/home/jcorreia/Projects/DB/"/>
 			</java>
 	</target>
 	<target name="runW8" depends="main" description="run" >
@@ -86,7 +90,7 @@
 				<classpath refid="classpath"/>
 		    	<arg value="C:\Users\ze_mi_000\Projects\Parte01aaa.xml"/>
 			</java>
-		</target>
+	</target>
 	
 
 </project>
