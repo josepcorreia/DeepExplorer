@@ -74,26 +74,28 @@ public class Palavra extends RelationalElement{
 	}
 
 	
-	public void insertNewPalavra(String  palavra, String classe, String categoria){
+	public void insertNewPalavra(String  word, String pos, String categoria){
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
-			String query = "Insert into Palavra (palavra, classe) " +
-						   "VALUES(\""+ palavra +"\",\"" + classe +"\" );";
-						   
 			
+			//Insert into Palavra (idPalavra, palavra, classe)
+			String query = "INSERT INTO Palavra VALUES( NULL, '"+ word + "' , '" + pos + "' , '" + categoria+"' );";
+						   
 			stmt.executeUpdate(query);
-	
-			ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
+			
+			String sql = "SELECT idPalavra FROM Palavra WHERE palavra = '"+ word + "' AND classe = '" + pos +"' LIMIT 1";
+			
+			ResultSet rs = stmt.executeQuery(sql);
 			if(rs.next()){
-				_currentId = rs.getLong("LAST_INSERT_ID()");
+				_currentId = rs.getLong("idPalavra");
 			}
 			rs.close();
 
 			//System.out.println("Record is inserted into Palavra table!");
 			
 		} catch (SQLException e) {
-			System.out.println("Inserir Nova Palavra: "+ palavra );
+			System.out.println("Inserir Nova Palavra: "+ word);
 			System.out.println(e.getMessage());
 			
 		} finally {
@@ -113,7 +115,7 @@ public class Palavra extends RelationalElement{
 		try{
 			stmt = connection.createStatement();
 			
-			String sql = "SELECT idPalavra FROM Palavra WHERE palavra =\""+ word + "\" AND classe =\"" + pos +"\" LIMIT 1";
+			String sql = "SELECT idPalavra FROM Palavra WHERE palavra ='"+ word + "' AND classe =\'" + pos +"' LIMIT 1";
 			
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -147,34 +149,36 @@ public class Palavra extends RelationalElement{
 	
 	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
   public boolean insertPalavraCorpus(long id, String depname, String prop){
-		PreparedStatement preparedStatement = null;
+	  Statement stmt = null;
+		
+		try{
+			stmt = connection.createStatement();
 			
-		try {
-			preparedStatement = connection.prepareStatement("insert into Pertence values (?, ?, ?, ?, ?)");
-			preparedStatement.setLong(1, id);
-			preparedStatement.setString(2,_corpusName);
-			preparedStatement.setString(3,prop);
-			preparedStatement.setString(4,depname);
-			preparedStatement.setInt(5,1);
 			
-			preparedStatement.executeUpdate();
-			//System.out.println("Record is inserted into Fornece table!");
-		} catch (SQLException e) {
-			System.out.println("|| Palavra insere no corpus");
-			System.out.println(e.getMessage());
-			return false;
 
-		} finally {
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	  return true;
-  }
+			String sql = "INSERT INTO Pertence (idPalavra, nomeCorpus, nomeProp, tipoDep, frequencia) VALUES(" +
+												" '" + id + "' , '" +
+												_corpusName + "' , '" + 
+												prop  + "' , '" + 
+												depname  + "' , " +  
+												1 + ");";
+			stmt.executeUpdate(sql);
+  
+	    }catch(SQLException se){
+	    	System.out.println("|| Palavra insere no corpus");
+			System.out.println(se.getMessage());
+			return false;
+	    }finally{
+	       //finally block used to close resources
+	       try{
+	          if(stmt!=null)
+	             stmt.close();
+	       }catch(SQLException se){
+	       }// do nothing
+	    }//end finally try
+
+		return true;
+	}
   
   public boolean wordExistsCorpus(long id, String depname, String prop){
 		Statement stmt = null;
@@ -228,7 +232,7 @@ public class Palavra extends RelationalElement{
 	
 		}catch(SQLException se){
 		      //Handle errors for JDBC
-			System.out.println("|| Palavra");
+			System.out.println("|| Update Frequency error");
 		      se.printStackTrace();
 		}finally{
 		      //finally block used to close resources

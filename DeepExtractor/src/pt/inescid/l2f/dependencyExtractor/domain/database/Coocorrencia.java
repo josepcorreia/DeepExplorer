@@ -177,9 +177,9 @@ public class Coocorrencia extends RelationalElement{
 						 "FROM Coocorrencia " +
 						 "WHERE idPalavra1 = "+ wordId1 + 
 						        " and idPalavra2 = " + wordId2 + 
-						        " and tipoDep=" + dep + 
-						        " and nomeProp = " + prop +
-						        " and nomeCorpus = " + _corpusName + ";";
+						        " and tipoDep= '" + dep + 
+						        "' and nomeProp = '" + prop +
+						        "' and nomeCorpus = '" + _corpusName + "';";
 			ResultSet rs = stmt.executeQuery(sql);
 			if(rs.next()){  
 				freq = rs.getInt(1);
@@ -214,32 +214,6 @@ public class Coocorrencia extends RelationalElement{
 					 "' and tipoDep = '"+ dep +
 					 "' and nomeCorpus = '" +  _corpusName + "'";
 		s.addBatch(sql);
-		/*Statement stmt = null;
-		try{
-			stmt = connection.createStatement();
-			String sql = "UPDATE Coocorrencia "+ 
-						 "SET PMI = " + pmi + " , Dice = " + dice + " , LogDice = " + logDice + 
-						 " WHERE idPalavra1 = " + wordId1+
-						 " and idPalavra2 = "+ wordId2 +
-						 " and nomeProp = '" + prop +
-						 "' and tipoDep = '"+ dep +
-						 "' and nomeCorpus = '" +  _corpusName + "'";
-						
-			stmt.executeUpdate(sql);
-	
-		}catch(SQLException se){
-		      //Handle errors for JDBC
-			System.out.println("Measure");
-		      se.printStackTrace();
-		}finally{
-		      //finally block used to close resources
-		      try{
-		         if(stmt!=null)
-		            stmt.close();
-		      }catch(SQLException se){
-		      }// do nothing
-
-		}//end finally try	*/   
 	}
 	
 	public void UpdateMeasures(){

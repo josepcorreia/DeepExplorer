@@ -36,13 +36,13 @@ public class DependencyExtractor {
 			//número da frase, sentence.getSentenceNumber() não está a funcinar
 			sentenceNumber = sentence.getNodes().get(0).getSentenceNumber();
 			
-			/*String Frase = "";
+			String Frase = "";
 				for (XIPNode node : sentence.getNodes()) {
 					Frase += node.getSentence();
 				
 				}
-				System.out.println("Frase:" + Frase);
-			*/
+			//	System.out.println("Frase:" + Frase);
+			
 			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
 			for (Dependency dependency : deps) {
 				if("NE".equals(dependency.getName())){
@@ -58,11 +58,11 @@ public class DependencyExtractor {
 			}
 			
 			_dependencyFactory.NE().ClearNamedEnteties();
-		
-			/*if(sentenceNumber==2){
+			
+
+			/*if(sentenceNumber==1){
 				System.exit(0);
 			}*/
-			
 			
 		}
 	}

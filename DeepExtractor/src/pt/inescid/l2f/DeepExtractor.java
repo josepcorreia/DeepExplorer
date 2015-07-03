@@ -1,7 +1,6 @@
 package pt.inescid.l2f;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.DirectoryIteratorException;
@@ -12,6 +11,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 
 import pt.inescid.l2f.connection.ConnectionMySQL;
+import pt.inescid.l2f.connection.ConnectionSQLite;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
@@ -26,14 +26,15 @@ public class DeepExtractor {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Inicio");
-		Connection c_mysql = ConnectionMySQL.getConnectionMySQL();
+		//Connection connection = ConnectionMySQL.getConnectionMySQL();
+		Connection connection = ConnectionSQLite.getConnectionSQLite();
 		
 		String corpusName = "CETEMPúblico";
 		
-		RelationalFactory relationalFactory  = new RelationalFactory(c_mysql, corpusName);//alterar e tornar a classe compeltamente estatica
+		RelationalFactory relationalFactory  = new RelationalFactory(connection, corpusName);//alterar e tornar a classe compeltamente estatica
 		DependencyExtractor de = new DependencyExtractor(corpusName);
 		
-		System.out.println(ConnectionMySQL.getStatusConnection());
+		System.out.println(ConnectionSQLite.getStatusConnection());
 
 		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 					
@@ -45,7 +46,8 @@ public class DeepExtractor {
 			
 		de.CalculateAssociationMeasures();
 			
-		ConnectionMySQL.CloseConnection(c_mysql);
+		//ConnectionMySQL.CloseConnection(connection);
+		ConnectionSQLite.CloseConnection(connection);
 		System.out.println("FIM");		
 	}
 	

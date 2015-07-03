@@ -5,29 +5,31 @@ import java.sql.Connection;
 import java.sql.DriverManager; 
 import java.sql.SQLException;
 
-public class ConnectionMySQL {
+public class ConnectionSQLite {
 
   private static String status = "Not connected"; 
   
   //Método de Conexão// 
-  public static Connection getConnectionMySQL() { 
+  public static Connection getConnectionSQLite() { 
 	  
 	  try { 
-		  Connection connection;
-		  String driverName = "com.mysql.jdbc.Driver";
-		  Class.forName(driverName); 
+		  Connection connection = null;
 		  
-		  // Configuração da conexão à base de dados//
-		  	String serverName = "localhost"; 
-//		  	String serverName = "85.247.198.76";
-		    String mydatabase = "db_deep";
-//		  	String mydatabase = "db_deep_aux"; 	
-		  	String url = "jdbc:mysql://" + serverName + "/" + mydatabase; 
-		  	String username = "jcorreia";
-		  	String password = "deepexplorer";
-		  	
-		  	connection = DriverManager.getConnection(url, username, password); 
-		  	
+		  // load the sqlite-JDBC driver using the current class loader
+		  String driverName = "org.sqlite.JDBC";
+		  Class.forName(driverName); 
+	
+
+			 // Configuração da conexão à base de dados//
+
+			String mydatabase = "db_deep.sqlite";
+//		  	String mydatabase = "db_deep_aux.sqlite";
+			String dir = "/Users/josecorreia/Projects/DB/";
+			String path = "jdbc:sqlite:" + dir + mydatabase; 
+
+			// create a database connection
+		    connection = DriverManager.getConnection(path);
+		 
 		  	//Teste da conexão// 
 		  	if (connection != null){ 
 		  		status = "DB: Conected with success!";
@@ -36,6 +38,7 @@ public class ConnectionMySQL {
 		  	} 
 
 		  	return connection;
+		  	
 		  	} catch (ClassNotFoundException e) { 
 		  		System.out.println("The driver does not found."); 
 		  		return null; 
@@ -59,8 +62,7 @@ public class ConnectionMySQL {
   } 
   
   public Connection RestartConnection(Connection connection) { 
-	  ConnectionMySQL.CloseConnection(connection);
-	  return ConnectionMySQL.getConnectionMySQL(); 
+	  ConnectionSQLite.CloseConnection(connection);
+	  return ConnectionSQLite.getConnectionSQLite(); 
   } 
 }
-
