@@ -59,12 +59,12 @@ public class DependencyExtractor {
 			
 			_dependencyFactory.NE().ClearNamedEnteties();
 			
-
 			/*if(sentenceNumber==1){
 				System.exit(0);
 			}*/
 			
 		}
+
 	}
 
 	public void CalculateAssociationMeasures(){

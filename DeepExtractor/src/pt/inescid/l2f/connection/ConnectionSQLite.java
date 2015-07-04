@@ -22,8 +22,8 @@ public class ConnectionSQLite {
 
 			 // Configuração da conexão à base de dados//
 
-			String mydatabase = "db_deep.sqlite";
-//		  	String mydatabase = "db_deep_aux.sqlite";
+			String mydatabase = "db_deep.db";
+//		  	String mydatabase = "db_deep_aux.db";
 			String path = "jdbc:sqlite:" + dir + mydatabase; 
 
 			// create a database connection

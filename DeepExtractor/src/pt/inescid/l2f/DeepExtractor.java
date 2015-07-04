@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 
-import pt.inescid.l2f.connection.ConnectionMySQL;
 import pt.inescid.l2f.connection.ConnectionSQLite;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
