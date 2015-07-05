@@ -1,6 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
+import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
 import pt.inescid.l2f.xipapi.domain.Dependency;
@@ -12,11 +13,11 @@ import java.util.Vector;
 
 public class DependencyExtractor {
 	private DependencyFactory _dependencyFactory;
-	
+	private DeepStorage _storage;
 
 	public DependencyExtractor(){
-		_dependencyFactory = new DependencyFactory();
-		
+		_storage = new DeepStorage();
+		_dependencyFactory = new DependencyFactory(_storage);
 	}
 	
 	public void Extract(XipDocument document){
@@ -51,12 +52,15 @@ public class DependencyExtractor {
 			
 			_dependencyFactory.NE().ClearNamedEnteties();
 			
-			/*if(sentenceNumber==1){
-				System.exit(0);
+			/*if(sentenceNumber==4){
+				
+				return;
 			}*/
 			
 		}
 
+		_storage.storeInDatabase();
+		_storage.printCenas();
 	}
 
 	public void CalculateAssociationMeasures(){

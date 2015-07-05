@@ -7,8 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import pt.inescid.l2f.connection.exception.WordNotExist;
+import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
+import pt.inescid.l2f.dependencyExtractor.domain.Word;
+
 public class Palavra extends RelationalElement{
-	private long _currentId;
 	private String _corpusName;
 
 
@@ -16,8 +19,8 @@ public class Palavra extends RelationalElement{
 		super(_connection);
 		_corpusName = corpusName;
 	}
-
-	public long checkWord(String  word, String pos, String category, String depname, String prop){
+	
+/*	public long checkWord(String  word, String pos, String category, String depname, String prop){
 		
 		if(!wordExists(word, pos)){
 			insertNewPalavra(word, pos, category);
@@ -31,8 +34,8 @@ public class Palavra extends RelationalElement{
 			}
 		}
 		return _currentId;
-	}
-
+	}*/
+	
 	public long getNumberWords(String depname) {
 		Connection connection = getConnetion();
 		
@@ -73,30 +76,36 @@ public class Palavra extends RelationalElement{
 	}
 
 	
-	public void insertNewPalavra(String  word, String pos, String categoria){
+	public Long insertNewPalavra(Word  word){
+		
 		Connection connection = getConnetion();
+		
+		String lemma = word.getLemma();
+		String pos = word.getPOS();
+		String categoria = "cat";
+		Long id = (long)0;
 		
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
 			
 			//Insert into Palavra (idPalavra, palavra, classe)
-			String query = "INSERT INTO Palavra VALUES( NULL, '"+ word + "' , '" + pos + "' , '" + categoria+"' );";
+			String query = "INSERT INTO Palavra VALUES( NULL, '"+ lemma + "' , '" + pos + "' , '" + categoria+"' );";
 						   
 			stmt.executeUpdate(query);
 			
-			String sql = "SELECT idPalavra FROM Palavra WHERE palavra = '"+ word + "' AND classe = '" + pos +"' LIMIT 1";
+			String sql = "SELECT idPalavra FROM Palavra WHERE palavra = '"+ lemma + "' AND classe = '" + pos +"' LIMIT 1";
 			
 			ResultSet rs = stmt.executeQuery(sql);
 			if(rs.next()){
-				_currentId = rs.getLong("idPalavra");
+				id = rs.getLong("idPalavra");
 			}
 			rs.close();
 
 			//System.out.println("Record is inserted into Palavra table!");
 			
 		} catch (SQLException e) {
-			System.out.println("Inserir Nova Palavra: "+ word);
+			System.out.println("Inserir Nova Palavra: "+ lemma);
 			System.out.println(e.getMessage());
 			
 		} finally {
@@ -108,31 +117,35 @@ public class Palavra extends RelationalElement{
 		       }catch(SQLException se){
 		       }// do nothing
 		}//end finally try	
+
+		return id;
   }
 	
-	//verifica se uma palavra existe na bd e actualiza o atributo currentId, caso a palavra exista
-	public boolean wordExists(String  word, String pos){
+	//verifica se uma palavra existe na bd
+	public Long wordExists(Word word) throws WordNotExist{
 		Connection connection = getConnetion();
+		
+		String lemma = word.getLemma();
+		String pos = word.getPOS();
 		
 		Statement stmt = null;
 	
 		try{
 			stmt = connection.createStatement();
 			
-			String sql = "SELECT idPalavra FROM Palavra WHERE palavra ='"+ word + "' AND classe =\'" + pos +"' LIMIT 1";
+			String sql = "SELECT idPalavra FROM Palavra WHERE palavra ='"+ lemma + "' AND classe =\'" + pos +"' LIMIT 1";
 			
 			ResultSet rs = stmt.executeQuery(sql);
 
 			
 			if(rs.next()){
-				_currentId = rs.getLong("idPalavra");
+				Long id = rs.getLong("idPalavra");
 				rs.close(); 
-				return true;
+				return id;
 			}
 			
 			//caso nao exista
 			rs.close(); 
-			return false;
     
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
@@ -148,12 +161,12 @@ public class Palavra extends RelationalElement{
 	       }// do nothing
 	    }//end finally try
  
-		return false;
+		throw new WordNotExist();
 	}
 	
 	
 	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
-  public boolean insertPalavraCorpus(long id, String depname, String prop){
+  public boolean insertPalavraCorpus(long id, String depname, String prop, int freq){
 	  Connection connection = getConnetion();
 	  
 	  Statement stmt = null;
@@ -168,7 +181,7 @@ public class Palavra extends RelationalElement{
 												_corpusName + "' , '" + 
 												prop  + "' , '" + 
 												depname  + "' , " +  
-												1 + ");";
+												freq + ");";
 			stmt.executeUpdate(sql);
   
 	    }catch(SQLException se){
@@ -188,7 +201,7 @@ public class Palavra extends RelationalElement{
 		return true;
 	}
   
-  public boolean wordExistsCorpus(long id, String depname, String prop){
+  public boolean wordExistsCorpus(long id, String depname, String prop) throws WordNotExistCorpus{
 	  Connection connection = getConnetion();
 	  
 	  Statement stmt = null;
@@ -208,9 +221,9 @@ public class Palavra extends RelationalElement{
 				rs.close(); 
 				return true;
 			}
-			//caso nao exista
+			
 			rs.close(); 
-			return false;
+			
   
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
@@ -226,16 +239,16 @@ public class Palavra extends RelationalElement{
 	       }// do nothing
 	    }//end finally try
 
-		return false;
+		throw new WordNotExistCorpus();
 	}
-  public void uptadeFrequency(long wordId, String depname, String prop){
+  public void uptadeFrequency(long wordId, String depname, String prop, int freq){
 	  Connection connection = getConnetion();	
-	  
+
 	  Statement stmt = null;
 		try{
 			stmt = connection.createStatement();
 			String sql = "UPDATE Pertence " +
-					     " SET frequencia = frequencia + 1 " +
+					     " SET frequencia = frequencia + "+ freq + " "+
 					     " WHERE idPalavra = "+ wordId +
 					     				" AND tipoDep = '"+ depname +
 					     				"' AND nomeProp = '"+ prop +

@@ -1,9 +1,11 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
+import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
+
 public class Mod extends DependencyType{
 
-	public Mod() {
-		super();
+	public Mod(DeepStorage _storage) {
+		super(_storage);
 	}
 	
 	@Override

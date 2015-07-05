@@ -5,7 +5,6 @@ public class Coocorrence {
 	private long _idPalavra2;
 	private String _property;
 	private String _depedency;
-	private long _frequency;
 
 	public Coocorrence(long _idPalavra1, long _idPalavra2, String _property,
 			String _depedency) {
@@ -29,16 +28,20 @@ public class Coocorrence {
 	public String getDepedency() {
 		return _depedency;
 	}
-
-	public long getFreq() {
-		return _frequency;
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((_depedency == null) ? 0 : _depedency.hashCode());
+		result = prime * result + (int) (_idPalavra1 ^ (_idPalavra1 >>> 32));
+		result = prime * result + (int) (_idPalavra2 ^ (_idPalavra2 >>> 32));
+		result = prime * result
+				+ ((_property == null) ? 0 : _property.hashCode());
+		return result;
 	}
 	
-	public void setFreq(long freq) {
-		this._frequency = freq;
-	}
-	
-	//auto-generated
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -64,8 +67,11 @@ public class Coocorrence {
 			return false;
 		return true;
 	}
-
-	
-
+	@Override
+	public String toString() {
+		return "Coocorrence [idPalavra1=" + _idPalavra1 + ", idPalavra2="
+				+ _idPalavra2 + ", property=" + _property + ", depedency="
+				+ _depedency + "]";
+	}
 
 }

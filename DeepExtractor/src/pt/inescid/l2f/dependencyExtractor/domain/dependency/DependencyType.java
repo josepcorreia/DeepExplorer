@@ -1,9 +1,11 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -17,6 +19,8 @@ import pt.inescid.l2f.connection.database.Dependencia;
 import pt.inescid.l2f.connection.database.Palavra;
 import pt.inescid.l2f.connection.database.Propriedade;
 import pt.inescid.l2f.connection.database.RelationalFactory;
+import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
+import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.Feature;
@@ -26,9 +30,14 @@ import pt.inescid.l2f.xipapi.domain.XIPNode;
 
 
 public abstract class DependencyType{
+	private DeepStorage _storage;
 	private HashMap<String,String> _depPropTable;
 
 	public DependencyType(){
+	}
+	
+	public DependencyType(DeepStorage storage){
+		_storage = storage; 
 		_depPropTable = getDepPropTable();
 		 depInformation();
 	}
@@ -56,14 +65,28 @@ public abstract class DependencyType{
 		
 		RelationalFactory.getPropriedade().checkProperty(prop, depname);
 		for (Word w : words) {
-			w.setId(RelationalFactory.getPalavra().checkWord(w.getLemma(), w.getPOS(), "", depname, prop));
+			_storage.CheckWord(w, prop, depname);
 		}
 
 		if(words.size()== 2){
-			RelationalFactory.getCoocorrencia().checkCoocorrence(words.get(0), words.get(1), prop, depname);
+			_storage.CheckCoocorrence(new Coocorrence(words.get(0).getIdPalavra(), words.get(1).getIdPalavra(), prop, depname));
 		}
 		else{
-			System.out.println("Depedencia com erro " + depname +" na frase " + dep.getSentenceNumber());
+			String path = new File("src/out/depError.txt").getAbsolutePath();
+			
+			BufferedWriter writer = null;
+	        try {
+	            writer = new BufferedWriter(new FileWriter(path));
+	            writer.write("Depedencia com erro " + depname +" na frase " + dep.getSentenceNumber() + "\n");
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                writer.close();
+	            } catch (Exception e) {
+	            }
+	        }
 		}
 	}
 	

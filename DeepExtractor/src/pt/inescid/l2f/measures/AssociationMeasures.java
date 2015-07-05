@@ -1,4 +1,4 @@
-package pt.inescid.l2f.dependencyExtractor.domain.measures;
+package pt.inescid.l2f.measures;
 
 import java.lang.Math;
 

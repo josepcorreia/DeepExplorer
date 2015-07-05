@@ -7,8 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
-import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
+import pt.inescid.l2f.measures.AssociationMeasures;
 
 
 public class Coocorrencia extends RelationalElement{
@@ -18,7 +19,6 @@ public class Coocorrencia extends RelationalElement{
 		super(_connection);
 		_corpusName = corpusName;
 	}
-
 
 
 	public int getNumberRows(){
@@ -55,21 +55,19 @@ public class Coocorrencia extends RelationalElement{
 		return rows;
 	}
 
+	/*public void checkCoocorrence(Word word1, Word word2, String prop, String dep){
 
-
-	public void checkCoocorrence(Word word1, Word word2, String prop, String dep){
-
-		Long wordId1 = word1.getId();
-		Long wordId2 = word2.getId();
+		Long wordId1 = word1.getIdPalavra();
+		Long wordId2 = word2.getIdPalavra();
 
 		if(coocorrenceExists(wordId1, wordId2, prop, dep)){
 			uptadeFrequency(wordId1, wordId2, prop, dep);
 		}else{
 			insertCoocorrence(wordId1, wordId2, prop, dep);
 		}
-	}
+	}*/
 
-	public void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName){
+	public void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName, int freq){
 		Connection connection = getConnetion();
 
 		PreparedStatement preparedStatement = null;
@@ -82,7 +80,7 @@ public class Coocorrencia extends RelationalElement{
 			preparedStatement.setString(3, property);
 			preparedStatement.setString(4, dependencyName);
 			preparedStatement.setString(5, _corpusName);
-			preparedStatement.setInt(6, 1);
+			preparedStatement.setInt(6, freq);
 			//medidas inicializadas a 0
 			preparedStatement.setDouble(7, 0.0);
 			preparedStatement.setDouble(8, 0.0);
@@ -112,7 +110,7 @@ public class Coocorrencia extends RelationalElement{
 		}
 	} 
 
-	public boolean coocorrenceExists(long wordId1, long wordId2, String prop, String dep){
+	public boolean coocorrenceExists(long wordId1, long wordId2, String prop, String dep) throws CoocorrenceNotExist{
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -133,8 +131,6 @@ public class Coocorrencia extends RelationalElement{
 
 			//caso nao exista
 			rs.close(); 
-			return false;
-
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
@@ -151,16 +147,16 @@ public class Coocorrencia extends RelationalElement{
 			}// do nothing
 		}//end finally try
 
-		return true;
+		throw new CoocorrenceNotExist();
 	}
-	public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep){
+	public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep, int freq){
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
 		try{
 			stmt = connection.createStatement();
 			String sql = "UPDATE Coocorrencia " +
-					"SET frequencia = frequencia + 1 " +
+					"SET frequencia = frequencia + " + freq + " "+
 					"WHERE idPalavra1='"+ wordId1 +
 					"' AND idPalavra2='" + wordId2 + 
 					"' AND nomeProp='" + prop + 
