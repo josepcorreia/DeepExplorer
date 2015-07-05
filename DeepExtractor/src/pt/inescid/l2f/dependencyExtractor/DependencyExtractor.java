@@ -61,6 +61,7 @@ public class DependencyExtractor {
 
 		_storage.storeInDatabase();
 		_storage.printCenas();
+		_storage.cleanMaps();
 	}
 
 	public void CalculateAssociationMeasures(){

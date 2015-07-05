@@ -33,7 +33,7 @@ public class DeepStorage {
 			
 			if(wordBelongsMap.containsKey(wb)){
 				int freq = wordBelongsMap.get(wb) + 1;
-				wordBelongsMap.replace(wb, freq);
+				wordBelongsMap.put(wb, freq);
 			}else{
 				wordBelongsMap.put(wb,1);
 			}			
@@ -61,7 +61,7 @@ public class DeepStorage {
 	public void CheckCoocorrence(Coocorrence coocorrence){
 		if(coocorrenceMap.containsKey(coocorrence)){
 			int freq = coocorrenceMap.get(coocorrence) + 1;
-			coocorrenceMap.replace(coocorrence, freq);
+			coocorrenceMap.put(coocorrence, freq);
 		} else{
 			coocorrenceMap.put(coocorrence, 1);
 		}
@@ -102,9 +102,15 @@ public class DeepStorage {
 			}
 			
 		}
-		
+		printCenas();
+		cleanMaps();
 	}
 	
+	public void cleanMaps(){
+		this.wordsMap = new HashMap<Word,Long>();
+		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
+		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
+	}
 	
 	public void printCenas(){
 		System.out.println("WOrd: " + wordsMap.size());
