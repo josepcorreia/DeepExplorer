@@ -4,8 +4,8 @@ import pt.inescid.l2f.xipapi.domain.Dependency;
 
 public class Cindir extends DependencyType{
 
-	public Cindir(String corpusName) {
-		super(corpusName);
+	public Cindir() {
+		super();
 	}
 
 	@Override

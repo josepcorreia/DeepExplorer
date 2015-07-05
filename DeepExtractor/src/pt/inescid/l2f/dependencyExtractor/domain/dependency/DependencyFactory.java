@@ -6,14 +6,14 @@ public class DependencyFactory {
 	private HashMap<String,DependencyType> _dependenciesMap;
 	private NE _ne;
 	
-	public DependencyFactory(String corpusName){
+	public DependencyFactory(){
 		_dependenciesMap = new HashMap<String,DependencyType>();
 		
-		_dependenciesMap.put("CDIR", new Cdir(corpusName));
-		_dependenciesMap.put("CINDIR", new Cindir(corpusName));
-		_dependenciesMap.put("COMPL", new COMPL(corpusName));
-		_dependenciesMap.put("MOD", new Mod(corpusName));
-		_dependenciesMap.put("SUBJ", new Subj(corpusName));
+		_dependenciesMap.put("CDIR", new Cdir());
+		_dependenciesMap.put("CINDIR", new Cindir());
+		_dependenciesMap.put("COMPL", new COMPL());
+		_dependenciesMap.put("MOD", new Mod());
+		_dependenciesMap.put("SUBJ", new Subj());
 		
 		_ne = new NE(); 
 	}	

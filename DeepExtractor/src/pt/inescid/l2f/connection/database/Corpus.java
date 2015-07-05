@@ -8,8 +8,13 @@ import java.sql.Statement;
 
 public class Corpus extends RelationalElement{
 
-	public static boolean insertNew(String nome, String  fonte, String ano, String genero, Boolean update){
-		Connection connection = newConnetion();
+	
+	public Corpus(Connection _connection) {
+		super(_connection);
+	}
+
+	public boolean insertNew(String nome, String  fonte, String ano, String genero, Boolean update){
+		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
 		Statement stmt = null;
@@ -55,11 +60,7 @@ public class Corpus extends RelationalElement{
 					
 					if (stmt != null) 
 						stmt.close();
-					
-					if (connection != null) 
-						connection.close();
-					
-					
+
 					}
 					catch (SQLException e) {
 						e.printStackTrace();

@@ -8,9 +8,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
 
-import pt.inescid.l2f.connection.ConnectionSQLite;
+import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
@@ -24,23 +23,23 @@ public class DeepExtractor {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Inicio");
-		//Connection connection = ConnectionMySQL.getConnectionMySQL();
 	
 		String corpusName = "CETEMPúblico";
 		
-		DependencyExtractor de = new DependencyExtractor(corpusName);
+		RelationalFactory rf = new RelationalFactory(corpusName);
+		DependencyExtractor de = new DependencyExtractor();
 		
 		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 					
 		Path dir = Paths.get(args[0]);
 		
-		de.CorpusInformation();
+		RelationalFactory.getCorpus().insertNew(corpusName, "Público", "2000", "Noticíario", false);
 			
 		inspectDirectory(dir, xipDocumentFactory, de);
 			
 		de.CalculateAssociationMeasures();
 			
-		//ConnectionMySQL.CloseConnection(connection);
+		rf.closeConnection();
 		
 		System.out.println("FIM");		
 	}

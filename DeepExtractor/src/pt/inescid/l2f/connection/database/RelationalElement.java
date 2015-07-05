@@ -5,13 +5,14 @@ import java.sql.Connection;
 import pt.inescid.l2f.connection.ConnectionSQLite;
 
 public abstract class RelationalElement {
+	private Connection _connection = null; 
+	
+	
+	public RelationalElement(Connection _connection) {
+		this._connection = _connection;
+	}
 
-	protected static Connection newConnetion(){
-		return ConnectionSQLite.getConnectionSQLite();
+	protected Connection getConnetion(){
+		return _connection;	
 	}
-	
-	protected static void closeConnetion(Connection connection){
-		ConnectionSQLite.closeConnection(connection);
-	}
-	
 }

@@ -12,14 +12,17 @@ import pt.inescid.l2f.dependencyExtractor.domain.measures.AssociationMeasures;
 
 
 public class Coocorrencia extends RelationalElement{
-	private static String _corpusName;
-	private static Statement s;
+	private String _corpusName;
+
+	public Coocorrencia(Connection _connection, String corpusName) {
+		super(_connection);
+		_corpusName = corpusName;
+	}
 
 
 
-
-	public static int getNumberRows(){
-		Connection connection = newConnetion();
+	public int getNumberRows(){
+		Connection connection = getConnetion();
 
 		Statement stmt = null;
 		int rows = 0;
@@ -45,9 +48,6 @@ public class Coocorrencia extends RelationalElement{
 				if(stmt!=null)
 					stmt.close();
 
-				if(connection!=null)
-					connection.close();
-
 			}catch(SQLException se){
 			}// do nothing
 		}//end finally try
@@ -57,8 +57,7 @@ public class Coocorrencia extends RelationalElement{
 
 
 
-	public static void checkCoocorrence(Word word1, Word word2, String prop, String dep, String corpusName){
-		_corpusName = corpusName;
+	public void checkCoocorrence(Word word1, Word word2, String prop, String dep){
 
 		Long wordId1 = word1.getId();
 		Long wordId2 = word2.getId();
@@ -70,8 +69,8 @@ public class Coocorrencia extends RelationalElement{
 		}
 	}
 
-	public static void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName){
-		Connection connection = newConnetion();
+	public void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName){
+		Connection connection = getConnetion();
 
 		PreparedStatement preparedStatement = null;
 
@@ -106,8 +105,6 @@ public class Coocorrencia extends RelationalElement{
 				if (preparedStatement != null) 
 					preparedStatement.close();
 
-				if(connection!=null)
-					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -115,8 +112,8 @@ public class Coocorrencia extends RelationalElement{
 		}
 	} 
 
-	public static boolean coocorrenceExists(long wordId1, long wordId2, String prop, String dep){
-		Connection connection = newConnetion();
+	public boolean coocorrenceExists(long wordId1, long wordId2, String prop, String dep){
+		Connection connection = getConnetion();
 
 		Statement stmt = null;
 
@@ -150,17 +147,14 @@ public class Coocorrencia extends RelationalElement{
 				if(stmt!=null)
 					stmt.close();
 				
-				if(connection!=null)
-		        	  connection.close();
-				
 			}catch(SQLException se){
 			}// do nothing
 		}//end finally try
 
 		return true;
 	}
-	public static void uptadeFrequency(long wordId1, long wordId2, String prop, String dep){
-		Connection connection = newConnetion();
+	public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep){
+		Connection connection = getConnetion();
 
 		Statement stmt = null;
 		try{
@@ -185,9 +179,6 @@ public class Coocorrencia extends RelationalElement{
 				if(stmt!=null)
 					stmt.close();
 				
-				if(connection!=null)
-		        	  connection.close();
-				
 			}catch(SQLException se){
 			}// do nothing
 
@@ -195,7 +186,7 @@ public class Coocorrencia extends RelationalElement{
 	}
 
 	public int getDependencyFrequency(long wordId1, long wordId2, String prop, String dep){
-		Connection connection = newConnetion();
+		Connection connection = getConnetion();
 
 		Statement stmt = null;
 		int freq = 0;
@@ -226,8 +217,6 @@ public class Coocorrencia extends RelationalElement{
 			try{
 				if(stmt!=null)
 					stmt.close();
-				if(connection!=null)
-		        	  connection.close();
 				
 			}catch(SQLException se){
 			}// do nothing
@@ -236,7 +225,7 @@ public class Coocorrencia extends RelationalElement{
 		return freq ;
 	}
 
-	public static void uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep, double pmi, double dice, double logDice) throws SQLException{
+	public String uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep, double pmi, double dice, double logDice) throws SQLException{
 
 		String sql = "UPDATE Coocorrencia "+ 
 				"SET PMI = " + pmi + " , Dice = " + dice + " , LogDice = " + logDice + 
@@ -245,12 +234,13 @@ public class Coocorrencia extends RelationalElement{
 				" and nomeProp = '" + prop +
 				"' and tipoDep = '"+ dep +
 				"' and nomeCorpus = '" +  _corpusName + "'";
-		s.addBatch(sql);
+		return sql;
 	}
 
-	public static void UpdateMeasures(){
-		Connection connection = newConnetion(); 
-
+	public void UpdateMeasures(){
+		Connection connection = getConnetion(); 
+		Statement s; 
+		
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 
@@ -266,7 +256,9 @@ public class Coocorrencia extends RelationalElement{
 				String sql = "SELECT * FROM Coocorrencia LIMIT " + index + "," +  intervall +  ";" ;
 				ResultSet rs = stmt.executeQuery(sql);
 				s = connection.createStatement();
-
+				
+				Palavra palavra = RelationalFactory.getPalavra();
+				
 				while(rs.next()){  
 					long word1 = rs.getLong("idPalavra1");
 					long word2 = rs.getLong("idPalavra2");
@@ -279,20 +271,20 @@ public class Coocorrencia extends RelationalElement{
 						nWordDep = nWords.get(dep); 
 					}
 					else{
-						nWordDep = Palavra.getNumberWords(dep);
+						nWordDep = palavra.getNumberWords(dep);
 						nWords.put(dep, nWordDep);
 					}
 
-					long word1freq = Palavra.getWordFrequency(word1,dep, prop); 
+					long word1freq = palavra.getWordFrequency(word1,dep, prop); 
 
-					long word2freq = Palavra.getWordFrequency(word2, dep, prop);
+					long word2freq = palavra.getWordFrequency(word2, dep, prop);
 					//System.out.println(nWordDep);
 
 					double pmi = AssociationMeasures.PMI(nWordDep, depfreq, word1freq, word2freq);
 					double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);					
 					double logDice = AssociationMeasures.LogDice(depfreq, word1freq, word2freq);
 
-					uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice);
+					s.addBatch(uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice));
 
 				}
 				rs.close(); 
@@ -309,10 +301,7 @@ public class Coocorrencia extends RelationalElement{
 				try{
 					if(stmt!=null)
 						stmt.close();
-					
-					if(connection!=null)
-			        	  connection.close();
-					
+										
 				}catch(SQLException se){
 				}// do nothing
 			}//end finally try

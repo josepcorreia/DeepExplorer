@@ -8,13 +8,17 @@ import java.sql.Statement;
 
 public class Propriedade extends RelationalElement{
 
-	public static void checkProperty(String prop, String dep){
+	public Propriedade(Connection _connection) {
+		super(_connection);
+	}
+	
+	public void checkProperty(String prop, String dep){
 		if(!propertyExists(prop, dep)){
 			insertPropriedade(prop,dep);
 		}
 	}
-	public static void insertPropriedade(String propriedade, String tipodepedencia){
-		Connection connection = newConnetion();
+	public void insertPropriedade(String propriedade, String tipodepedencia){
+		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
 		
@@ -36,17 +40,14 @@ public class Propriedade extends RelationalElement{
 				if (preparedStatement != null) 
 					preparedStatement.close();
 				
-				if(connection != null)
-					connection.close();
-				
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
 	}
 
-	public static boolean propertyExists(String prop, String dep){
-		Connection connection = newConnetion();
+	public boolean propertyExists(String prop, String dep){
+		Connection connection = getConnetion();
 		
 		Statement stmt = null;
 	
@@ -74,8 +75,6 @@ public class Propriedade extends RelationalElement{
 	       try{
 	          if(stmt!=null)
 	             stmt.close();
-	          if(connection != null)
-					connection.close();
 	          
 	       }catch(SQLException se){
 	       }// do nothing

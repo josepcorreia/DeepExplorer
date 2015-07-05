@@ -8,12 +8,16 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Palavra extends RelationalElement{
-	private static long _currentId;
-	private static String _corpusName;
+	private long _currentId;
+	private String _corpusName;
 
 
-	public static long checkWord(String  word, String pos, String category, String depname, String prop, String corpusName){
+	public Palavra(Connection _connection, String corpusName) {
+		super(_connection);
 		_corpusName = corpusName;
+	}
+
+	public long checkWord(String  word, String pos, String category, String depname, String prop){
 		
 		if(!wordExists(word, pos)){
 			insertNewPalavra(word, pos, category);
@@ -29,8 +33,8 @@ public class Palavra extends RelationalElement{
 		return _currentId;
 	}
 
-	public static long getNumberWords(String depname) {
-		Connection connection = newConnetion();
+	public long getNumberWords(String depname) {
+		Connection connection = getConnetion();
 		
 		Statement stmt = null;
 		long totalFreq = 0;
@@ -60,12 +64,7 @@ public class Palavra extends RelationalElement{
 	       try{
 	          if(stmt!=null)
 	             stmt.close();
-	          
-	          if(connection != null)
-	        	  connection.close();
-	          
-	          if(connection != null)
-	        	  connection.close();
+
 	       }catch(SQLException se){
 	       }// do nothing
 	    }//end finally try
@@ -74,8 +73,8 @@ public class Palavra extends RelationalElement{
 	}
 
 	
-	public static void insertNewPalavra(String  word, String pos, String categoria){
-		Connection connection = newConnetion();
+	public void insertNewPalavra(String  word, String pos, String categoria){
+		Connection connection = getConnetion();
 		
 		Statement stmt = null;
 		try {
@@ -106,16 +105,14 @@ public class Palavra extends RelationalElement{
 		          if(stmt!=null)
 		             stmt.close();
 		          
-		          if(connection != null)
-		        	  connection.close();
 		       }catch(SQLException se){
 		       }// do nothing
 		}//end finally try	
   }
 	
 	//verifica se uma palavra existe na bd e actualiza o atributo currentId, caso a palavra exista
-	public static boolean wordExists(String  word, String pos){
-		Connection connection = newConnetion();
+	public boolean wordExists(String  word, String pos){
+		Connection connection = getConnetion();
 		
 		Statement stmt = null;
 	
@@ -147,8 +144,6 @@ public class Palavra extends RelationalElement{
 	          if(stmt!=null)
 	             stmt.close();
 	          
-	          if(connection != null)
-	        	  connection.close();
 	       }catch(SQLException se){
 	       }// do nothing
 	    }//end finally try
@@ -158,8 +153,8 @@ public class Palavra extends RelationalElement{
 	
 	
 	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
-  public static boolean insertPalavraCorpus(long id, String depname, String prop){
-	  Connection connection = newConnetion();
+  public boolean insertPalavraCorpus(long id, String depname, String prop){
+	  Connection connection = getConnetion();
 	  
 	  Statement stmt = null;
 		
@@ -186,9 +181,6 @@ public class Palavra extends RelationalElement{
 	          if(stmt!=null)
 	             stmt.close();
 	          
-	          if(connection != null)
-	        	  connection.close();
-	          
 	       }catch(SQLException se){
 	       }// do nothing
 	    }//end finally try
@@ -196,8 +188,8 @@ public class Palavra extends RelationalElement{
 		return true;
 	}
   
-  public static boolean wordExistsCorpus(long id, String depname, String prop){
-	  Connection connection = newConnetion();
+  public boolean wordExistsCorpus(long id, String depname, String prop){
+	  Connection connection = getConnetion();
 	  
 	  Statement stmt = null;
 	
@@ -230,16 +222,14 @@ public class Palavra extends RelationalElement{
 	          if(stmt!=null)
 	             stmt.close();
 	          
-	          if(connection != null)
-	        	  connection.close();
 	       }catch(SQLException se){
 	       }// do nothing
 	    }//end finally try
 
 		return false;
 	}
-  public static void uptadeFrequency(long wordId, String depname, String prop){
-	  Connection connection = newConnetion();	
+  public void uptadeFrequency(long wordId, String depname, String prop){
+	  Connection connection = getConnetion();	
 	  
 	  Statement stmt = null;
 		try{
@@ -262,16 +252,15 @@ public class Palavra extends RelationalElement{
 		      try{
 		         if(stmt!=null)
 		            stmt.close();
-		         if(connection != null)
-		        	  connection.close();
+		         
 		      }catch(SQLException se){
 		      }// do nothing
 
 		}//end finally try	   
 	}
   
-  public static long getWordFrequency(Long id, String depname, String prop){
-	  Connection connection = newConnetion();	
+  public long getWordFrequency(Long id, String depname, String prop){
+	  Connection connection = getConnetion();	
 	  
 	  Statement stmt = null;
   		long freq = 0;
@@ -303,8 +292,6 @@ public class Palavra extends RelationalElement{
 		         if(stmt!=null)
 		            stmt.close();
 		         
-		         if(connection != null)
-		        	  connection.close();
 		      }catch(SQLException se){
 		      }// do nothing
 

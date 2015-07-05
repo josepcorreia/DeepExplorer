@@ -4,8 +4,8 @@ import pt.inescid.l2f.xipapi.domain.Dependency;
 
 public class COMPL extends DependencyType{
 
-	public COMPL(String corpusName) {
-		super(corpusName);
+	public COMPL() {
+		super();
 	}
 	@Override
 	protected String getProperty(Dependency dep) {

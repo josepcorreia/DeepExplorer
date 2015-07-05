@@ -4,8 +4,8 @@ import pt.inescid.l2f.xipapi.domain.Dependency;
 
 public class Cdir extends DependencyType{
 
-	public Cdir(String corpusName) {
-		super(corpusName);
+	public Cdir() {
+		super();
 	}
 	
 	@Override

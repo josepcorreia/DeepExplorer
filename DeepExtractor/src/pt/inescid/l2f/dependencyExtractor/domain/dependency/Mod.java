@@ -2,8 +2,8 @@ package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
 public class Mod extends DependencyType{
 
-	public Mod(String corpusName) {
-		super(corpusName);
+	public Mod() {
+		super();
 	}
 	
 	@Override

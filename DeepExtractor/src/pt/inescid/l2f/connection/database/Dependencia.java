@@ -9,8 +9,12 @@ import java.sql.Statement;
 public class Dependencia extends RelationalElement{
 
 
-	public static boolean insertNew(String tipodepedencia){
-		Connection connection = newConnetion();
+	public Dependencia(Connection _connection) {
+		super(_connection);
+	}
+
+	public boolean insertNew(String tipodepedencia){
+		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
 		Statement stmt = null;
@@ -47,11 +51,7 @@ public class Dependencia extends RelationalElement{
 				
 				if (stmt != null) 
 					stmt.close();
-				
-				if (connection != null) 
-					connection.close();
-				
-				
+
 				}
 				catch (SQLException e) {
 					e.printStackTrace();
