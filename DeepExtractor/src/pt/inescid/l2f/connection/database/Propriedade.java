@@ -1,4 +1,4 @@
-package pt.inescid.l2f.dependencyExtractor.domain.database;
+package pt.inescid.l2f.connection.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,16 +8,14 @@ import java.sql.Statement;
 
 public class Propriedade extends RelationalElement{
 
-	public Propriedade(Connection conn) {
-		super(conn);
-	}
-
-	public void checkProperty(String prop, String dep){
+	public static void checkProperty(String prop, String dep){
 		if(!propertyExists(prop, dep)){
 			insertPropriedade(prop,dep);
 		}
 	}
-	public void insertPropriedade(String propriedade, String tipodepedencia){
+	public static void insertPropriedade(String propriedade, String tipodepedencia){
+		Connection connection = newConnetion();
+		
 		PreparedStatement preparedStatement = null;
 		
 		try {
@@ -33,19 +31,23 @@ public class Propriedade extends RelationalElement{
 			System.out.println(e.getMessage());
 
 		} finally {
+			try {
 
-			if (preparedStatement != null) {
-				try {
+				if (preparedStatement != null) 
 					preparedStatement.close();
+				
+				if(connection != null)
+					connection.close();
+				
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
-		}
-		//System.out.println("Record is inserted into Propriedade table!");
 	}
 
-	public boolean propertyExists(String prop, String dep){
+	public static boolean propertyExists(String prop, String dep){
+		Connection connection = newConnetion();
+		
 		Statement stmt = null;
 	
 		try{
@@ -72,6 +74,9 @@ public class Propriedade extends RelationalElement{
 	       try{
 	          if(stmt!=null)
 	             stmt.close();
+	          if(connection != null)
+					connection.close();
+	          
 	       }catch(SQLException se){
 	       }// do nothing
 	    }//end finally try

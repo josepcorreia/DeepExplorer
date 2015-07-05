@@ -10,28 +10,31 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 
+import pt.inescid.l2f.connection.database.Coocorrencia;
+import pt.inescid.l2f.connection.database.Dependencia;
+import pt.inescid.l2f.connection.database.Palavra;
+import pt.inescid.l2f.connection.database.Propriedade;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Coocorrencia;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Palavra;
-import pt.inescid.l2f.dependencyExtractor.domain.database.Propriedade;
-import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.Feature;
 import pt.inescid.l2f.xipapi.domain.Token;
 import pt.inescid.l2f.xipapi.domain.XIPNode;
-import pt.inescid.l2f.xipapi.domain.XipDocument;
-import pt.inescid.l2f.xipapi.exception.FeatureDoesNotExistException;
+
 
 
 public abstract class DependencyType{
+	private String _corpusName;
 	private HashMap<String,String> _depPropTable;
 	
 	public DependencyType(){
+	}
+	
+	public DependencyType(String corpusName){
 		_depPropTable = getDepPropTable();
 		 depInformation();
+		 _corpusName = corpusName; 
 	}
 
 	public void getDepedencyInformation(Dependency dep, HashMap<String, String> namedEnteties){
@@ -55,13 +58,13 @@ public abstract class DependencyType{
 		depname = newDepProp[0];  
 		prop = newDepProp[1];
 		
-		RelationalFactory.getPropriedade().checkProperty(prop, depname);
+		Propriedade.checkProperty(prop, depname);
 		for (Word w : words) {
-			w.setId(RelationalFactory.getPalavra().checkWord(w.getLemma(), w.getPOS(), "", depname, prop));
+			w.setId(Palavra.checkWord(w.getLemma(), w.getPOS(), "", depname, prop, _corpusName));
 		}
 
 		if(words.size()== 2){
-			RelationalFactory.getCoocorrencia().checkCoocorrence(words.get(0), words.get(1), prop, depname);
+			Coocorrencia.checkCoocorrence(words.get(0), words.get(1), prop, depname, _corpusName);
 		}
 		else{
 			System.out.println("Depedencia com erro " + depname +" na frase " + dep.getSentenceNumber());
@@ -163,7 +166,7 @@ public abstract class DependencyType{
 		}
 
 		for(String depname : depnames) {
-			RelationalFactory.getDependencia().insertNew(depname);			
+			Dependencia.insertNew(depname);			
 		}
 	}
 }

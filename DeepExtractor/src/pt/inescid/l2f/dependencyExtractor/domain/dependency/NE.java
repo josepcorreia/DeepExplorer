@@ -23,8 +23,8 @@ public class NE extends DependencyType{
 	private HashMap<String, String> _namedEnteties;
 	private LinkedHashMap<String, String> _entetiesTable; 
 	
-	public NE() {
-	  super();
+	public NE(){
+		super();
 	  _namedEnteties = new HashMap<String, String>();	
 	  _entetiesTable = getEntetiesTable();
 	

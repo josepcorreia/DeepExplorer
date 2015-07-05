@@ -1,4 +1,4 @@
-package pt.inescid.l2f.dependencyExtractor.domain.database;
+package pt.inescid.l2f.connection.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,11 +8,10 @@ import java.sql.Statement;
 
 public class Dependencia extends RelationalElement{
 
-	public Dependencia(Connection conn) {
-		super(conn);
-	}
 
-	public boolean insertNew(String tipodepedencia){
+	public static boolean insertNew(String tipodepedencia){
+		Connection connection = newConnetion();
+		
 		PreparedStatement preparedStatement = null;
 		Statement stmt = null;
 		
@@ -41,14 +40,23 @@ public class Dependencia extends RelationalElement{
 			return false;
 
 		} finally {
+			try {
 
-			if (preparedStatement != null) {
-				try {
+				if (preparedStatement != null) 
 					preparedStatement.close();
-				} catch (SQLException e) {
+				
+				if (stmt != null) 
+					stmt.close();
+				
+				if (connection != null) 
+					connection.close();
+				
+				
+				}
+				catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}
+			
 		}
 	  return true;
 }

@@ -10,7 +10,7 @@ public class ConnectionSQLite {
   private static String status = "Not connected"; 
   
   //Método de Conexão// 
-  public static Connection getConnectionSQLite(String dir) { 
+  public static Connection getConnectionSQLite() { 
 	  
 	  try { 
 		  Connection connection = null;
@@ -24,6 +24,7 @@ public class ConnectionSQLite {
 
 			String mydatabase = "db_deep.db";
 //		  	String mydatabase = "db_deep_aux.db";
+			String dir = "/Users/josecorreia/Projects/DB/";
 			String path = "jdbc:sqlite:" + dir + mydatabase; 
 
 			// create a database connection
@@ -50,8 +51,8 @@ public class ConnectionSQLite {
   public static String getStatusConnection() { 
 	  return status; 
   } 
-  
-  public static boolean CloseConnection(Connection connection) { 
+ 
+  public static boolean closeConnection(Connection connection) { 
 	  try { 
 		connection.close(); 
 		return true; 
@@ -60,8 +61,9 @@ public class ConnectionSQLite {
 	    } 
   } 
   
-  public Connection RestartConnection(Connection connection, String dir) { 
-	  ConnectionSQLite.CloseConnection(connection);
-	  return ConnectionSQLite.getConnectionSQLite(dir); 
-  } 
+  public Connection restartConnection(Connection connection) { 
+	  ConnectionSQLite.closeConnection(connection);
+	  return ConnectionSQLite.getConnectionSQLite(); 
+  }
+
 }

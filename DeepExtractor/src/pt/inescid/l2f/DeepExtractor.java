@@ -12,7 +12,6 @@ import java.sql.Connection;
 
 import pt.inescid.l2f.connection.ConnectionSQLite;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
-import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
 
@@ -26,15 +25,11 @@ public class DeepExtractor {
 	public static void main(String[] args) {
 		System.out.println("Inicio");
 		//Connection connection = ConnectionMySQL.getConnectionMySQL();
-		Connection connection = ConnectionSQLite.getConnectionSQLite(args[1]);
-		
+	
 		String corpusName = "CETEMPúblico";
 		
-		RelationalFactory relationalFactory  = new RelationalFactory(connection, corpusName);//alterar e tornar a classe compeltamente estatica
 		DependencyExtractor de = new DependencyExtractor(corpusName);
 		
-		System.out.println(ConnectionSQLite.getStatusConnection());
-
 		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 					
 		Path dir = Paths.get(args[0]);
@@ -46,7 +41,7 @@ public class DeepExtractor {
 		de.CalculateAssociationMeasures();
 			
 		//ConnectionMySQL.CloseConnection(connection);
-		ConnectionSQLite.CloseConnection(connection);
+		
 		System.out.println("FIM");		
 	}
 	

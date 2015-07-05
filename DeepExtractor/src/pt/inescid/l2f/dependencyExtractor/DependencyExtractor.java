@@ -1,6 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor;
 
-import pt.inescid.l2f.dependencyExtractor.domain.database.RelationalFactory;
+import pt.inescid.l2f.connection.database.Coocorrencia;
+import pt.inescid.l2f.connection.database.Corpus;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
 import pt.inescid.l2f.xipapi.domain.Dependency;
@@ -24,7 +25,7 @@ public class DependencyExtractor {
 
 
 	public void CorpusInformation() {
-		RelationalFactory.getCorpus().insertNew(_corpusName, "Público", "2000", "Noticíario", false);
+		Corpus.insertNew(_corpusName, "Público", "2000", "Noticíario", false);
 	}
 	
 	public void Extract(XipDocument document){
@@ -68,6 +69,6 @@ public class DependencyExtractor {
 	}
 
 	public void CalculateAssociationMeasures(){
-		RelationalFactory.getCoocorrencia().UpdateMeasures();
+		Coocorrencia.UpdateMeasures();
 	}
 }

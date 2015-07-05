@@ -4,8 +4,8 @@ import pt.inescid.l2f.xipapi.domain.Dependency;
 
 public class Subj extends DependencyType{
 
-	public Subj() {
-		super();
+	public Subj(String corpusName) {
+		super(corpusName);
 	}
 	
 	@Override

@@ -9,11 +9,11 @@ public class DependencyFactory {
 	public DependencyFactory(String corpusName){
 		_dependenciesMap = new HashMap<String,DependencyType>();
 		
-		_dependenciesMap.put("CDIR", new Cdir());
-		_dependenciesMap.put("CINDIR", new Cindir());
-		_dependenciesMap.put("COMPL", new COMPL());
-		_dependenciesMap.put("MOD", new Mod());
-		_dependenciesMap.put("SUBJ", new Subj());
+		_dependenciesMap.put("CDIR", new Cdir(corpusName));
+		_dependenciesMap.put("CINDIR", new Cindir(corpusName));
+		_dependenciesMap.put("COMPL", new COMPL(corpusName));
+		_dependenciesMap.put("MOD", new Mod(corpusName));
+		_dependenciesMap.put("SUBJ", new Subj(corpusName));
 		
 		_ne = new NE(); 
 	}	
