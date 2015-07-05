@@ -24,7 +24,8 @@ public class ConnectionSQLite {
 
 			String mydatabase = "db_deep.db";
 //		  	String mydatabase = "db_deep_aux.db";
-			String dir = "/Users/josecorreia/Projects/DB/";
+			//String dir = "/Users/josecorreia/Projects/DB/";
+			String dir = "/afs/l2f/home/jcorreia/Projects/DB/";
 			String path = "jdbc:sqlite:" + dir + mydatabase; 
 
 			// create a database connection

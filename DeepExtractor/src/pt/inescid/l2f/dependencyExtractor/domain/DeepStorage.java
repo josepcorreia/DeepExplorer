@@ -102,8 +102,6 @@ public class DeepStorage {
 			}
 			
 		}
-		printCenas();
-		cleanMaps();
 	}
 	
 	public void cleanMaps(){
