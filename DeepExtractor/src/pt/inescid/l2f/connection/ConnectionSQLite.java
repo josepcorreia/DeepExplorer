@@ -60,9 +60,9 @@ public class ConnectionSQLite {
 	    } 
   } 
   
-  public Connection restartConnection(Connection connection) { 
+  public Connection restartConnection(Connection connection, String dirDB) { 
 	  ConnectionSQLite.closeConnection(connection);
-	  return ConnectionSQLite.getConnectionSQLite(); 
+	  return ConnectionSQLite.getConnectionSQLite(dirDB); 
   }
 
 }
