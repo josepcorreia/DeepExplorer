@@ -115,4 +115,9 @@ public class DeepStorage {
 		System.out.println("WOrdBelongs: " + wordBelongsMap.size());
 		System.out.println("COO: " + coocorrenceMap.size());
 	}
+
+	public void commit() {
+		RelationalFactory.commit();
+		
+	}
 }

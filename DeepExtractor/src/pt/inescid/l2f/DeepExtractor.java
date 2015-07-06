@@ -26,7 +26,7 @@ public class DeepExtractor {
 	
 		String corpusName = "CETEMPúblico";
 		
-		RelationalFactory rf = new RelationalFactory(corpusName);
+		RelationalFactory rf = new RelationalFactory(corpusName, args[1]);
 		DependencyExtractor de = new DependencyExtractor();
 		
 		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();

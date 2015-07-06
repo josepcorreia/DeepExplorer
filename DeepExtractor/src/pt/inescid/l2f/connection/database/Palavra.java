@@ -19,23 +19,7 @@ public class Palavra extends RelationalElement{
 		super(_connection);
 		_corpusName = corpusName;
 	}
-	
-/*	public long checkWord(String  word, String pos, String category, String depname, String prop){
-		
-		if(!wordExists(word, pos)){
-			insertNewPalavra(word, pos, category);
-			insertPalavraCorpus(_currentId, depname, prop);
-		}else{
-			if(wordExistsCorpus(_currentId, depname, prop)){
-				uptadeFrequency(_currentId, depname, prop);
-			}
-			else{
-				insertPalavraCorpus(_currentId, depname, prop);
-			}
-		}
-		return _currentId;
-	}*/
-	
+
 	public long getNumberWords(String depname) {
 		Connection connection = getConnetion();
 		
@@ -77,7 +61,7 @@ public class Palavra extends RelationalElement{
 
 	
 	public Long insertNewPalavra(Word  word){
-		
+	
 		Connection connection = getConnetion();
 		
 		String lemma = word.getLemma();

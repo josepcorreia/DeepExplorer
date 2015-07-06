@@ -10,7 +10,7 @@ public class ConnectionSQLite {
   private static String status = "Not connected"; 
   
   //Método de Conexão// 
-  public static Connection getConnectionSQLite() { 
+  public static Connection getConnectionSQLite(String dirDB) { 
 	  
 	  try { 
 		  Connection connection = null;
@@ -24,9 +24,7 @@ public class ConnectionSQLite {
 
 			String mydatabase = "db_deep.db";
 //		  	String mydatabase = "db_deep_aux.db";
-			//String dir = "/Users/josecorreia/Projects/DB/";
-			String dir = "/afs/l2f/home/jcorreia/Projects/DB/";
-			String path = "jdbc:sqlite:" + dir + mydatabase; 
+			String path = "jdbc:sqlite:" + dirDB + mydatabase; 
 
 			// create a database connection
 		    connection = DriverManager.getConnection(path);

@@ -59,8 +59,9 @@ public class DependencyExtractor {
 			
 		}
 
-		_storage.storeInDatabase();
 		_storage.printCenas();
+		_storage.storeInDatabase();
+		_storage.commit();
 		_storage.cleanMaps();
 	}
 

@@ -6,15 +6,21 @@ import java.sql.SQLException;
 import pt.inescid.l2f.connection.ConnectionSQLite;
 
 public class RelationalFactory {
-	private Connection _connection;
+	private static Connection _connection;
 	private static Palavra _palavra;
 	private static Coocorrencia _coo;
 	private static Propriedade _prop;
 	private static Corpus _corpus;
 	private static Dependencia _dependencia;
 
-	public RelationalFactory(String corpusName){
-		_connection = ConnectionSQLite.getConnectionSQLite();
+	public RelationalFactory(String corpusName, String dirDB){
+		_connection = ConnectionSQLite.getConnectionSQLite(dirDB);
+		try {
+			_connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		_corpus = new Corpus(_connection);
 		_palavra = new Palavra(_connection,corpusName);
 		_coo = new Coocorrencia(_connection,corpusName);
@@ -44,5 +50,14 @@ public class RelationalFactory {
 
 	public void closeConnection() {
 		ConnectionSQLite.closeConnection(_connection);
+	}
+
+	public static void commit() {
+		try {
+			_connection.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -68,18 +68,21 @@
 		    <java classname="${main}" fork="true">
 				<classpath refid="classpath"/>
 		    	<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
+		    	<arg value="/Users/josecorreia/Projects/DB/"/>
 			</java>
 		</target>
 	<target name="runLinInesc" depends="main" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
 			    	<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
+			    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
 				</java>
 	</target>
 	<target name="runCorpus" depends="main" description="run" >
 		    <java  classname="${main}" fork="true">
 				<classpath refid="classpath"/>
-		    	<arg value="/home/masp/josecorreia/Projects/CETEMPublico"/>
+		    	<arg value="/ffs/tmp/string/CORPUS/"/>
+		    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
 			</java>
 	</target>
 	<target name="runW8" depends="main" description="run" >
