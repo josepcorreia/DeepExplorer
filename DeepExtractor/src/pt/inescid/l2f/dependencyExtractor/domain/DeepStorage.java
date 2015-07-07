@@ -110,7 +110,7 @@ public class DeepStorage {
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
 	}
 	
-	public void printCenas(){
+	public void printSizes(){
 		System.out.println("WOrd: " + wordsMap.size());
 		System.out.println("WOrdBelongs: " + wordBelongsMap.size());
 		System.out.println("COO: " + coocorrenceMap.size());

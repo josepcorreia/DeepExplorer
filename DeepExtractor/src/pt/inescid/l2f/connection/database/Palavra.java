@@ -20,6 +20,8 @@ public class Palavra extends RelationalElement{
 		_corpusName = corpusName;
 	}
 
+	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
+	
 	public long getNumberWords(String depname) {
 		Connection connection = getConnetion();
 		
@@ -64,7 +66,7 @@ public class Palavra extends RelationalElement{
 	
 		Connection connection = getConnetion();
 		
-		String lemma = word.getLemma();
+		String lemma = word.getLemma().replace("'","''");
 		String pos = word.getPOS();
 		String categoria = "cat";
 		Long id = (long)0;
@@ -109,7 +111,7 @@ public class Palavra extends RelationalElement{
 	public Long wordExists(Word word) throws WordNotExist{
 		Connection connection = getConnetion();
 		
-		String lemma = word.getLemma();
+		String lemma = word.getLemma().replace("'","''");
 		String pos = word.getPOS();
 		
 		Statement stmt = null;

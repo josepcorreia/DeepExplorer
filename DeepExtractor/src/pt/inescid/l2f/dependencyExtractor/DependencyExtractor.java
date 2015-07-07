@@ -46,20 +46,19 @@ public class DependencyExtractor {
 			for (Dependency dependency : deps) {
 			
 				if(map.containsKey(dependency.getName())){
-					map.get(dependency.getName()).getDepedencyInformation(dependency, _dependencyFactory.NE().getNamedEnteties());
+					map.get(dependency.getName()).getDepedencyInformation(dependency, _dependencyFactory.NE().getnamedEntetiesNodes());
 				}
 			}
 			
-			_dependencyFactory.NE().ClearNamedEnteties();
+			_dependencyFactory.NE().ClearNamedEntetiesNodes();
 			
 			/*if(sentenceNumber==4){
-				
 				return;
 			}*/
 			
 		}
 
-		_storage.printCenas();
+		_storage.printSizes();
 		_storage.storeInDatabase();
 		_storage.commit();
 		_storage.cleanMaps();

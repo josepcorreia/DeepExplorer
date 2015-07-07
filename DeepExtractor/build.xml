@@ -6,6 +6,7 @@
 	<property name="doc.dir"            value="${basedir}/doc" />
 	<property name="lib.dir"            value="${basedir}/lib"/>
 	<property name="jar.dir"            value="${basedir}/dist"/>
+	<property name="bin.dir"            value="${basedir}/bin"/>
 	<property name="package"            value="pt.inescid.l2f"/>
 	<property name="main"  				value="${package}.DeepExtractor"/>
 
@@ -22,6 +23,8 @@
 	        <delete dir="${build.dir}"/>
 	        <delete dir="${doc.dir}"/>
 	        <delete dir="${jar.dir}"/>
+			<!--eclipse-->
+			<delete dir="${bin.dir}"/>
 	</target>
 	
 	 <target name="build" depends="clean" description="compile the source " >
@@ -68,7 +71,7 @@
 		    <java classname="${main}" fork="true">
 				<classpath refid="classpath"/>
 		    	<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
-		    	<arg value="/Users/josecorreia/Projects/DB/"/>
+		    	<arg value="/Users/josecorreia/Projects/DB_site/"/>
 			</java>
 		</target>
 	<target name="runLinInesc" depends="main" description="run" >

@@ -76,7 +76,7 @@ public abstract class DependencyType{
 			
 			BufferedWriter writer = null;
 	        try {
-	            writer = new BufferedWriter(new FileWriter(path));
+	            writer = new BufferedWriter(new FileWriter(path, true));
 	            writer.write("Depedencia com erro " + depname +" na frase " + dep.getSentenceNumber() + "\n");
 
 	        } catch (Exception e) {
