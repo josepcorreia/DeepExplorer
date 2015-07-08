@@ -3,9 +3,9 @@
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 
-public class COMPL extends DependencyType{
+public class Compl extends DependencyType{
 
-	public COMPL(DeepStorage _storage) {
+	public Compl(DeepStorage _storage) {
 		super(_storage);
 	}
 	@Override

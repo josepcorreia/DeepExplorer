@@ -71,7 +71,7 @@ public class NE extends DependencyType{
 						}
 					}	
 					//caso se deseje fazer alguma coisa com as features nao detectadas, será aqui
-
+					
 				}
 			}
 
