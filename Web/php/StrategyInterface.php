@@ -1,20 +1,20 @@
 <?php
 class StrategyContext {
-    private $strategy = NULL; 
-   
+    private $strategy = NULL;
+
 
     public function __construct($pos) {
         switch ($pos) {
-            case "NOUN": 
+            case "NOUN":
                 $this->strategy = new StrategyNoun();
             break;
-            case "VERB": 
+            case "VERB":
                 $this->strategy = new StrategyVerb();
             break;
-            case "ADJ": 
+            case "ADJ":
                 $this->strategy = new StrategyAdj();
             break;
-            case "ADV": 
+            case "ADV":
                 $this->strategy = new StrategyAdv();
             break;
         }
@@ -35,8 +35,8 @@ abstract class DeepStrategyInterface {
             Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
             WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
                                                           from Palavra
-                                                          where palavra= '$word' and 
-                                                                classe= '$pos' LIMIT 1) 
+                                                          where palavra= '$word' and
+                                                                classe= '$pos' LIMIT 1)
                                                         and Coocorrencia.tipoDep = '$dep'
                                                         and Coocorrencia.nomeProp = '$prop'
             ORDER BY Coocorrencia.".$measure." DESC
@@ -54,8 +54,8 @@ abstract class DeepStrategyInterface {
             Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
             WHERE Coocorrencia.idPalavra2 = (SELECT idPalavra
                                                           from Palavra
-                                                          where palavra= '$word' and 
-                                                                classe= '$pos' LIMIT 1) 
+                                                          where palavra= '$word' and
+                                                                classe= '$pos' LIMIT 1)
                                                         and Coocorrencia.tipoDep = '$dep'
                                                         and Coocorrencia.nomeProp = '$prop'
             ORDER BY Coocorrencia.".$measure." DESC
@@ -66,26 +66,26 @@ abstract class DeepStrategyInterface {
         return $result;
     }
 }
- 
+
 class StrategyNoun extends DeepStrategyInterface {
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
         //dependencias que existem no sistema
         $depProps = array("MOD PRE_NOUN_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_PP","MOD POST_NOUN_ADJ");
         $outp = "";
-        foreach ($depProps as $depProp){ 
+        foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
             $dep = $split[0];
             $prop = $split[1];
             $depProp = $dep."_".$prop;
 
             $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-           
+
             $outp_aux = "";
-            while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
+            while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
                 if ($outp_aux != "") {$outp_aux .= ",";}
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
+                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
             }
             if ($outp != ""){
                 $outp .= ",";
@@ -98,7 +98,7 @@ class StrategyNoun extends DeepStrategyInterface {
         $outp .= "}";
         return $outp;
     }
-    
+
 }
 
 class StrategyVerb extends DeepStrategyInterface {
@@ -107,19 +107,19 @@ class StrategyVerb extends DeepStrategyInterface {
        //dependencias que existem no sistema
         $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
         $outp = "";
-        
-        foreach ($depProps as $depProp){ 
+
+        foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
             $dep = $split[0];
             $prop = $split[1];
             $depProp = $dep."_".$prop;
-        
+
         $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
         $outp_aux = "";
-        while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
+        while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
              if ($outp_aux != "") {$outp_aux .= ",";}
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
+                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
         }
         if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
             $outp .= '"'.$depProp.'":['.$outp_aux.']';
@@ -131,18 +131,18 @@ class StrategyVerb extends DeepStrategyInterface {
 
 class StrategyAdj extends DeepStrategyInterface {
     private $pos = "ADJ";
-    
+
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
         $outp = "";
-        
-        foreach ($depProps as $depProp){ 
+
+        foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
             $dep = $split[0];
             $prop = $split[1];
-            $depProp = $dep."_".$prop;    
-            
+            $depProp = $dep."_".$prop;
+
             $depPos_aux = split("_",$prop);
 
             if(sizeof($depPos_aux)==3){
@@ -153,22 +153,22 @@ class StrategyAdj extends DeepStrategyInterface {
                     $depPos = $depPos_aux;
                 }
             }
-            
+
             if($pos == $depPos[0]){
                 $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
             }else{
                if($pos == $depPos[1]){
-                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);    
+                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
                 }
             }
 
-        
+
         $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
         $outp_aux = "";
-        while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
+        while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
              if ($outp_aux != "") {$outp_aux .= ",";}
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
+                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
         }
         if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
             $outp .= '"'.$depProp.'":['.$outp_aux.']';
@@ -185,13 +185,13 @@ class StrategyAdv extends DeepStrategyInterface {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
         $outp = "";
-        
-        foreach ($depProps as $depProp){ 
+
+        foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
             $dep = $split[0];
             $prop = $split[1];
-            $depProp = $dep."_".$prop;    
-            
+            $depProp = $dep."_".$prop;
+
             $depPos_aux = split("_",$prop);
 
             if(sizeof($depPos_aux)==3){
@@ -202,32 +202,32 @@ class StrategyAdv extends DeepStrategyInterface {
                     $depPos = $depPos_aux;
                 }
             }
-            
+
             if($pos == $depPos[0]){
                 //echo "string1    ";
                 $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
             }else{
                if($pos == $depPos[1]){
                // echo "string2    ";
-                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);    
+                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
                 }
             }
-            
+
             if($pos == $depPos[0]){
                     $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
             }else{
                if($pos == $depPos[1]){
-                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);    
+                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
                 }
             }
-            
+
             $outp_aux = "";
-            while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
+            while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
                 if ($outp_aux != ""){
                     $outp_aux .= ",";
                 }
                 $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}'; 
+                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
             }
             if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
                 $outp .= '"'.$depProp.'":['.$outp_aux.']';
