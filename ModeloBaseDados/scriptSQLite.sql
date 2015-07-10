@@ -1,10 +1,11 @@
-CREATE TABLE Corpus (nome varchar (45) NOT NULL, fonte varchar (45) DEFAULT NULL, ano varchar (45) DEFAULT NULL, genero varchar (45) DEFAULT NULL, "update" tinyint (1) NOT NULL, PRIMARY KEY (nome));
+CREATE TABLE Corpus (nome varchar (45) NOT NULL, fonte varchar (45) DEFAULT NULL, ano varchar (45) DEFAULT NULL, genero
+varchar (45) DEFAULT NULL, "update" tinyint (1) NOT NULL, PRIMARY KEY (nome));
 
 CREATE TABLE Dependencia (tipoDep varchar (45) NOT NULL, PRIMARY KEY (tipoDep));
 
-CREATE TABLE Propriedade (nomeProp varchar (45) NOT NULL, tipoDep varchar (45) NOT NULL, PRIMARY KEY (nomeProp, tipoDep), CONSTRAINT fk_Propriedade_Dependencia1 FOREIGN KEY (tipoDep) REFERENCES Dependencia (tipoDep) ON DELETE NO ACTION ON UPDATE NO ACTION);
+CREATE TABLE Propriedade (nomeProp varchar (45) NOT NULL, tipoDep varchar (20) NOT NULL, PRIMARY KEY (nomeProp, tipoDep), CONSTRAINT fk_Propriedade_Dependencia1 FOREIGN KEY (tipoDep) REFERENCES Dependencia (tipoDep) ON DELETE NO ACTION ON UPDATE NO ACTION);
 
-CREATE TABLE Palavra (idPalavra INTEGER PRIMARY KEY ASC, palavra varchar (200) NOT NULL, classe varchar (45) NOT NULL, categoria varchar (45) DEFAULT NULL);
+CREATE TABLE Palavra (idPalavra INTEGER PRIMARY KEY ASC, palavra varchar (50) NOT NULL, classe varchar (25) NOT NULL, categoria varchar (25) DEFAULT NULL);
 
 CREATE TABLE Frase (idFrase INTEGER PRIMARY KEY NOT NULL, frase varchar (400) NOT NULL, nomeCorpus varchar (45) NOT NULL, CONSTRAINT fk_Frase_Corpus1 FOREIGN KEY (nomeCorpus) REFERENCES Corpus (nome) ON DELETE NO ACTION ON UPDATE NO ACTION);
 

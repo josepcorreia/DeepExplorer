@@ -32,7 +32,7 @@ import pt.inescid.l2f.xipapi.domain.XIPNode;
 public abstract class DependencyType{
 	private DeepStorage _storage;
 	private HashMap<String,String> _depPropTable;
-
+	
 	public DependencyType(){
 	}
 	
@@ -57,6 +57,7 @@ public abstract class DependencyType{
 		}
 		
 		String depProp = depname+" "+prop;
+		
 		if(!_depPropTable.containsKey(depProp))
 			return;
 		String newDepProp[] = _depPropTable.get(depProp).split(" ");
@@ -67,7 +68,7 @@ public abstract class DependencyType{
 		for (Word w : words) {
 			_storage.CheckWord(w, prop, depname);
 		}
-
+		
 		if(words.size()== 2){
 			_storage.CheckCoocorrence(new Coocorrence(words.get(0).getIdPalavra(), words.get(1).getIdPalavra(), prop, depname));
 		}
@@ -102,7 +103,7 @@ public abstract class DependencyType{
 	}
 
 	protected String getProperty(Dependency dep) {
-		String prop = "SEM_PROP";
+		String prop = "";
 		for (Feature f : dep.getFeatures()){
 			//Propriedade
 			String aux = f.getName();
@@ -145,9 +146,10 @@ public abstract class DependencyType{
 	}
 
 	protected String getPropPOS(String prop, String pos) {
-		if(!prop.contains("SEM_PROP")){
-			prop += "_" + pos;
-		}
+		if(!prop.isEmpty())
+			prop += "_"; 
+			
+		prop += pos;		
 		return prop;
 	}
 

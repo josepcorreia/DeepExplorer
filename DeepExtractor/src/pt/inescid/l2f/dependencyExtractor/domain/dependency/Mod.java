@@ -1,6 +1,8 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
+import pt.inescid.l2f.xipapi.domain.Dependency;
+import pt.inescid.l2f.xipapi.domain.Feature;
 
 public class Mod extends DependencyType{
 
@@ -9,12 +11,17 @@ public class Mod extends DependencyType{
 	}
 	
 	@Override
-	protected String getPropPOS(String prop, String pos) {
-		if(prop.contains("SEM_PROP")){
-			prop = "";
-			prop += pos;
-		}else {
-			prop += "_" + pos;
+	protected String getProperty(Dependency dep) {
+		String prop = "";
+		for (Feature f : dep.getFeatures()){
+			//Propriedade
+			String aux = f.getName();
+			if (aux.equals("PRE")||aux.equals("POST")){
+				prop=aux;
+			}
+			if (aux.equals("FOCUS")){
+				prop+="_" + aux;
+			}
 		}
 		return prop;
 	}

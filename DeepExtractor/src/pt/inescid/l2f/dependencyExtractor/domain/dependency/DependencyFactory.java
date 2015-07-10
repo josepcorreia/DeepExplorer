@@ -13,7 +13,7 @@ public class DependencyFactory {
 		
 		_dependenciesMap.put("CDIR", new Cdir(_storage));
 		_dependenciesMap.put("CINDIR", new Cindir(_storage));
-		_dependenciesMap.put("COMPL", new COMPL(_storage));
+		_dependenciesMap.put("COMPL", new Compl(_storage));
 		_dependenciesMap.put("MOD", new Mod(_storage));
 		_dependenciesMap.put("SUBJ", new Subj(_storage));
 		

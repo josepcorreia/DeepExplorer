@@ -57,7 +57,7 @@ public class DependencyExtractor {
 			}*/
 			
 		}
-
+		
 		_storage.printSizes();
 		_storage.storeInDatabase();
 		_storage.commit();

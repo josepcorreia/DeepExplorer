@@ -9,9 +9,4 @@ public class Cdir extends DependencyType{
 		super(_storage);
 	}
 	
-	@Override
-	protected String getProperty(Dependency dep) {
-		String prop = "SEM_PROP";
-		return prop;
-	}
 }

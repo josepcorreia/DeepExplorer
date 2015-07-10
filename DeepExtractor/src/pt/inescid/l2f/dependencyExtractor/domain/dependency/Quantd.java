@@ -8,16 +8,4 @@ public class Quantd extends DependencyType{
 		super(_storage);
 	}
 	
-	/*
-	@Override
-	protected String getPropPOS(String prop, String pos) {
-		if(prop.contains("SEM_PROP")){
-			prop = "";
-			prop += pos;
-		}else {
-			prop += "_" + pos;
-		}
-		return prop;
-	}
-	*/
 }

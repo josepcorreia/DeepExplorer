@@ -8,11 +8,5 @@ public class Cindir extends DependencyType{
 	public Cindir(DeepStorage _storage) {
 		super(_storage);
 	}
-
-	@Override
-	protected String getProperty(Dependency dep) {
-		String prop = "SEM_PROP";
-		return prop;
-	}
 	
 }

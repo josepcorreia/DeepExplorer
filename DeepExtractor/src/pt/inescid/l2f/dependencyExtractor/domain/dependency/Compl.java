@@ -8,11 +8,5 @@ public class Compl extends DependencyType{
 	public Compl(DeepStorage _storage) {
 		super(_storage);
 	}
-	@Override
-	protected String getProperty(Dependency dep) {
-		String prop = "SEM_PROP";
-		return prop;
-	}
-	
-	
+
 }
