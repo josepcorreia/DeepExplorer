@@ -42,7 +42,7 @@ public abstract class DependencyType{
 		 depInformation();
 	}
 
-	public void getDepedencyInformation(Dependency dep, HashMap<String, String> namedEnteties){
+	public void getDependencyInformation(Dependency dep, HashMap<String, String> namedEnteties){
 		String depname = dep.getName();
 		String prop = getProperty(dep);
 

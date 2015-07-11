@@ -29,7 +29,7 @@ public class NE extends DependencyType{
 
 	}
 
-	public void getDepedencyInformation(Dependency dep){
+	public void getDependencyInformation(Dependency dep){
 		Boolean flagBreak;
 
 		depLoop:
@@ -91,7 +91,10 @@ public class NE extends DependencyType{
 				namedEntetiesTable.put(aux[0], aux[1]);
 			}
 
-		} catch (UnsupportedEncodingException | FileNotFoundException e) {
+		} catch (UnsupportedEncodingException) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
