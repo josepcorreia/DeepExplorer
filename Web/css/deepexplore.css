@@ -26,7 +26,7 @@ text-align:center
 }
 
 /*button in the midle*/
-.buttonMiddle{ 	
+.buttonMiddle{
   	border-bottom-left-radius: 0;
   	border-top-left-radius: 0;
   	border-top-right-radius: 0;
@@ -38,4 +38,44 @@ text-align:center
 	width: 11%;
 	margin-right: auto;
 	margin-left: auto;
+}
+
+.rowDeps{
+  padding-bottom: 4%;
+}
+
+.depTitle{
+  background-color: dimgrey;
+  padding: 10px 15px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.depTitle > .title{
+  color:white;
+margin-top: 0;
+margin-bottom: 0;
+font-size: 16px;
+}
+
+.wordTitle{
+  display: table;
+  margin:auto;
+  padding-bottom: 5%;
+}
+.panel-rightDepsGovernor{
+  border-color:  darkseagreen;
+}
+.panel-rightDepsGovernor > .panel-heading{
+    background-color: darkseagreen;
+    color:white;
+}
+
+.panel-leftDepsGovernor{
+  border-color:  orchid;
+}
+.panel-leftDepsGovernor > .panel-heading{
+    background-color: orchid;
+    color:white;
 }

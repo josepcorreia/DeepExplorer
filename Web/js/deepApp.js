@@ -2,7 +2,6 @@ var deepApp = angular.module("deepApp", ['ngRoute']);
 
 
 deepApp.config(function($routeProvider, $locationProvider) {
-        
 
     $routeProvider.
             // route for the home page
@@ -12,6 +11,10 @@ deepApp.config(function($routeProvider, $locationProvider) {
             }).
 
             // route for the about page
+            when('/deepexplorer', {
+                templateUrl : 'partials/deep.html',
+                controller  : 'deepCtrl'
+            }).
             when('/nome', {
                 templateUrl : 'partials/nome.html',
                 controller  : 'nounCtrl'
@@ -68,7 +71,7 @@ deepApp.service('sharedInfo', function () {
             setDeps: function(value) {
                 deps = value;
             }
-            
+
         };
 });
 
@@ -81,22 +84,22 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
    var posHash = new Array();
     posHash['Nome'] = 'NOUN';
     posHash['Verbo'] = 'VERB';
-    posHash['Adjectivo'] = 'ADJ'; 
-    posHash['Advérbio'] = 'ADV'; 
+    posHash['Adjectivo'] = 'ADJ';
+    posHash['Advérbio'] = 'ADV';
 
     var urlHash = new Array();
     urlHash['Nome'] = 'nome';
     urlHash['Verbo'] = 'verbo';
-    urlHash['Adjectivo'] = 'adjectivo'; 
-    urlHash['Advérbio'] = 'adverbio'; 
+    urlHash['Adjectivo'] = 'adjectivo';
+    urlHash['Advérbio'] = 'adverbio';
 
    $scope.changePos = function(value) {
      $scope.pos = value;
    };
    $scope.changeMeasure = function(value) {
-     $scope.measure = value;  
+     $scope.measure = value;
    };
-  
+
   var selectPath = function (){
     var path = "/" + urlHash[$scope.pos];
 
@@ -104,7 +107,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
   };
 
    $scope.searchWord = function() {
-    
+
       if(angular.isString($scope.word)){
         if($scope.pos != "Classe"){
           if($scope.measure != "Medida"){
@@ -146,7 +149,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     async: true
         });//request
-        
+
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
             sharedInfo.setDeps(response.DEPS);
@@ -171,12 +174,12 @@ deepApp.controller("nounCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
-    
+
     $scope.MOD_PRE_NOUN_ADV = Deps.MOD_PRE_NOUN_ADV;
     $scope.MOD_PRE_NOUN_ADJ = Deps.MOD_PRE_NOUN_ADJ;
     $scope.MOD_POST_NOUN_PP = Deps.MOD_POST_NOUN_PP;
     $scope.MOD_POST_NOUN_ADJ = Deps.MOD_POST_NOUN_ADJ;
-    
+
     //console.log( Deps);
 });
 
@@ -184,12 +187,12 @@ deepApp.controller("verbCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
-    
+
     $scope.SUBJ_SEM_PROP = Deps.SUBJ_SEM_PROP;
     $scope.CDIR_SEM_PROP = Deps.CDIR_SEM_PROP;
     $scope.COMPLEMENTOS_SEM_PROP = Deps.COMPLEMENTOS_SEM_PROP;
     $scope.MOD_VERB_ADV = Deps.MOD_VERB_ADV;
-    
+
     //console.log( Deps);
 });
 
@@ -197,7 +200,7 @@ deepApp.controller("advCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
-    
+
     $scope.MOD_PRE_NOUN_ADV = Deps.MOD_PRE_NOUN_ADV;
     $scope.MOD_VERB_ADV = Deps.MOD_VERB_ADV;
     $scope.MOD_PRE_ADJ_ADV = Deps.MOD_PRE_ADJ_ADV;
@@ -211,12 +214,20 @@ deepApp.controller("adjCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
-    
+
     $scope.MOD_PRE_ADJ_ADJ = Deps.MOD_PRE_ADJ_ADJ;
     $scope.MOD_PRE_ADJ_ADV = Deps.MOD_PRE_ADJ_ADV;
     $scope.MOD_PRE_NOUN_ADJ = Deps.MOD_PRE_NOUN_ADJ;
     $scope.MOD_POST_NOUN_ADJ = Deps.MOD_POST_NOUN_ADJ;
     $scope.MOD_POST_ADJ_PP = Deps.MOD_POST_ADJ_PP;
- 
+
     //console.log( Deps);
 });
+deepApp.controller("deepCtrl", function($scope, sharedInfo) {
+    var Deps = sharedInfo.getDeps();
+    //$scope.word = sharedInfo.getWord();
+    //$scope.pos =  sharedInfo.getPos();
+    $scope.word = "Teste";
+    $scope.pos = "Nome";
+        //console.log( Deps);
+  });
