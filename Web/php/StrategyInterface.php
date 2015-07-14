@@ -27,8 +27,6 @@ class StrategyContext {
 abstract class DeepStrategyInterface {
     abstract public function getDeps($conn, $word, $pos,  $measure, $limit);
 
-    //"The first argument of a binary dependency corresponds to  the governor while the second to a dependent of this governor."
-    //retorna as palavras que se relacionam com a palavra gorvernadora da dependencia
     protected function getDepGovernor($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
@@ -47,7 +45,7 @@ abstract class DeepStrategyInterface {
         return $result;
     }
 
-    //retorna as palavras governadoras da palavra dependece
+   
     protected function getDepDependent($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
@@ -65,127 +63,9 @@ abstract class DeepStrategyInterface {
 
         return $result;
     }
-}
 
-class StrategyNoun extends DeepStrategyInterface {
-
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
-        //dependencias que existem no sistema
-        $depProps = array("MOD PRE_NOUN_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_PP","MOD POST_NOUN_ADJ");
+    protected function getResult($depProps, $conn, $word, $pos, $measure , $limit){
         $outp = "";
-        foreach ($depProps as $depProp){
-            $split = split(" ",$depProp);
-            $dep = $split[0];
-            $prop = $split[1];
-            $depProp = $dep."_".$prop;
-
-            $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-
-            $outp_aux = "";
-            while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
-                if ($outp_aux != "") {$outp_aux .= ",";}
-                $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
-            }
-            if ($outp != ""){
-                $outp .= ",";
-            }
-            else{
-                $outp .= "{";
-            }
-                $outp .= '"'.$depProp.'":['.$outp_aux.']';
-        }
-        $outp .= "}";
-        return $outp;
-    }
-
-}
-
-class StrategyVerb extends DeepStrategyInterface {
-
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
-       //dependencias que existem no sistema
-        $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
-        $outp = "";
-
-        foreach ($depProps as $depProp){
-            $split = split(" ",$depProp);
-            $dep = $split[0];
-            $prop = $split[1];
-            $depProp = $dep."_".$prop;
-
-        $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-        $outp_aux = "";
-        while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
-             if ($outp_aux != "") {$outp_aux .= ",";}
-                $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
-        }
-        if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
-            $outp .= '"'.$depProp.'":['.$outp_aux.']';
-        }
-        $outp .= "}";
-        return $outp;
-    }
-}
-
-class StrategyAdj extends DeepStrategyInterface {
-    private $pos = "ADJ";
-
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
-       //dependencias que existem no sistema
-        $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
-        $outp = "";
-
-        foreach ($depProps as $depProp){
-            $split = split(" ",$depProp);
-            $dep = $split[0];
-            $prop = $split[1];
-            $depProp = $dep."_".$prop;
-
-            $depPos_aux = split("_",$prop);
-
-            if(sizeof($depPos_aux)==3){
-                $depPos[0]=$depPos_aux[1];
-                $depPos[1]=$depPos_aux[2];
-            } else{
-                if(sizeof($depPos_aux)==2){
-                    $depPos = $depPos_aux;
-                }
-            }
-
-            if($pos == $depPos[0]){
-                $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-            }else{
-               if($pos == $depPos[1]){
-                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-                }
-            }
-
-
-        $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-        $outp_aux = "";
-        while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
-             if ($outp_aux != "") {$outp_aux .= ",";}
-                $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
-        }
-        if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
-            $outp .= '"'.$depProp.'":['.$outp_aux.']';
-        }
-        $outp .= "}";
-        return $outp;
-    }
-}
-
-class StrategyAdv extends DeepStrategyInterface {
-    private $pos = "ADV";
-
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
-       //dependencias que existem no sistema
-        $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
-        $outp = "";
-
         foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
             $dep = $split[0];
@@ -233,7 +113,59 @@ class StrategyAdv extends DeepStrategyInterface {
                 $outp .= '"'.$depProp.'":['.$outp_aux.']';
         }
         $outp .= "}";
-        return $outp;
+        return $outp; 
+    
+    }
+}
+
+class StrategyNoun extends DeepStrategyInterface {
+
+    public function getDeps($conn, $word, $pos, $measure, $limit) {
+        //dependencias que existem no sistema
+        $depProps = array("MOD PRE_NOUN_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_PP","MOD POST_NOUN_ADJ");
+
+        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        return $result;
+    }
+
+}
+
+class StrategyVerb extends DeepStrategyInterface {
+
+    public function getDeps($conn, $word, $pos,  $measure, $limit) {
+       //dependencias que existem no sistema
+        $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
+        $outp = "";
+
+        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        return $result;
+
+    }
+}
+
+class StrategyAdj extends DeepStrategyInterface {
+    private $pos = "ADJ";
+
+    public function getDeps($conn, $word, $pos,  $measure, $limit) {
+       //dependencias que existem no sistema
+        $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
+
+        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        return $result;   
+    
+    }
+}
+
+class StrategyAdv extends DeepStrategyInterface {
+    private $pos = "ADV";
+
+    public function getDeps($conn, $word, $pos,  $measure, $limit) {
+       //dependencias que existem no sistema
+        $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
+       
+        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        return $result;
+
     }
 }
 

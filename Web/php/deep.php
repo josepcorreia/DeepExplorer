@@ -23,11 +23,11 @@ $Measure = $_POST['measure'];
 if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
-/*
+
 $word = "muito";
 $pos = "ADV";
 $Measure = "PMI";
-*/
+
 
 $strategyContext = new StrategyContext($pos);
 
