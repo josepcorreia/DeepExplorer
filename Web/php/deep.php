@@ -24,8 +24,9 @@ if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
 
-$word = "muito";
-$pos = "ADV";
+
+$word = "ser";
+$pos = "VERB";
 $Measure = "PMI";
 
 

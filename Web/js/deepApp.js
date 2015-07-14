@@ -154,7 +154,8 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
         request.done(function (response, textStatus, jqXHR){
             sharedInfo.setDeps(response.DEPS);
             console.log(response);
-            selectPath();
+            $location.path("/deepexplorer");
+           // selectPath();
             $scope.$apply()
          });//request done
 
@@ -225,9 +226,8 @@ deepApp.controller("adjCtrl", function($scope, sharedInfo) {
 });
 deepApp.controller("deepCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
-    //$scope.word = sharedInfo.getWord();
-    //$scope.pos =  sharedInfo.getPos();
-    $scope.word = "Teste";
-    $scope.pos = "Nome";
+    $scope.word = sharedInfo.getWord();
+    $scope.pos =  sharedInfo.getPos();
+    
         //console.log( Deps);
   });

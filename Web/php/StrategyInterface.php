@@ -84,16 +84,6 @@ abstract class DeepStrategyInterface {
             }
 
             if($pos == $depPos[0]){
-                //echo "string1    ";
-                $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-            }else{
-               if($pos == $depPos[1]){
-               // echo "string2    ";
-                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-                }
-            }
-
-            if($pos == $depPos[0]){
                     $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
             }else{
                if($pos == $depPos[1]){
@@ -123,7 +113,7 @@ class StrategyNoun extends DeepStrategyInterface {
     public function getDeps($conn, $word, $pos, $measure, $limit) {
         //dependencias que existem no sistema
         $depProps = array("MOD PRE_NOUN_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_PP","MOD POST_NOUN_ADJ");
-
+   
         $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
@@ -132,20 +122,16 @@ class StrategyNoun extends DeepStrategyInterface {
 
 class StrategyVerb extends DeepStrategyInterface {
 
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
-       //dependencias que existem no sistema
+    public function getDeps($conn, $word, $pos, $measure, $limit) {
+        //dependencias que existem no sistema
         $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
-        $outp = "";
-
+echo "AQUIUIII";
         $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
-
     }
 }
 
 class StrategyAdj extends DeepStrategyInterface {
-    private $pos = "ADJ";
-
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
@@ -157,7 +143,6 @@ class StrategyAdj extends DeepStrategyInterface {
 }
 
 class StrategyAdv extends DeepStrategyInterface {
-    private $pos = "ADV";
 
     public function getDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
