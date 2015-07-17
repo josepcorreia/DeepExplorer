@@ -67,6 +67,13 @@
 	    	<arg value="/Users/josecorreia/Projects/DB/"/>
 		</java>
 	</target>
+	<target name="runCasaParte1" depends="main" description="run" >
+		<java classname="${main}" fork="true">
+			<classpath refid="classpath"/>
+			<arg value="/home/josecorreia/Projects/Parte1"/>
+			<arg value="/home/josecorreia/Projects/DB/"/>
+		</java>
+	</target>
 	<target name="runTudo" depends="main" description="run" >
 		    <java classname="${main}" fork="true">
 				<classpath refid="classpath"/>
@@ -75,7 +82,7 @@
 			</java>
 		</target>
 	<target name="runLinInesc" depends="main" description="run" >
-			    <java  classname="${main}" fork="true">
+			    <java  classname="${main}" memoryMaximumSize="2048m" fork="true">
 					<classpath refid="classpath"/>
 			    	<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
 			    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>

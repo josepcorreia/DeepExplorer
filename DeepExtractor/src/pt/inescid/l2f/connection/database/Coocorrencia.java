@@ -305,5 +305,11 @@ public class Coocorrencia extends RelationalElement{
 			index = index + intervall;
 
 		}
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+
+		}
+
 	}
 }

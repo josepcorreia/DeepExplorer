@@ -1,11 +1,9 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -91,7 +89,7 @@ public class NE extends DependencyType{
 				namedEntetiesTable.put(aux[0], aux[1]);
 			}
 
-		} catch (UnsupportedEncodingException) {
+		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {

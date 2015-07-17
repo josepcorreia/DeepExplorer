@@ -25,11 +25,11 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="module-library" exported="">
       <library name="junit-4.8.2.jar">
         <CLASSES>
-          <root url="file://C:/Users/ze_mi_000/Projects/deepexplorer/DeepExtractor/lib/junit-4.8.2.jar" />
+          <root url="jar://$MODULE_DIR$/lib/junit-4.8.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -38,10 +38,21 @@
     <orderEntry type="module-library" exported="">
       <library name="mysql-connector-java-5.1.34-bin.jar">
         <CLASSES>
-          <root url="file://C:/Users/ze_mi_000/Projects/deepexplorer/DeepExtractor/lib/mysql-connector-java-5.1.34-bin.jar" />
+          <root url="jar://$MODULE_DIR$/lib/mysql-connector-java-5.1.34-bin.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/sqlite-jdbc-3.8.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/sqlite-jdbc-3.8.6.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
