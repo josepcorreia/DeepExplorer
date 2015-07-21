@@ -24,11 +24,11 @@ if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
 
-
+/*
 $word = "ser";
 $pos = "VERB";
 $Measure = "PMI";
-
+*/
 
 $strategyContext = new StrategyContext($pos);
 

@@ -235,7 +235,7 @@ public class Coocorrencia extends RelationalElement{
 
 	public void UpdateMeasures(){
 		Connection connection = getConnetion(); 
-		Statement s; 
+		Statement s;
 		
 		int intervall = 2000;
 		int totalrows =  getNumberRows();

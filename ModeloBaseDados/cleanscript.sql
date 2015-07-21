@@ -5,4 +5,5 @@ DELETE FROM Palavra;
 DELETE FROM Frase;
 DELETE FROM Propriedade;
 DELETE FROM Dependencia;
+DELETE FROM Ficheiro;
 DELETE FROM Corpus;

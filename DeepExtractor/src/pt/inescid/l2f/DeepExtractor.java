@@ -36,11 +36,12 @@ public class DeepExtractor {
 		RelationalFactory.getCorpus().insertNew(corpusName, "Público", "2000", "Noticíario", false);
 			
 		inspectDirectory(dir, xipDocumentFactory, de);
-			
+
+
+		//calcula as medidas
 		de.CalculateAssociationMeasures();
 			
 		rf.closeConnection();
-		
 		System.out.println("FIM");		
 	}
 	
@@ -54,12 +55,19 @@ public class DeepExtractor {
 
 				}
 				if(file.toFile().isFile() && file.toString().endsWith(".xml")){
-					
-					System.out.println("FILE " +file.getFileName());
-					BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
-					document = xipdc.getXipResult(buffer);
-										
-					de.Extract(document);
+					String filename = file.getFileName().toString();
+
+                    if(!RelationalFactory.getFicheiro().fileExists(filename)) {
+
+                        System.out.println("FILE " + filename);
+                        BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
+                        document = xipdc.getXipResult(buffer);
+
+                        de.Extract(document);
+
+                        RelationalFactory.getFicheiro().insertNewFile(filename);
+                    }
+
 				}
 
 			}
