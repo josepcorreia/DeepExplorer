@@ -8,4 +8,11 @@ public class Classd extends DependencyType{
 	public Classd(DeepStorage _storage) {
 		super(_storage);
 	}
+
+	protected String getProperty(Dependency dep) {
+		//neste caso não interessa se a prop é pre ou post
+		String prop = "";
+
+		return prop;
+	}
 }

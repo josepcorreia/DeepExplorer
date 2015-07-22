@@ -60,6 +60,7 @@ public abstract class DependencyType{
 		
 		if(!_depPropTable.containsKey(depProp))
 			return;
+
 		String newDepProp[] = _depPropTable.get(depProp).split(" ");
 		depname = newDepProp[0];  
 		prop = newDepProp[1];
@@ -113,6 +114,7 @@ public abstract class DependencyType{
 		}
 		return prop;
 	}
+
 	protected String getPOS(XIPNode node) {
 		String pos = node.getName();
 
@@ -162,9 +164,13 @@ public abstract class DependencyType{
 			
 			String line;
 		    while ((line = buffer.readLine()) != null) {
-		    	String aux[] = line.split(",");
-		    
-		    	depPropTable.put(aux[0], aux[1]);
+                if(line.contains("##") || line.equals("")) {
+                    continue;
+                }
+
+                String aux[] = line.split(",");
+
+                depPropTable.put(aux[0], aux[1]);
 		    }
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e) {

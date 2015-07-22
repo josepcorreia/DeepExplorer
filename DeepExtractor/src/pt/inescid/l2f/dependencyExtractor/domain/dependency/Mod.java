@@ -20,7 +20,11 @@ public class Mod extends DependencyType{
 				prop=aux;
 			}
 			if (aux.equals("FOCUS")){
-				prop+="_" + aux;
+
+				if(!prop.equals(""))
+					prop+="_";
+
+				prop+= aux;
 			}
 		}
 		return prop;

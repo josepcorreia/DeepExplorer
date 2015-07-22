@@ -9,4 +9,11 @@ public class Subj extends DependencyType{
 		super(_storage);
 	}
 
+	protected String getProperty(Dependency dep) {
+		//neste caso não interessa se a prop é pre ou post
+		String prop = "";
+
+		return prop;
+	}
+
 }
