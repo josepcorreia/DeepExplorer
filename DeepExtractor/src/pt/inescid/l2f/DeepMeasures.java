@@ -24,6 +24,7 @@ public class DeepMeasures {
 		String corpusName = "CETEMPúblico";
 		
 		RelationalFactory rf = new RelationalFactory(corpusName, args[0]);
+		DependencyExtractor de = new DependencyExtractor();
 
 		//calcula as medidas
 		de.CalculateAssociationMeasures();
