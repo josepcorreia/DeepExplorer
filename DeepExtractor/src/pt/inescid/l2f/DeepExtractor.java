@@ -26,12 +26,12 @@ public class DeepExtractor {
 	
 		String corpusName = "CETEMPúblico";
 		
-		RelationalFactory rf = new RelationalFactory(corpusName, args[1]);
+		RelationalFactory rf = new RelationalFactory(corpusName, args[0]);
 		DependencyExtractor de = new DependencyExtractor();
 		
 		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
 					
-		Path dir = Paths.get(args[0]);
+		Path dir = Paths.get(args[1]);
 		
 		RelationalFactory.getCorpus().insertNew(corpusName, "Público", "2000", "Noticíario", false);
 			
@@ -39,7 +39,7 @@ public class DeepExtractor {
 
 
 		//calcula as medidas
-		de.CalculateAssociationMeasures();
+		//de.CalculateAssociationMeasures();
 			
 		rf.closeConnection();
 		System.out.println("FIM");		

@@ -63,44 +63,37 @@
  	<target name="runParte1" depends="main" description="run" >
 	    <java classname="${main}" fork="true">
 			<classpath refid="classpath"/>
-	    	<arg value="/Users/josecorreia/Projects/Parte1"/>
 	    	<arg value="/Users/josecorreia/Projects/DB/"/>
+			<arg value="/Users/josecorreia/Projects/Parte1"/>
 		</java>
 	</target>
 	<target name="runCasaParte1" depends="main" description="run" >
 		<java classname="${main}" fork="true">
 			<classpath refid="classpath"/>
-			<arg value="/home/josecorreia/Projects/Parte1"/>
 			<arg value="/home/josecorreia/Projects/DB/"/>
+			<arg value="/home/josecorreia/Projects/Parte1"/>
 		</java>
 	</target>
 	<target name="runTudo" depends="main" description="run" >
 		    <java classname="${main}" fork="true">
 				<classpath refid="classpath"/>
-		    	<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
 		    	<arg value="/Users/josecorreia/Projects/DB_site/"/>
+				<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
 			</java>
 		</target>
 	<target name="runLinInesc" depends="main" description="run" >
-			    <java  classname="${main}" memoryMaximumSize="2048m" fork="true">
+			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
-			    	<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
 			    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
+					<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
 				</java>
 	</target>
-	<target name="runCorpus" depends="main" description="run" >
+	<target name="runCorpus" depends="main" description="run">
 		    <java  classname="${main}" fork="true">
 				<classpath refid="classpath"/>
-		    	<arg value="/ffs/tmp/string/CORPUS/"/>
 		    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
+				<arg value="/ffs/tmp/string/CORPUS/"/>
 			</java>
 	</target>
-	<target name="runW8" depends="main" description="run" >
-		    <java memoryMaximumSize="2048m" classname="${main}" fork="true">
-				<classpath refid="classpath"/>
-		    	<arg value="C:\Users\ze_mi_000\Projects\Parte01aaa.xml"/>
-			</java>
-	</target>
-	
 
 </project>
