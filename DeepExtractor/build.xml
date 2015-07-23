@@ -85,7 +85,7 @@
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
 			    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
-					<arg value="/afs/l2f/home/jcorreia/Projects/Parte1"/>
+					<arg value="${corpus_dir}"/>
 				</java>
 	</target>
 	<target name="runCorpus" depends="main" description="run">

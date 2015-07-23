@@ -111,9 +111,9 @@ public class DeepStorage {
 	}
 	
 	public void printSizes(){
-		System.out.println("WOrd: " + wordsMap.size());
-		System.out.println("WOrdBelongs: " + wordBelongsMap.size());
-		System.out.println("COO: " + coocorrenceMap.size());
+		//System.out.println("WOrd: " + wordsMap.size());
+		//System.out.println("WOrdBelongs: " + wordBelongsMap.size());
+		//System.out.println("COO: " + coocorrenceMap.size());
 	}
 
 	public void commit() {
