@@ -9,7 +9,7 @@ for i in `seq 5 $max`
 do
    	dir_aux="Parte0$i";
    	dir=$corpus/$dir_aux;
-   	txt="$dir_aux.txt"
+   	txt="log/$dir_aux.txt"
    	ant runLinInesc -Dcorpus_dir=$corpus > $txt
    	
 done

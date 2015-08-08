@@ -9,6 +9,7 @@
 	<property name="bin.dir"            value="${basedir}/bin"/>
 	<property name="package"            value="pt.inescid.l2f"/>
 	<property name="main"  				value="${package}.DeepExtractor"/>
+	<property name="main1"  			value="${package}.DeepMeasures"/>
 
 	<path id="external.jars">
 	  	<fileset dir="${lib.dir}" includes="**/*.jar"/>
@@ -61,12 +62,18 @@
 	<target name="mainJD" depends="clean,build,compress,javadoc"/>
 	
  	<target name="runParte1" depends="main" description="run" >
-	    <java classname="${main}" fork="true">
-			<classpath refid="classpath"/>
-	    	<arg value="/Users/josecorreia/Projects/DB/"/>
-			<arg value="/Users/josecorreia/Projects/Parte1"/>
-		</java>
-	</target>
+    <java classname="${main}" fork="true">
+        <classpath refid="classpath"/>
+        <arg value="/Users/josecorreia/Projects/DB/"/>
+        <arg value="/Users/josecorreia/Projects/Parte1"/>
+    </java>
+</target>
+    <target name="runParte1Medidas" depends="main" description="run" >
+        <java classname="${main1}" fork="true">
+            <classpath refid="classpath"/>
+            <arg value="/Users/josecorreia/Projects/DB/"/>
+        </java>
+    </target>
 	<target name="runCasaParte1" depends="main" description="run" >
 		<java classname="${main}" fork="true">
 			<classpath refid="classpath"/>
@@ -87,6 +94,12 @@
 			    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
 					<arg value="${corpus_dir}"/>
 				</java>
+	</target>
+	<target name="runMeasuresInesc" depends="main" description="run" >
+		<java  classname="${main1}" fork="true">
+			<classpath refid="classpath"/>
+			<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
+		</java>
 	</target>
 	<target name="runCorpus" depends="main" description="run">
 		    <java  classname="${main}" fork="true">
