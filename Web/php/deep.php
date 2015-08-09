@@ -24,17 +24,17 @@ if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
 
-/*
-$word = "ser";
-$pos = "VERB";
+
+$word = "carro";
+$pos = "NOUN";
 $Measure = "PMI";
-*/
+
 
 $strategyContext = new StrategyContext($pos);
 
-$deps = '{"DEPS":'.$strategyContext->getAllDependencies($conn,$word,$pos,$Measure,25).'}';
+$deps = '{"DEPS":'.$strategyContext->GetAllDependencies($conn,$word,$pos,$Measure,25).'}';
 
-echo($deps);
+//echo($deps);
 
 $conn->close();
 

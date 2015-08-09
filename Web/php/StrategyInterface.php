@@ -2,32 +2,68 @@
 class StrategyContext {
     private $strategy = NULL;
 
-
     public function __construct($pos) {
         switch ($pos) {
-            case "NOUN":
+            case 'NOUN':
+                $deps = $this->GetDependenciesFromFile($pos);
                 $this->strategy = new StrategyNoun();
             break;
-            case "VERB":
+            case 'VERB':
+                $deps = $this->GetDependenciesFromFile($pos);
                 $this->strategy = new StrategyVerb();
             break;
-            case "ADJ":
+            case 'ADJ':
+                $deps = $this->GetDependenciesFromFile($pos);
                 $this->strategy = new StrategyAdj();
             break;
-            case "ADV":
+            case 'ADV':
+                $deps = $this->GetDependenciesFromFile($pos);
                 $this->strategy = new StrategyAdv();
             break;
         }
     }
-    public function getAllDependencies($conn, $word, $pos,  $measure, $limit) {
-      return $this->strategy->getDeps($conn, $word, $pos,  $measure, $limit);
+    public function GetDependenciesFromFile($pos)
+    {
+        $file = fopen('resources/dep_prop.txt','r');
+            while ($line = fgets($file)) {
+                $line = trim(preg_replace('/\n/', '', $line));
+                $split = split(" ",$line);
+
+                if( $split[0] ===  '##') {
+                    if((string)$split[1] === (string)$pos) {
+                        $this->GetDependenciesByClass($file, $pos);  
+                    }
+                }            
+            }
+        fclose($file);
+    }
+    private function GetDependenciesByClass($file,$pos){
+      //  $deps = 
+
+        while ($line = fgets($file)) {
+
+            $test = split(" ",$line);
+            if( $test[0] ===  '##') 
+                return;
+            
+            $line = trim(preg_replace('/\n/', '', $line));
+
+            $split = split(",",$line);  
+
+           
+
+        }
+    }
+
+    public function GetAllDependencies($conn, $word, $pos,  $measure, $limit) {
+      return $this->strategy->GetDeps($conn, $word, $pos,  $measure, $limit);
     }
 }
 
 abstract class DeepStrategyInterface {
-    abstract public function getDeps($conn, $word, $pos,  $measure, $limit);
+    abstract public function GetDeps($conn, $word, $pos,  $measure, $limit);
 
-    protected function getDepGovernor($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
+    protected function GetDepGovernor($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
@@ -46,7 +82,7 @@ abstract class DeepStrategyInterface {
     }
 
    
-    protected function getDepDependent($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
+    protected function GetDepDependent($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
@@ -64,7 +100,7 @@ abstract class DeepStrategyInterface {
         return $result;
     }
 
-    protected function getResult($depProps, $conn, $word, $pos, $measure , $limit){
+    protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
         $outp = "";
         foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
@@ -83,11 +119,11 @@ abstract class DeepStrategyInterface {
                 }
             }
 
-            if($pos == $depPos[0]){
-                    $result = $this->getDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+            if($pos === $depPos[0]){
+                    $result = $this->GetDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
             }else{
-               if($pos == $depPos[1]){
-                  $result = $this->getDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+               if($pos === $depPos[1]){
+                  $result = $this->GetDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
                 }
             }
 
@@ -110,11 +146,11 @@ abstract class DeepStrategyInterface {
 
 class StrategyNoun extends DeepStrategyInterface {
 
-    public function getDeps($conn, $word, $pos, $measure, $limit) {
+    public function GetDeps($conn, $word, $pos, $measure, $limit) {
         //dependencias que existem no sistema
         $depProps = array("MOD PRE_NOUN_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_PP","MOD POST_NOUN_ADJ");
    
-        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
 
@@ -122,21 +158,21 @@ class StrategyNoun extends DeepStrategyInterface {
 
 class StrategyVerb extends DeepStrategyInterface {
 
-    public function getDeps($conn, $word, $pos, $measure, $limit) {
+    public function GetDeps($conn, $word, $pos, $measure, $limit) {
         //dependencias que existem no sistema
         $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
-echo "AQUIUIII";
-        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+
+        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
 }
 
 class StrategyAdj extends DeepStrategyInterface {
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
+    public function GetDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
 
-        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;   
     
     }
@@ -144,11 +180,11 @@ class StrategyAdj extends DeepStrategyInterface {
 
 class StrategyAdv extends DeepStrategyInterface {
 
-    public function getDeps($conn, $word, $pos,  $measure, $limit) {
+    public function GetDeps($conn, $word, $pos,  $measure, $limit) {
        //dependencias que existem no sistema
         $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
        
-        $result = $this->getResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
 
     }
