@@ -6,19 +6,19 @@ class StrategyContext {
         switch ($pos) {
             case 'NOUN':
                 $deps = $this->GetDependenciesFromFile($pos);
-                $this->strategy = new StrategyNoun();
+                $this->strategy = new StrategyNoun($deps);
             break;
             case 'VERB':
                 $deps = $this->GetDependenciesFromFile($pos);
-                $this->strategy = new StrategyVerb();
+                //$this->strategy = new StrategyVerb();
             break;
             case 'ADJ':
                 $deps = $this->GetDependenciesFromFile($pos);
-                $this->strategy = new StrategyAdj();
+                //$this->strategy = new StrategyAdj();
             break;
             case 'ADV':
                 $deps = $this->GetDependenciesFromFile($pos);
-                $this->strategy = new StrategyAdv();
+                //$this->strategy = new StrategyAdv();
             break;
         }
     }
@@ -30,29 +30,34 @@ class StrategyContext {
                 $split = split(" ",$line);
 
                 if( $split[0] ===  '##') {
-                    if((string)$split[1] === (string)$pos) {
-                        $this->GetDependenciesByClass($file, $pos);  
+                    if($split[1] === $pos) {
+                        return $this->GetDependenciesByClass($file, $pos);  
                     }
                 }            
             }
         fclose($file);
     }
     private function GetDependenciesByClass($file,$pos){
-      //  $deps = 
+        $deps = array();
 
         while ($line = fgets($file)) {
+            $line = trim(preg_replace('/\n/', '', $line));
+            
+            //caso da linha em brnaco do ficheiro
+            if($line === ""){
+                continue;
+            } 
 
             $test = split(" ",$line);
-            if( $test[0] ===  '##') 
-                return;
-            
-            $line = trim(preg_replace('/\n/', '', $line));
+            if( $test[0] ===  '##'){             
+              break;  
+            }
+            $split = split(",",$line);
 
-            $split = split(",",$line);  
-
-           
-
+            //add to array
+            $deps[$split[0]] = $split[1];
         }
+        return $deps;
     }
 
     public function GetAllDependencies($conn, $word, $pos,  $measure, $limit) {
@@ -101,6 +106,11 @@ abstract class DeepStrategyInterface {
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
+        //agora $depProps e um hashmap, tem que se extrair as propriedades para 
+        //depois sim ser possivel obter os resultados
+
+        //array_keys() 
+
         $outp = "";
         foreach ($depProps as $depProp){
             $split = split(" ",$depProp);
@@ -145,11 +155,14 @@ abstract class DeepStrategyInterface {
 }
 
 class StrategyNoun extends DeepStrategyInterface {
+    private $depProps = NULL;
+
+    public function __construct($deps) {
+        $this->depsProps = $deps;
+    }
 
     public function GetDeps($conn, $word, $pos, $measure, $limit) {
-        //dependencias que existem no sistema
-        $depProps = array("MOD PRE_NOUN_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_PP","MOD POST_NOUN_ADJ");
-   
+
         $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
