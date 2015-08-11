@@ -87,7 +87,7 @@ abstract class DeepStrategyInterface {
     }
 
    
-    protected function GetDepDependent($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
+    protected function GetDepGoverned($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
         $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
             FROM Coocorrencia
             Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
@@ -106,35 +106,23 @@ abstract class DeepStrategyInterface {
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
-        //agora $depProps e um hashmap, tem que se extrair as propriedades para 
-        //depois sim ser possivel obter os resultados
-
-        //array_keys() 
+        
+        $depPropsKeys = array_keys($depProps);
 
         $outp = "";
-        foreach ($depProps as $depProp){
+        foreach ($depPropsKeys as $depProp){
             $split = split(" ",$depProp);
+            
             $dep = $split[0];
             $prop = $split[1];
+            
             $depProp = $dep."_".$prop;
 
-            $depPos_aux = split("_",$prop);
-
-            if(sizeof($depPos_aux)==3){
-                $depPos[0]=$depPos_aux[1];
-                $depPos[1]=$depPos_aux[2];
-            } else{
-                if(sizeof($depPos_aux)==2){
-                    $depPos = $depPos_aux;
-                }
-            }
-
-            if($pos === $depPos[0]){
-                    $result = $this->GetDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-            }else{
-               if($pos === $depPos[1]){
-                  $result = $this->GetDepDependent($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-                }
+                //a partir do mapa decidir qual escolher, se governor se governed
+                $result = $this->GetDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+            
+                $result = $this->GetDepGoverned($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+            
             }
 
             $outp_aux = "";
@@ -158,12 +146,11 @@ class StrategyNoun extends DeepStrategyInterface {
     private $depProps = NULL;
 
     public function __construct($deps) {
-        $this->depsProps = $deps;
+        $this->depProps = $deps;
     }
 
     public function GetDeps($conn, $word, $pos, $measure, $limit) {
-
-        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        $result = $this->GetResult($this->depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
 
