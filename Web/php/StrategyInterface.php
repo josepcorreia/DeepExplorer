@@ -68,45 +68,61 @@ class StrategyContext {
 abstract class DeepStrategyInterface {
     abstract public function GetDeps($conn, $word, $pos,  $measure, $limit);
 
-    protected function GetDepGovernor($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
-        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
-            FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra2 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra1 = (SELECT idPalavra
-                                                          from Palavra
-                                                          where palavra= '$word' and
-                                                                classe= '$pos' LIMIT 1)
-                                                        and Coocorrencia.tipoDep = '$dep'
-                                                        and Coocorrencia.nomeProp = '$prop'
-            ORDER BY Coocorrencia.".$measure." DESC
-            LIMIT $limit";
+    protected function GetWordId($conn, $word, $pos)
+    {
+        $query =   "SELECT idPalavra 
+                    FROM Palavra 
+                    WHERE palavra = '".$word."' 
+                    and classe = '".$pos."' 
+                    LIMIT 1;";
+    
+        $result = $conn->query($query);
 
+        $rs = $result->fetchArray(SQLITE3_ASSOC);
+
+        return $rs["idPalavra"];
+    }
+
+    protected function GetDepFromWord2($conn, $idWord2, $dep, $prop,  $measure, $limit) {
+        $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
+                 FROM ( SELECT idPalavra1,".$measure.",frequencia
+                        FROM (SELECT * 
+                             FROM Coocorrencia 
+                             WHERE frequencia > 1)
+                        WHERE idPalavra2 = ".$idWord2."
+                        and tipoDep = '".$dep."'
+                        and nomeProp = '".$prop."'
+                        ORDER BY ".$measure." DESC
+                        LIMIT ".$limit. ") as Coo
+                Inner join Palavra on Coo.idPalavra1 = Palavra.idPalavra;";
+            
         $result = $conn->query($query);
 
         return $result;
     }
-
    
-    protected function GetDepGoverned($conn, $word, $pos, $dep,$prop,  $measure, $limit) {
-        $query= "  SELECT Palavra.palavra, Coocorrencia.nomeProp, Coocorrencia.".$measure."
-            FROM Coocorrencia
-            Inner join Palavra on Coocorrencia.idPalavra1 = Palavra.idPalavra
-            WHERE Coocorrencia.idPalavra2 = (SELECT idPalavra
-                                                          from Palavra
-                                                          where palavra= '$word' and
-                                                                classe= '$pos' LIMIT 1)
-                                                        and Coocorrencia.tipoDep = '$dep'
-                                                        and Coocorrencia.nomeProp = '$prop'
-            ORDER BY Coocorrencia.".$measure." DESC
-            LIMIT $limit";
+    protected function GetDepFromWord1($conn, $idWord1, $dep, $prop,  $measure, $limit) {
+        $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
+                 FROM ( SELECT idPalavra2,".$measure.",frequencia
+                        FROM (SELECT * 
+                             FROM Coocorrencia 
+                             WHERE frequencia > 1)
+                        WHERE idPalavra1 =".$idWord1."
+                        and tipoDep = '".$dep."'
+                        and nomeProp = '".$prop."'
+                        ORDER BY ".$measure." DESC
+                        LIMIT ".$limit. ") as Coo
+                Inner join Palavra on Coo.idPalavra2 = Palavra.idPalavra;";
 
         $result = $conn->query($query);
-
+      
         return $result;
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
         
+        $idWord = $this->GetWordId($conn, $word, $pos);
+
         $depPropsKeys = array_keys($depProps);
 
         $outp = "";
@@ -115,17 +131,29 @@ abstract class DeepStrategyInterface {
             
             $dep = $split[0];
             $prop = $split[1];
-            
-            $depProp = $dep."_".$prop;
 
-                //a partir do mapa decidir qual escolher, se governor se governed
-                $result = $this->GetDepGovernor($conn, $word, $pos, $dep, $prop, $measure ,$limit);
+            $depType = $depProps[$depProp];
             
-                $result = $this->GetDepGoverned($conn, $word, $pos, $dep, $prop, $measure ,$limit);
-            
+            switch ($depType) {
+                case 'PRE_GOVERNED':
+                    $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+                break;
+                case 'PRE_GOVERNOR':
+                    $result = $this->GetDepFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit);
+                break;
+                case 'POST_GOVERNED':
+                    $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+                break;
+                case 'POST_GOVERNOR':
+                    $result = $this->GetDepFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit);
+                break;                
             }
 
-            $outp_aux = "";
+            $outp_aux = ""; 
+
+            $depProp = $dep."_".$prop;
+            
+            
             while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
                 if ($outp_aux != ""){
                     $outp_aux .= ",";
@@ -135,10 +163,10 @@ abstract class DeepStrategyInterface {
             }
             if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
                 $outp .= '"'.$depProp.'":['.$outp_aux.']';
-        }
+        
+       } 
         $outp .= "}";
         return $outp; 
-    
     }
 }
 
