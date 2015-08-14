@@ -134,6 +134,7 @@ abstract class DeepStrategyInterface {
 
             $depType = $depProps[$depProp];
             
+            //tem que se mudar porque nao sei se assim vai funcionar
             switch ($depType) {
                 case 'PRE_GOVERNED':
                     $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
