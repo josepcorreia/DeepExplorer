@@ -155,7 +155,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
             sharedInfo.setDeps(response.DEPS);
             console.log(response);
             $location.path("/nome");
-            //$location.path("/deepexplorer");
+            $location.path("/deepexplorer");
            // selectPath();
             $scope.$apply()
          });//request done

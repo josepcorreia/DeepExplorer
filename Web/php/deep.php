@@ -25,16 +25,19 @@ if($Measure == 'Frequência'){
 }
 
 
-$word = "carro";
+/*$word = "carro";
 $pos = "NOUN";
 $Measure = "Dice";
 
-
+/*$word = "ser";
+$pos = "VERB";
+$Measure = "Dice";
+*/
 $strategyContext = new StrategyContext($pos);
 
-$deps = '{"DEPS":'.$strategyContext->GetAllDependencies($conn,$word,$pos,$Measure,10).'}';
+$deps = $strategyContext->GetAllDependencies($conn,$word,$pos,$Measure,10);
 
-echo($deps);
+echo(json_encode($deps, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE ));
 
 $conn->close();
 

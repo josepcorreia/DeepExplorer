@@ -5,24 +5,28 @@ class StrategyContext {
     public function __construct($pos) {
         switch ($pos) {
             case 'NOUN':
-                $deps = $this->GetDependenciesFromFile($pos);
-                $this->strategy = new StrategyNoun($deps);
+                $this->strategy = new StrategyNoun($pos);
             break;
-            case 'VERB':
-                $deps = $this->GetDependenciesFromFile($pos);
-                //$this->strategy = new StrategyVerb();
+            case 'VERB':                
+                $this->strategy = new StrategyVerb($pos);
             break;
             case 'ADJ':
-                $deps = $this->GetDependenciesFromFile($pos);
-                //$this->strategy = new StrategyAdj();
+                $this->strategy = new StrategyAdj($pos);
             break;
             case 'ADV':
-                $deps = $this->GetDependenciesFromFile($pos);
-                //$this->strategy = new StrategyAdv();
+                $this->strategy = new StrategyAdv($pos);
             break;
         }
     }
-    public function GetDependenciesFromFile($pos)
+    public function GetAllDependencies($conn, $word, $pos,  $measure, $limit) {
+      return $this->strategy->GetDeps($conn, $word, $pos,  $measure, $limit);
+    }
+}
+
+abstract class DeepStrategyInterface {
+    abstract public function GetDeps($conn, $word, $pos,  $measure, $limit);
+
+    protected function GetDependenciesFromFile($pos)
     {
         $file = fopen('resources/dep_prop.txt','r');
             while ($line = fgets($file)) {
@@ -31,13 +35,13 @@ class StrategyContext {
 
                 if( $split[0] ===  '##') {
                     if($split[1] === $pos) {
-                        return $this->GetDependenciesByClass($file, $pos);  
+                        return $this->GetDependenciesByClass($file);  
                     }
                 }            
             }
         fclose($file);
     }
-    private function GetDependenciesByClass($file,$pos){
+    protected function GetDependenciesByClass($file){
         $deps = array();
 
         while ($line = fgets($file)) {
@@ -59,14 +63,6 @@ class StrategyContext {
         }
         return $deps;
     }
-
-    public function GetAllDependencies($conn, $word, $pos,  $measure, $limit) {
-      return $this->strategy->GetDeps($conn, $word, $pos,  $measure, $limit);
-    }
-}
-
-abstract class DeepStrategyInterface {
-    abstract public function GetDeps($conn, $word, $pos,  $measure, $limit);
 
     protected function GetWordId($conn, $word, $pos)
     {
@@ -120,13 +116,20 @@ abstract class DeepStrategyInterface {
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
+        $outp = $deps = array();
+        
         
         $idWord = $this->GetWordId($conn, $word, $pos);
 
         $depPropsKeys = array_keys($depProps);
 
-        $outp = "";
+        //$outp = "";
+        
+        
+
         foreach ($depPropsKeys as $depProp){
+            $depProp_array = array();
+
             $split = split(" ",$depProp);
             
             $dep = $split[0];
@@ -134,23 +137,42 @@ abstract class DeepStrategyInterface {
 
             $depType = $depProps[$depProp];
             
-            //tem que se mudar porque nao sei se assim vai funcionar
-            switch ($depType) {
-                case 'PRE_GOVERNED':
+            
+            if($prop === "SEM_PROP" ||$prop == "VERB_NOUN" || $prop === "VERB_ADJ"){
+                //no caso do SUBJ, CDIR,CINDIR e COMPL
+                $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+            }
+            else{ 
+                if (strpos($depType,'GOVERNED') !== false) {
                     $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
-                break;
-                case 'PRE_GOVERNOR':
-                    $result = $this->GetDepFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit);
-                break;
-                case 'POST_GOVERNED':
-                    $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
-                break;
-                case 'POST_GOVERNOR':
-                    $result = $this->GetDepFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit);
-                break;                
+                }
+                else{
+                    if (strpos($depType,'GOVERNOR') !== false) {
+                        $result = $this->GetDepFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit);
+                    }
+                }
             }
 
-            $outp_aux = ""; 
+            $depProp = $dep."_".$prop;
+
+            $words_array = array();
+
+            while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
+                $word_array = array();
+
+                $word_array["word"] = $rs["palavra"];
+                $word_array["measure"] = $rs[$measure];
+                $word_array["frequency"] = $rs["frequencia"];
+            
+                array_push($words_array,$word_array); 
+            }
+            
+            if(count($words_array) > 0){
+                $depProp_array[$depProp] = $words_array; 
+                $outp[$depType] = $depProp_array;
+            }
+
+            /*$outp_aux = ""; 
 
             $depProp = $dep."_".$prop;
             
@@ -164,56 +186,74 @@ abstract class DeepStrategyInterface {
             }
             if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
                 $outp .= '"'.$depProp.'":['.$outp_aux.']';
-        
+            */
        } 
-        $outp .= "}";
+        //var_dump($outp);
+        //$outp .= "}";
         return $outp; 
     }
 }
 
 class StrategyNoun extends DeepStrategyInterface {
+    private $pos = NULL;
     private $depProps = NULL;
 
-    public function __construct($deps) {
-        $this->depProps = $deps;
+    public function __construct($pos){
+        $this->pos = $pos;
+        $this->depProps = $this->GetDependenciesFromFile($pos);
     }
 
     public function GetDeps($conn, $word, $pos, $measure, $limit) {
         $result = $this->GetResult($this->depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
-
 }
 
 class StrategyVerb extends DeepStrategyInterface {
+    private $pos;
+    private $depProps = NULL;
 
+    public function __construct($pos){
+        $this->pos = $pos;
+        $this->depProps = $this->GetDependenciesFromFile($pos);
+    }
+    
     public function GetDeps($conn, $word, $pos, $measure, $limit) {
-        //dependencias que existem no sistema
-        $depProps = array("SUBJ SEM_PROP", "CDIR SEM_PROP", "COMPLEMENTOS SEM_PROP", "MOD VERB_ADV");
-
-        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        
+        $result = $this->GetResult($this->depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
     }
 }
 
 class StrategyAdj extends DeepStrategyInterface {
-    public function GetDeps($conn, $word, $pos,  $measure, $limit) {
-       //dependencias que existem no sistema
-        $depProps = array("MOD PRE_ADJ_ADJ","MOD PRE_ADJ_ADV","MOD PRE_NOUN_ADJ","MOD POST_NOUN_ADJ", "MOD POST_ADJ_PP");
+    private $pos;
+    private $depProps = NULL;
 
-        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
+    public function __construct($pos){
+        $this->pos = $pos;
+        $this->depProps = $this->GetDependenciesFromFile($pos);
+    }
+    
+    public function GetDeps($conn, $word, $pos,  $measure, $limit) {
+
+        $result = $this->GetResult($this->depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;   
     
     }
 }
 
 class StrategyAdv extends DeepStrategyInterface {
+    private $pos;
+    private $depProps = NULL;
 
+    public function __construct($pos){
+        $this->pos = $pos;
+        $this->depProps = $this->GetDependenciesFromFile($pos);
+    }
+    
     public function GetDeps($conn, $word, $pos,  $measure, $limit) {
-       //dependencias que existem no sistema
-        $depProps = array("MOD PRE_NOUN_ADV","MOD VERB_ADV","MOD PRE_ADJ_ADV","MOD ADV_ADV","MOD TOP_ADV");
        
-        $result = $this->GetResult($depProps, $conn, $word, $pos,  $measure, $limit);
+        $result = $this->GetResult($this->depProps, $conn, $word, $pos,  $measure, $limit);
         return $result;
 
     }
