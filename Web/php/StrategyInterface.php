@@ -116,16 +116,13 @@ abstract class DeepStrategyInterface {
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
-        $outp = $deps = array();
-        
+        $outp = array();
+        $pre_governor = $pre_governed = array();
+        $post_governor = $post_governed = array();
         
         $idWord = $this->GetWordId($conn, $word, $pos);
 
         $depPropsKeys = array_keys($depProps);
-
-        //$outp = "";
-        
-        
 
         foreach ($depPropsKeys as $depProp){
             $depProp_array = array();
@@ -137,8 +134,7 @@ abstract class DeepStrategyInterface {
 
             $depType = $depProps[$depProp];
             
-            
-            if($prop === "SEM_PROP" ||$prop == "VERB_NOUN" || $prop === "VERB_ADJ"){
+            if($prop === "SEM_PROP" ||$prop === "VERB_NOUN" || $prop === "VERB_ADJ"){
                 //no caso do SUBJ, CDIR,CINDIR e COMPL
                 $result = $this->GetDepFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
             }
@@ -166,30 +162,41 @@ abstract class DeepStrategyInterface {
             
                 array_push($words_array,$word_array); 
             }
-            
+
             if(count($words_array) > 0){
-                $depProp_array[$depProp] = $words_array; 
-                $outp[$depType] = $depProp_array;
-            }
+                //$depProp_array[$depProp] = $words_array; 
 
-            /*$outp_aux = ""; 
-
-            $depProp = $dep."_".$prop;
-            
-            
-            while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
-                if ($outp_aux != ""){
-                    $outp_aux .= ",";
+                switch ($depType) {
+                    case 'PRE_GOVERNED':
+                        $pre_governed[$depProp] = $words_array;
+                    break;
+                    case 'PRE_GOVERNOR':                
+                        $pre_governor[$depProp] = $words_array;
+                    break;
+                    case 'POST_GOVERNED':
+                        $post_governed[$depProp] = $words_array;
+                    break;
+                    case 'POST_GOVERNOR':                
+                        $post_governor[$depProp] = $words_array;
+                    break;
                 }
-                $outp_aux .= '{"word":"'  . $rs["palavra"] . '",';
-                $outp_aux .= '"measure":"'. $rs["$measure"] . '"}';
             }
-            if ($outp != "") {$outp .= ",";}else{$outp .= "{";}
-                $outp .= '"'.$depProp.'":['.$outp_aux.']';
-            */
-       } 
-        //var_dump($outp);
-        //$outp .= "}";
+       }
+        if(count($pre_governed) > 0){
+            $outp['PRE_GOVERNED']= $pre_governed;
+        }
+
+        if(count($pre_governor) > 0){
+            $outp['PRE_GOVERNOR']= $pre_governor;
+        }
+
+        if(count($post_governed) > 0){
+            $outp['POST_GOVERNED']= $post_governed;
+        }
+        if(count($post_governor) > 0){
+            $outp['POST_GOVERNOR']= $post_governor;
+        }
+
         return $outp; 
     }
 }

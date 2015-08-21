@@ -4,7 +4,8 @@ require_once("StrategyInterface.php");
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-$dir = "/Users/josecorreia/Projects/DB_site";
+//$dir = "/Users/josecorreia/Projects/DB_site" ;
+$dir = "/home/josepcorreia/Projects/DB_site";
 $filename = "db_deep.db";
 
 // Create connection
@@ -24,12 +25,13 @@ if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
 
-
-/*$word = "carro";
+/*
+$word = "carro";
 $pos = "NOUN";
 $Measure = "Dice";
-
-/*$word = "ser";
+*/
+/*
+$word = "ser";
 $pos = "VERB";
 $Measure = "Dice";
 */
