@@ -24,9 +24,9 @@
 							<div class="col-xs-6 .col-sm-3" ng-repeat="x in PRE_GOVERNED">
 								<table class="table table-bordered">
 									<tr class="active">
-  										<td >{{}}</td>
+  										<td >{{x.name}}</td>
 									</tr>	
-									<tr class="warning" ng-repeat="y in x">
+									<tr class="warning" ng-repeat="y in x.data">
     									<td>{{y.word}}</td>
 									</tr>
 								</table>	
@@ -45,9 +45,9 @@
 							<div class="col-xs-6 .col-sm-3" ng-repeat="x in POST_GOVERNED">
 								<table class="table table-bordered">
 									<tr class="active">
-  										<td >{{}}</td>
+  										<td >{{x.name}}</td>
 									</tr>	
-									<tr class="warning" ng-repeat="y in x">
+									<tr class="warning" ng-repeat="y in x.data">
     									<td>{{y.word}}</td>
 									</tr>
 								</table>	
@@ -77,9 +77,9 @@
 							<div class="col-xs-6 .col-sm-3" ng-repeat="x in PRE_GOVERNOR">
 								<table class="table table-bordered">
 									<tr class="active">
-  										<td >{{}}</td>
+  										<td >{{x.name}}</td>
 									</tr>	
-									<tr class="warning" ng-repeat="y in x">
+									<tr class="warning" ng-repeat="y in x.data">
     									<td>{{y.word}}</td>
 									</tr>
 								</table>	
@@ -98,9 +98,9 @@
 							<div class="col-xs-6 .col-sm-3" ng-repeat="x in POST_GOVERNOR">
 								<table class="table table-bordered">
 									<tr class="active">
-  										<td >{{}}</td>
+  										<td >{{x.name}}</td>
 									</tr>	
-									<tr class="warning" ng-repeat="y in x">
+									<tr class="warning" ng-repeat="y in x.data">
     									<td>{{y.word}}</td>
 									</tr>
 								</table>	
