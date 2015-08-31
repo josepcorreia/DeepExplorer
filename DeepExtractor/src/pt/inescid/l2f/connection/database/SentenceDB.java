@@ -1,55 +1,46 @@
 package pt.inescid.l2f.connection.database;
 
-import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
-import pt.inescid.l2f.dependencyExtractor.domain.Word;
+import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
+import pt.inescid.l2f.dependencyExtractor.domain.Exemplifies;
+import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Sentence extends RelationalElement{
+public class SentenceDB extends RelationalElement{
 	private String _corpusName;
 
 
-	public Sentence(Connection _connection, String corpusName) {
+	public SentenceDB(Connection _connection, String corpusName) {
 		super(_connection);
 		_corpusName = corpusName;
 	}
 
 	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
-	
-	public Long insertNewSentence(Word  word){
+	public void insertNewSentence(Sentence sentence){
 
 		Connection connection = getConnetion();
 
-		String lemma = word.getLemma().replace("'","''");
-		String pos = word.getPOS();
-		String categoria = "cat";
-		Long id = (long)0;
+		String sentence_text = sentence.getSentence().replace("'", "''");
+		int sentenceNumber = sentence.getSentenceNumber();
+		String filename = sentence.getFilename();
 
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
 
-			//Insert into Palavra (idPalavra, palavra, classe)
-			String query = "INSERT INTO Palavra VALUES( NULL, '"+ lemma + "' , '" + pos + "' , '" + categoria+"' );";
+			  				//insert into frase values(numeroFrase,nomeFicheiro, frase,nomeCorpus)
+			String query = "INSERT INTO Frase VALUES( "+ sentenceNumber + ", '" + filename + "' , '"+ sentence_text +"','"+ _corpusName +"' );";
 
 			stmt.executeUpdate(query);
 
-			String sql = "SELECT idPalavra FROM Palavra WHERE palavra = '"+ lemma + "' AND classe = '" + pos +"' LIMIT 1";
-
-			ResultSet rs = stmt.executeQuery(sql);
-			if(rs.next()){
-				id = rs.getLong("idPalavra");
-			}
-			rs.close();
-
-			//System.out.println("Record is inserted into Palavra table!");
+			//System.out.println("Record is inserted into Frase table!");
 
 		} catch (SQLException e) {
-			System.out.println("Inserir Nova Palavra: "+ lemma);
+			System.out.println("Inserir Nova Frase: "+ sentenceNumber + " " +filename);
 			System.out.println(e.getMessage());
 
 		} finally {
@@ -61,77 +52,32 @@ public class Sentence extends RelationalElement{
 		       }catch(SQLException se){
 		       }// do nothing
 		}//end finally try
-
-		return id;
   }
 
-
-	//verifica se uma palavra existe na bd
-	public Long setenceExists(Word word) throws WordNotExist{
-		Connection connection = getConnetion();
-
-		String lemma = word.getLemma().replace("'","''");
-		String pos = word.getPOS();
-
-		Statement stmt = null;
-
-		try{
-			stmt = connection.createStatement();
-
-			String sql = "SELECT idPalavra FROM Palavra WHERE palavra ='"+ lemma + "' AND classe =\'" + pos +"' LIMIT 1";
-
-			ResultSet rs = stmt.executeQuery(sql);
-
-
-			if(rs.next()){
-				Long id = rs.getLong("idPalavra");
-				rs.close();
-				return id;
-			}
-
-			//caso nao exista
-			rs.close();
-
-	    }catch(SQLException se){
-	       //Handle errors for JDBC
-	    	System.out.println("||wordExists Palavra " + word);
-	       se.printStackTrace();
-	    }finally{
-	       //finally block used to close resources
-	       try{
-	          if(stmt!=null)
-	             stmt.close();
-
-	       }catch(SQLException se){
-	       }// do nothing
-	    }//end finally try
-
-		throw new WordNotExist();
-	}
-
-	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
-  public boolean insertPalavraCorpus(long id, String depname, String prop, int freq){
-	  Connection connection = getConnetion();
+	//Insere a coocorrencia na tabela que indica quais as frases que ocorrem numa determinada coocorrencia
+  public void insertNewSetenceExample(Exemplifies exemplifies){
+      //table = Exemplifica
+	   Connection connection = getConnetion();
 
 	  Statement stmt = null;
 
 		try{
 			stmt = connection.createStatement();
 
-
-
-			String sql = "INSERT INTO Pertence (idPalavra, nomeCorpus, nomeProp, tipoDep, frequencia) VALUES(" +
-												" '" + id + "' , '" +
-												_corpusName + "' , '" +
-												prop  + "' , '" +
-												depname  + "' , " +
-												freq + ");";
+			String sql = "INSERT INTO Exemplifica (numeroFrase, nomeFicheiro, idPalavra1 , " +
+                                                "idPalavra2 , nomeProp, tipoDep, nomeCorpus) VALUES(" +
+												exemplifies.getSentenceNumber() + " , '" +
+												exemplifies.getFilename() + "' , " +
+												exemplifies.getIdPalavra1() + " , " +
+                                                exemplifies.getIdPalavra2() + " , '" +
+                                                exemplifies.getProperty()  + "' , '" +
+                                                exemplifies.getDependency()  + "' , '" +
+												_corpusName + "');";
 			stmt.executeUpdate(sql);
 
 	    }catch(SQLException se){
 	    	System.out.println("|| Palavra insere no corpus");
 			System.out.println(se.getMessage());
-			return false;
 	    }finally{
 	       //finally block used to close resources
 	       try{
@@ -141,8 +87,6 @@ public class Sentence extends RelationalElement{
 	       }catch(SQLException se){
 	       }// do nothing
 	    }//end finally try
-
-		return true;
 	}
 
 

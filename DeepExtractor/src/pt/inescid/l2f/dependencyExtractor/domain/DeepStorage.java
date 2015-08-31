@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import pt.inescid.l2f.connection.database.Coocorrencia;
 import pt.inescid.l2f.connection.database.Palavra;
 import pt.inescid.l2f.connection.database.RelationalFactory;
+import pt.inescid.l2f.connection.database.SentenceDB;
 import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
@@ -15,12 +16,15 @@ public class DeepStorage {
 	private HashMap<Word,Long> wordsMap;
 	private HashMap<WordBelongs, Integer> wordBelongsMap;
 	private HashMap<Coocorrence, Integer> coocorrenceMap;
+	private HashSet<Sentence> sentenceSet;
+	private HashSet<Exemplifies> exemplifiesSet;
 	
 	public DeepStorage() {
-		super();
 		this.wordsMap = new HashMap<Word,Long>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
+        this.sentenceSet = new HashSet<Sentence>();
+        this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
 	
 	public void CheckWord(Word word, String prop, String depName){
@@ -58,18 +62,32 @@ public class DeepStorage {
 			
 	}
 
-	public void CheckCoocorrence(Coocorrence coocorrence){
+	public void CheckCoocorrence(Coocorrence coocorrence, Sentence sentence){
 		if(coocorrenceMap.containsKey(coocorrence)){
 			int freq = coocorrenceMap.get(coocorrence) + 1;
 			coocorrenceMap.put(coocorrence, freq);
 		} else{
 			coocorrenceMap.put(coocorrence, 1);
 		}
+        checkSetence(sentence, coocorrence);
 	}
+
+    public void checkSetence(Sentence sentence, Coocorrence coocorrence){
+        if(!sentenceSet.contains(sentence)){
+            sentenceSet.add(sentence);
+        }
+        Exemplifies ex = new Exemplifies(sentence, coocorrence);
+
+        if(!exemplifiesSet.contains(ex)){
+            exemplifiesSet.add(ex);
+        }
+    }
+
 	
 	public void storeInDatabase(){
 		Palavra palavra = RelationalFactory.getPalavra();
 		Coocorrencia coo = RelationalFactory.getCoocorrencia();
+        SentenceDB sentenceDB = RelationalFactory.getSentenceDB();
 		
 		for (Entry<WordBelongs, Integer>  entry : wordBelongsMap.entrySet() ) {
 			WordBelongs wb = entry.getKey();
@@ -91,7 +109,7 @@ public class DeepStorage {
 			Long id1 = coocorrence.getIdPalavra1(); 
 			Long id2 = coocorrence.getIdPalavra2();
 			String prop = coocorrence.getProperty();
-			String dep = coocorrence.getDepedency();
+			String dep = coocorrence.getDependency();
 			
 			try {
 				if(coo.coocorrenceExists(id1, id2, prop, dep)){
@@ -102,18 +120,31 @@ public class DeepStorage {
 			}
 			
 		}
+
+       for(Sentence sentence : sentenceSet){
+           sentenceDB.insertNewSentence(sentence);
+       }
+
+       for( Exemplifies ex : exemplifiesSet){
+           sentenceDB.insertNewSetenceExample(ex);
+       }
+
 	}
 	
 	public void cleanMaps(){
 		this.wordsMap = new HashMap<Word,Long>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
+        this.sentenceSet = new HashSet<Sentence>();
+        this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
 	
 	public void printSizes(){
-		//System.out.println("WOrd: " + wordsMap.size());
-		//System.out.println("WOrdBelongs: " + wordBelongsMap.size());
-		//System.out.println("COO: " + coocorrenceMap.size());
+		System.out.println("WOrd: " + wordsMap.size());
+		System.out.println("WOrdBelongs: " + wordBelongsMap.size());
+		System.out.println("COO: " + coocorrenceMap.size());
+        System.out.println("frase: " + sentenceSet.size());
+        System.out.println("exemplifica: " + exemplifiesSet.size());
 	}
 
 	public void commit() {

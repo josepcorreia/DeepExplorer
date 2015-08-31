@@ -13,6 +13,7 @@ public class RelationalFactory {
 	private static Corpus _corpus;
 	private static Dependencia _dependencia;
     private static Ficheiro _ficheiro;
+	private static SentenceDB _sentenceDB;
 
 	public RelationalFactory(String corpusName, String dirDB){
 		_connection = ConnectionSQLite.getConnectionSQLite(dirDB);
@@ -28,6 +29,7 @@ public class RelationalFactory {
 		_prop = new Propriedade(_connection); 
 		_dependencia = new Dependencia(_connection);
 		_ficheiro = new Ficheiro(_connection,corpusName);
+        _sentenceDB = new SentenceDB(_connection, corpusName);
 	}
 
 	public static Palavra getPalavra() {
@@ -52,6 +54,10 @@ public class RelationalFactory {
 
     public static Ficheiro getFicheiro(){
         return _ficheiro;
+    }
+
+    public static SentenceDB getSentenceDB(){
+        return _sentenceDB;
     }
 
 	public void closeConnection() {

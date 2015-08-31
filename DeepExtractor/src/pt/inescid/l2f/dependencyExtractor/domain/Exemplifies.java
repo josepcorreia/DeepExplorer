@@ -18,27 +18,36 @@ public class Exemplifies {
         this._prop = prop;
     }
 
-    public int get_sentenceNumber() {
+    public Exemplifies(Sentence sentence, Coocorrence coocorrence) {
+        this._sentenceNumber = sentence.getSentenceNumber();
+        this._filename = sentence.getFilename();
+        this._idPalavra1 = coocorrence.getIdPalavra1();
+        this._idPalavra2 = coocorrence.getIdPalavra2();
+        this._depName = coocorrence.getDependency();
+        this._prop = coocorrence.getProperty();
+    }
+
+    public int getSentenceNumber() {
         return _sentenceNumber;
     }
 
-    public String get_filename() {
+    public String getFilename() {
         return _filename;
     }
 
-    public Long get_idPalavra1() {
+    public Long getIdPalavra1() {
         return _idPalavra1;
     }
 
-    public Long get_idPalavra2() {
+    public Long getIdPalavra2() {
         return _idPalavra2;
     }
 
-    public String get_depName() {
+    public String getDependency() {
         return _depName;
     }
 
-    public String get_prop() {
+    public String getProperty() {
         return _prop;
     }
 

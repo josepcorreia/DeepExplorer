@@ -2,6 +2,7 @@ package pt.inescid.l2f.dependencyExtractor;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
+import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
 import pt.inescid.l2f.xipapi.domain.Dependency;
@@ -24,18 +25,18 @@ public class DependencyExtractor {
 		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
 		
 		int sentenceNumber = 0;
-		for (XIPNode sentence : document.getSentences()) {
+		for (XIPNode sentenceNode : document.getSentences()) {
 					
 			//número da frase, sentence.getSentenceNumber() não está a funcinar
-			sentenceNumber = sentence.getNodes().get(0).getSentenceNumber();
+			sentenceNumber = sentenceNode.getNodes().get(0).getSentenceNumber();
 			
-			String Frase = "";
-				for (XIPNode node : sentence.getNodes()) {
-					Frase += node.getSentence();
-				
-				}
-			//	System.out.println("Frase:" + Frase);
-			
+			String sentence_text = "";
+            for (XIPNode node : sentenceNode.getNodes()) {
+                sentence_text += node.getSentence();
+			}
+
+            Sentence sentence = new Sentence(sentenceNumber, filename, sentence_text);
+
 			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
 			for (Dependency dependency : deps) {
 				if("NE".equals(dependency.getName())){
@@ -46,19 +47,23 @@ public class DependencyExtractor {
 			for (Dependency dependency : deps) {
 			
 				if(map.containsKey(dependency.getName())){
-					map.get(dependency.getName()).getDependencyInformation(dependency, _dependencyFactory.NE().getnamedEntetiesNodes());
+					map.get(dependency.getName()).getDependencyInformation(dependency, _dependencyFactory.NE().getnamedEntetiesNodes(), sentence);
 				}
 			}
 			
 			_dependencyFactory.NE().ClearNamedEntetiesNodes();
-			
-			/*if(sentenceNumber==4){
-				return;
-			}*/
-			
+			/*
+			if(sentenceNumber==4){
+                _storage.printSizes();
+                _storage.storeInDatabase();
+                _storage.commit();
+                _storage.cleanMaps();
+                return;
+			}
+			*/
 		}
 		
-		_storage.printSizes();
+		//_storage.printSizes();
 		_storage.storeInDatabase();
 		_storage.commit();
 		_storage.cleanMaps();

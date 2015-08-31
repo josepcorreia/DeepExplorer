@@ -25,7 +25,7 @@ public class Coocorrence {
 		return _property;
 	}
 	
-	public String getDepedency() {
+	public String getDependency() {
 		return _depedency;
 	}
 	

@@ -21,6 +21,7 @@ import pt.inescid.l2f.connection.database.Propriedade;
 import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
+import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.Feature;
@@ -42,7 +43,7 @@ public abstract class DependencyType{
 		 depInformation();
 	}
 
-	public void getDependencyInformation(Dependency dep, HashMap<String, String> namedEnteties){
+	public void getDependencyInformation(Dependency dep, HashMap<String, String> namedEnteties, Sentence sentence){
 		String depname = dep.getName();
 		String prop = getProperty(dep);
 
@@ -71,7 +72,7 @@ public abstract class DependencyType{
 		}
 		
 		if(words.size()== 2){
-			_storage.CheckCoocorrence(new Coocorrence(words.get(0).getIdPalavra(), words.get(1).getIdPalavra(), prop, depname));
+			_storage.CheckCoocorrence(new Coocorrence(words.get(0).getIdPalavra(), words.get(1).getIdPalavra(), prop, depname), sentence);
 		}
 		else{
 			String path = new File("src/out/depError.txt").getAbsolutePath();
