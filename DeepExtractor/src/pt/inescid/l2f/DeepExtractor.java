@@ -63,7 +63,7 @@ public class DeepExtractor {
                         BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
                         document = xipdc.getXipResult(buffer);
 
-                        de.Extract(document);
+                        de.Extract(document, filename);
 
                         RelationalFactory.getFicheiro().insertNewFile(filename);
                     }

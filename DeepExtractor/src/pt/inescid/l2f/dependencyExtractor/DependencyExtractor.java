@@ -20,7 +20,7 @@ public class DependencyExtractor {
 		_dependencyFactory = new DependencyFactory(_storage);
 	}
 	
-	public void Extract(XipDocument document){
+	public void Extract(XipDocument document, String filename){
 		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
 		
 		int sentenceNumber = 0;
