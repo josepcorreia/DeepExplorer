@@ -16,14 +16,14 @@ public class DeepStorage {
 	private HashMap<Word,Long> wordsMap;
 	private HashMap<WordBelongs, Integer> wordBelongsMap;
 	private HashMap<Coocorrence, Integer> coocorrenceMap;
-	private HashSet<Sentence> sentenceSet;
+	private HashMap<Sentence, String> sentenceMap;
 	private HashSet<Exemplifies> exemplifiesSet;
 	
 	public DeepStorage() {
 		this.wordsMap = new HashMap<Word,Long>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
-        this.sentenceSet = new HashSet<Sentence>();
+        this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
 	
@@ -73,8 +73,8 @@ public class DeepStorage {
 	}
 
     public void checkSetence(Sentence sentence, Coocorrence coocorrence){
-        if(!sentenceSet.contains(sentence)){
-            sentenceSet.add(sentence);
+        if(!sentenceMap.containsKey(sentence)){
+            sentenceMap.put(sentence, sentence.getSentenceText());
         }
         Exemplifies ex = new Exemplifies(sentence, coocorrence);
 
@@ -121,12 +121,18 @@ public class DeepStorage {
 			
 		}
 
-       for(Sentence sentence : sentenceSet){
-           sentenceDB.insertNewSentence(sentence);
-       }
-
        for( Exemplifies ex : exemplifiesSet){
-           sentenceDB.insertNewSetenceExample(ex);
+
+           Sentence sentence = new Sentence(ex.getSentenceNumber(), ex.getFilename());
+           Coocorrence coocorrence = new Coocorrence(ex.getIdPalavra1(),ex.getIdPalavra2(), ex.getProperty(), ex.getDependency());
+
+           if(coo.getDependencyFrequency(coocorrence) < 20) {
+               sentence.setSentenceText(sentenceMap.get(sentence));
+               if(!sentenceDB.sentenceExists(sentence)){
+                   sentenceDB.insertNewSentence(sentence);
+               }
+               sentenceDB.insertNewSetenceExample(ex);
+           }
        }
 
 	}
@@ -135,7 +141,7 @@ public class DeepStorage {
 		this.wordsMap = new HashMap<Word,Long>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
-        this.sentenceSet = new HashSet<Sentence>();
+        this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
 	
@@ -143,7 +149,7 @@ public class DeepStorage {
 		System.out.println("WOrd: " + wordsMap.size());
 		System.out.println("WOrdBelongs: " + wordBelongsMap.size());
 		System.out.println("COO: " + coocorrenceMap.size());
-        System.out.println("frase: " + sentenceSet.size());
+        System.out.println("frase: " + sentenceMap.size());
         System.out.println("exemplifica: " + exemplifiesSet.size());
 	}
 

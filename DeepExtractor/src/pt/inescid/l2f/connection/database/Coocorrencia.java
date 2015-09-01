@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
+import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.measures.AssociationMeasures;
 
@@ -54,18 +55,6 @@ public class Coocorrencia extends RelationalElement{
 
 		return rows;
 	}
-
-	/*public void checkCoocorrence(Word word1, Word word2, String prop, String dep){
-
-		Long wordId1 = word1.getIdPalavra();
-		Long wordId2 = word2.getIdPalavra();
-
-		if(coocorrenceExists(wordId1, wordId2, prop, dep)){
-			uptadeFrequency(wordId1, wordId2, prop, dep);
-		}else{
-			insertCoocorrence(wordId1, wordId2, prop, dep);
-		}
-	}*/
 
 	public void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName, int freq){
 		Connection connection = getConnetion();
@@ -181,7 +170,12 @@ public class Coocorrencia extends RelationalElement{
 		}//end finally try	   
 	}
 
-	public int getDependencyFrequency(long wordId1, long wordId2, String prop, String dep){
+	public int getDependencyFrequency(Coocorrence coocorrence){
+		long wordId1 = coocorrence.getIdPalavra1();
+		long wordId2 = coocorrence.getIdPalavra2();
+		String prop = coocorrence.getProperty();
+		String dep = coocorrence.getDependency();
+
 		Connection connection = getConnetion();
 
 		Statement stmt = null;

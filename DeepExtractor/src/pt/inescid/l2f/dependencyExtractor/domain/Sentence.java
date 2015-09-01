@@ -3,13 +3,22 @@ package pt.inescid.l2f.dependencyExtractor.domain;
 public class Sentence {
 	private int _sentenceNumber;
 	private String _filename;
-	private String _sentence;
+	private String _sentence_text;
 
 
 	public Sentence(int sentenceNumber, String filename, String sentence) {
 		_sentenceNumber = sentenceNumber;
         _filename = filename;
-        _sentence = sentence;
+        _sentence_text = sentence;
+    }
+
+    public Sentence(int sentenceNumber, String filename) {
+        _sentenceNumber = sentenceNumber;
+        _filename = filename;
+    }
+
+    public void setSentenceText(String text){
+        _sentence_text = text;
     }
 
     public int getSentenceNumber() {
@@ -20,8 +29,8 @@ public class Sentence {
         return _filename;
     }
 
-    public String getSentence() {
-        return _sentence;
+    public String getSentenceText() {
+        return _sentence_text;
     }
 
     @Override
@@ -32,8 +41,7 @@ public class Sentence {
         Sentence sentence = (Sentence) o;
 
         if (_sentenceNumber != sentence._sentenceNumber) return false;
-        if (_filename != null ? !_filename.equals(sentence._filename) : sentence._filename != null) return false;
-        return !(_sentence != null ? !_sentence.equals(sentence._sentence) : sentence._sentence != null);
+        return !(_filename != null ? !_filename.equals(sentence._filename) : sentence._filename != null);
 
     }
 
@@ -41,7 +49,6 @@ public class Sentence {
     public int hashCode() {
         int result = _sentenceNumber;
         result = 31 * result + (_filename != null ? _filename.hashCode() : 0);
-        result = 31 * result + (_sentence != null ? _sentence.hashCode() : 0);
         return result;
     }
 
@@ -50,7 +57,7 @@ public class Sentence {
         return "Sentence{" +
                 "_sentenceNumber=" + _sentenceNumber +
                 ", _filename='" + _filename + '\'' +
-                ", _sentence='" + _sentence + '\'' +
+                ", _sentence='" + _sentence_text + '\'' +
                 '}';
     }
 }

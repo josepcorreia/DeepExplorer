@@ -68,7 +68,6 @@ public class Palavra extends RelationalElement{
 		
 		String lemma = word.getLemma().replace("'","''");
 		String pos = word.getPOS();
-		String categoria = "cat";
 		Long id = (long)0;
 		
 		Statement stmt = null;
@@ -76,7 +75,7 @@ public class Palavra extends RelationalElement{
 			stmt = connection.createStatement();
 			
 			//Insert into Palavra (idPalavra, palavra, classe)
-			String query = "INSERT INTO Palavra VALUES( NULL, '"+ lemma + "' , '" + pos + "' , '" + categoria+"' );";
+			String query = "INSERT INTO Palavra VALUES( NULL, '"+ lemma + "' , '" + pos + "' );";
 						   
 			stmt.executeUpdate(query);
 			
@@ -262,7 +261,7 @@ public class Palavra extends RelationalElement{
 	  Connection connection = getConnetion();	
 	  
 	  Statement stmt = null;
-  		long freq = 0;
+  		int freq = 0;
   		
 		try{
 			stmt = connection.createStatement();
@@ -276,7 +275,7 @@ public class Palavra extends RelationalElement{
 
 			
 			if(rs.next()){
-				freq = rs.getLong("frequencia");
+				freq = rs.getInt("frequencia");
 			}
 
 			rs.close(); 
