@@ -138,37 +138,111 @@ public class Coocorrencia extends RelationalElement{
 
 		throw new CoocorrenceNotExist();
 	}
-	public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep, int freq){
-		Connection connection = getConnetion();
 
-		Statement stmt = null;
-		try{
-			stmt = connection.createStatement();
-			String sql = "UPDATE Coocorrencia " +
-					"SET frequencia = frequencia + " + freq + " "+
-					"WHERE idPalavra1='"+ wordId1 +
-					"' AND idPalavra2='" + wordId2 + 
-					"' AND nomeProp='" + prop + 
-					"' AND tipoDep = '" + dep + 
-					"' AND nomeCorpus= '"+ _corpusName +"'";
+    public long getNumberCoocorrencesWord1(long wordId1, String dep, String prop){
+        //total number of coocorrences in database
+        Connection connection = getConnetion();
 
-			stmt.executeUpdate(sql);
+        Statement stmt = null;
+        long total = 0;
 
-		}catch(SQLException se){
-			//Handle errors for JDBC
-			System.out.println("|| COOO frequencia");
-			se.printStackTrace();
-		}finally{
-			//finally block used to close resources
-			try{
-				if(stmt!=null)
-					stmt.close();
-				
-			}catch(SQLException se){
-			}// do nothing
+        try{
+            stmt = connection.createStatement();
+            String sql = "SELECT sum(frequencia) as total FROM Coocorrencia Where idPalavra1 = "+ wordId1 +" and tipoDep = '"+ dep +"' and nomeProp = '" + prop+ "';";
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                total = rs.getLong("total");
+            }
 
-		}//end finally try	   
-	}
+            rs.close();
+
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            System.out.println("|| COO: Numero total de coocorrencias");
+            se.printStackTrace();
+
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+
+            }catch(SQLException se){
+            }// do nothing
+        }//end finally try
+
+        return total;
+    }
+
+    public long getNumberCoocorrencesWord2(long wordId2, String dep, String prop){
+        //total number of coocorrences in database
+        Connection connection = getConnetion();
+
+        Statement stmt = null;
+        long total = 0;
+
+        try{
+            stmt = connection.createStatement();
+            String sql = "SELECT sum(frequencia) as total FROM Coocorrencia Where idPalavra2 ="+ wordId2 +" and tipoDep = '"+ dep +"' and nomeProp = '" + prop+ "';";
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                total = rs.getLong("total");
+            }
+
+            rs.close();
+
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            System.out.println("|| COO: Numero total de coocorrencias");
+            se.printStackTrace();
+
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+
+            }catch(SQLException se){
+            }// do nothing
+        }//end finally try
+
+        return total;
+    }
+
+    public long getDepNumberCoocorrences(String dep, String prop){
+        //total number of coocorrences in database for dep x and prop y
+        Connection connection = getConnetion();
+
+        Statement stmt = null;
+        long total = 0;
+
+        try{
+            stmt = connection.createStatement();
+            String sql = "SELECT sum(frequencia) as total FROM Coocorrencia Where tipoDep = '"+ dep +"' and nomeProp = '" + prop+ "';";
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                total = rs.getLong("total");
+            }
+
+            rs.close();
+
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            System.out.println("|| COO: Numero total de coocorrencias");
+            se.printStackTrace();
+
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+
+            }catch(SQLException se){
+            }// do nothing
+        }//end finally try
+
+        return total;
+    }
 
 	public int getDependencyFrequency(Coocorrence coocorrence){
 		long wordId1 = coocorrence.getIdPalavra1();
@@ -183,19 +257,19 @@ public class Coocorrencia extends RelationalElement{
 
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT frequencia " + 
+			String sql = "SELECT frequencia " +
 					"FROM Coocorrencia " +
-					"WHERE idPalavra1 = "+ wordId1 + 
-					" and idPalavra2 = " + wordId2 + 
-					" and tipoDep= '" + dep + 
+					"WHERE idPalavra1 = "+ wordId1 +
+					" and idPalavra2 = " + wordId2 +
+					" and tipoDep= '" + dep +
 					"' and nomeProp = '" + prop +
 					"' and nomeCorpus = '" + _corpusName + "';";
 			ResultSet rs = stmt.executeQuery(sql);
-			if(rs.next()){  
+			if(rs.next()){
 				freq = rs.getInt("frequencia");
 			}
 
-			rs.close(); 
+			rs.close();
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
@@ -207,7 +281,7 @@ public class Coocorrencia extends RelationalElement{
 			try{
 				if(stmt!=null)
 					stmt.close();
-				
+
 			}catch(SQLException se){
 			}// do nothing
 		}//end finally try
@@ -215,11 +289,50 @@ public class Coocorrencia extends RelationalElement{
 		return freq ;
 	}
 
-	public String uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep, double pmi, double dice, double logDice) throws SQLException{
+    public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep, int freq){
+        Connection connection = getConnetion();
+
+        Statement stmt = null;
+        try{
+            stmt = connection.createStatement();
+            String sql = "UPDATE Coocorrencia " +
+                    "SET frequencia = frequencia + " + freq + " "+
+                    "WHERE idPalavra1='"+ wordId1 +
+                    "' AND idPalavra2='" + wordId2 +
+                    "' AND nomeProp='" + prop +
+                    "' AND tipoDep = '" + dep +
+                    "' AND nomeCorpus= '"+ _corpusName +"'";
+
+            stmt.executeUpdate(sql);
+
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            System.out.println("|| COOO frequencia");
+            se.printStackTrace();
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+
+            }catch(SQLException se){
+            }// do nothing
+
+        }//end finally try
+    }
+
+	public String uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep,
+                                                                                    double pmi,
+                                                                                    double dice,
+                                                                                    double logDice,
+                                                                                    double chisquarePearson,
+                                                                                    double loglikelihood) throws SQLException{
 
 		String sql = "UPDATE Coocorrencia "+ 
-				"SET PMI = " + pmi + " , Dice = " + dice + " , LogDice = " + logDice + 
-				" WHERE idPalavra1 = " + wordId1+
+				"SET PMI = '" + pmi + "' , Dice = '" + dice + "' , LogDice = '" + logDice +
+                                                            "' , ChiPearson = '" + chisquarePearson +
+                                                            "' , LogLikelihood = '" + loglikelihood +
+				"' WHERE idPalavra1 = " + wordId1+
 				" and idPalavra2 = "+ wordId2 +
 				" and nomeProp = '" + prop +
 				"' and tipoDep = '"+ dep +
@@ -234,7 +347,8 @@ public class Coocorrencia extends RelationalElement{
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 
-		HashMap<String, Long> nWords = new HashMap<String, Long>();
+		HashMap<String, Long> totalWordsDeps = new HashMap<String, Long>();
+        HashMap<String, Long> totalCoocorrenceDeps = new HashMap<String, Long>();
 
 		int index = 0;
 		while(index < totalrows){
@@ -252,29 +366,50 @@ public class Coocorrencia extends RelationalElement{
 				while(rs.next()){  
 					long word1 = rs.getLong("idPalavra1");
 					long word2 = rs.getLong("idPalavra2");
-					long depfreq = rs.getLong("frequencia");
-					String dep = rs.getString("tipoDep");
-					String prop =  rs.getString("nomeProp");
-					long nWordDep = 0;
+                    long depfreq = rs.getLong("frequencia");
 
-					if(nWords.containsKey(dep)){
-						nWordDep = nWords.get(dep); 
+                    String dep = rs.getString("tipoDep");
+					String prop =  rs.getString("nomeProp");
+                    String depProp = dep + "_" + prop;
+
+                    long word1freq = palavra.getWordFrequency(word1, dep, prop);
+                    long word2freq = palavra.getWordFrequency(word2, dep, prop);
+
+                    long word1CococorrenceFreq = getNumberCoocorrencesWord1(word1, dep, prop);
+                    long word2CococorrenceFreq = getNumberCoocorrencesWord2(word2, dep, prop);
+
+
+                    long numberWordDep = 0;
+                    long totalCoocorenceDep = 0;
+
+					if(totalWordsDeps.containsKey(depProp)){
+						numberWordDep = totalWordsDeps.get(depProp);
 					}
 					else{
-						nWordDep = palavra.getNumberWords(dep);
-						nWords.put(dep, nWordDep);
-					}
+						numberWordDep = palavra.getNumberWords(dep, prop);
+                        totalWordsDeps.put(depProp, numberWordDep);
+                    }
 
-					long word1freq = palavra.getWordFrequency(word1,dep, prop); 
+                    if(totalCoocorrenceDeps.containsKey(depProp)){
+                        totalCoocorenceDep = totalWordsDeps.get(depProp);
+                    }
+                    else{
+                        totalCoocorenceDep = getDepNumberCoocorrences(dep, prop);
+                        totalCoocorrenceDeps.put(depProp, numberWordDep);
+                    }
 
-					long word2freq = palavra.getWordFrequency(word2, dep, prop);
-					//System.out.println(nWordDep);
 
-					double pmi = AssociationMeasures.PMI(nWordDep, depfreq, word1freq, word2freq);
-					double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);					
-					double logDice = AssociationMeasures.LogDice(depfreq, word1freq, word2freq);
+                    double pmi = AssociationMeasures.PMI(numberWordDep, depfreq, word1freq, word2freq);
 
-					s.addBatch(uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice));
+                    double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);
+
+                    double logDice = AssociationMeasures.LogDice(depfreq, word1freq, word2freq);
+
+                    double chisquarePearson = AssociationMeasures.chiSquarePearson(totalCoocorenceDep, depfreq, word1CococorrenceFreq, word2CococorrenceFreq);
+
+					double loglikelihood = AssociationMeasures.logLikelihood(numberWordDep, depfreq, word1freq, word2freq);
+
+					s.addBatch(uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice, chisquarePearson, loglikelihood));
 
 				}
 				rs.close(); 

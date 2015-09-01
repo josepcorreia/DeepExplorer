@@ -22,7 +22,7 @@ public class Palavra extends RelationalElement{
 
 	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
 	
-	public long getNumberWords(String depname) {
+	public long getNumberWords(String depname, String prop) {
 		Connection connection = getConnetion();
 		
 		Statement stmt = null;
@@ -33,6 +33,7 @@ public class Palavra extends RelationalElement{
 			String sql = "Select sum(frequencia) as total " + 
 						 "from Pertence " + 
 						 "WHERE tipoDep = '" + depname +
+						 "' and nomeProp = '"+ prop +
 						 "' and nomeCorpus = '"+ _corpusName +"'";
 			
 			ResultSet rs = stmt.executeQuery(sql);
