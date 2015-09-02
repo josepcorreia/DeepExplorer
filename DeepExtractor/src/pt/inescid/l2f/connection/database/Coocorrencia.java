@@ -276,7 +276,9 @@ public class Coocorrencia extends RelationalElement{
 	public void UpdateMeasures(){
 		Connection connection = getConnetion(); 
 		Statement s;
-		
+        Palavra palavra = RelationalFactory.getPalavra();
+        SentenceDB sentenceDB = RelationalFactory.getSentenceDB();
+
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 
@@ -297,8 +299,7 @@ public class Coocorrencia extends RelationalElement{
 				ResultSet rs = stmt.executeQuery(sql);
 				s = connection.createStatement();
 				
-				Palavra palavra = RelationalFactory.getPalavra();
-                SentenceDB sentenceDB = RelationalFactory.getSentenceDB();
+
 				
 				while(rs.next()){  
 					long word1 = rs.getLong("idPalavra1");
@@ -320,7 +321,7 @@ public class Coocorrencia extends RelationalElement{
                     long totalCoocorenceDep = 0;
                     long totalSentencesDep = 0;
 
-                    //HAshmap WORDS (others)
+                    //HAshmap WORDS (others measures)
                     if(totalWordsDeps.containsKey(depProp)){
 						numberWordDep = totalWordsDeps.get(depProp);
 					}
