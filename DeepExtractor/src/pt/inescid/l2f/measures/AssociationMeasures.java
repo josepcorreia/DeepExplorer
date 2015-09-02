@@ -60,9 +60,9 @@ public class AssociationMeasures {
 //        System.out.println(result);
 
         if(result.isNaN())
-            return -1000;
+            return -1;
         if(result.isInfinite())
-            return -100;
+            return -10;
         return result;
     }
     private static double L(double k,double n, double z){

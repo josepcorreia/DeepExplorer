@@ -6,6 +6,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 $dir = "/Users/josecorreia/Projects/DB_site" ;
+//$dir = "/Users/josecorreia/Projects/DB" ;
 //$dir = "/home/josepcorreia/Projects/DB_site";
 $filename = "db_deep.db";
 
