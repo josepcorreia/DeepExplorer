@@ -126,7 +126,7 @@ public class DeepStorage {
            Sentence sentence = new Sentence(ex.getSentenceNumber(), ex.getFilename());
            Coocorrence coocorrence = new Coocorrence(ex.getIdPalavra1(),ex.getIdPalavra2(), ex.getProperty(), ex.getDependency());
 
-           if(coo.getDependencyFrequency(coocorrence) < 20) {
+           if(coo.getCoocorrenceFrequency(coocorrence) < 20) {
                sentence.setSentenceText(sentenceMap.get(sentence));
                if(!sentenceDB.sentenceExists(sentence)){
                    sentenceDB.insertNewSentence(sentence);

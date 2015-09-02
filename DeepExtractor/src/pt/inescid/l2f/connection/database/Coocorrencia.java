@@ -244,7 +244,7 @@ public class Coocorrencia extends RelationalElement{
         return total;
     }
 
-	public int getDependencyFrequency(Coocorrence coocorrence){
+	public int getCoocorrenceFrequency(Coocorrence coocorrence){
 		long wordId1 = coocorrence.getIdPalavra1();
 		long wordId2 = coocorrence.getIdPalavra2();
 		String prop = coocorrence.getProperty();
@@ -326,12 +326,14 @@ public class Coocorrencia extends RelationalElement{
                                                                                     double dice,
                                                                                     double logDice,
                                                                                     double chisquarePearson,
-                                                                                    double loglikelihood) throws SQLException{
+                                                                                    double loglikelihood) throws SQLException{//,
+                                                                                    //double significance) throws SQLException{
 
 		String sql = "UPDATE Coocorrencia "+ 
 				"SET PMI = '" + pmi + "' , Dice = '" + dice + "' , LogDice = '" + logDice +
                                                             "' , ChiPearson = '" + chisquarePearson +
                                                             "' , LogLikelihood = '" + loglikelihood +
+                                                           // "' , Significance = '" + significance +
 				"' WHERE idPalavra1 = " + wordId1+
 				" and idPalavra2 = "+ wordId2 +
 				" and nomeProp = '" + prop +
@@ -347,8 +349,11 @@ public class Coocorrencia extends RelationalElement{
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 
+        int japercorridas = 0;
+
 		HashMap<String, Long> totalWordsDeps = new HashMap<String, Long>();
         HashMap<String, Long> totalCoocorrenceDeps = new HashMap<String, Long>();
+        HashMap<String, Long> totalSentencesDeps = new HashMap<String, Long>();
 
 		int index = 0;
 		while(index < totalrows){
@@ -362,6 +367,7 @@ public class Coocorrencia extends RelationalElement{
 				s = connection.createStatement();
 				
 				Palavra palavra = RelationalFactory.getPalavra();
+                SentenceDB sentenceDB = RelationalFactory.getSentenceDB();
 				
 				while(rs.next()){  
 					long word1 = rs.getLong("idPalavra1");
@@ -381,8 +387,10 @@ public class Coocorrencia extends RelationalElement{
 
                     long numberWordDep = 0;
                     long totalCoocorenceDep = 0;
+                    long totalSentencesDep = 0;
 
-					if(totalWordsDeps.containsKey(depProp)){
+                    //HAshmap WORDS (others)
+                    if(totalWordsDeps.containsKey(depProp)){
 						numberWordDep = totalWordsDeps.get(depProp);
 					}
 					else{
@@ -390,15 +398,24 @@ public class Coocorrencia extends RelationalElement{
                         totalWordsDeps.put(depProp, numberWordDep);
                     }
 
+                    //HAshmap COOCORRENCES (chisquare perason)
                     if(totalCoocorrenceDeps.containsKey(depProp)){
-                        totalCoocorenceDep = totalWordsDeps.get(depProp);
+                        totalCoocorenceDep = totalCoocorrenceDeps.get(depProp);
                     }
                     else{
                         totalCoocorenceDep = getDepNumberCoocorrences(dep, prop);
-                        totalCoocorrenceDeps.put(depProp, numberWordDep);
+                        totalCoocorrenceDeps.put(depProp, totalCoocorenceDep);
                     }
-
-
+/*
+                    //HAshmap SENTENCES (significance)
+                    if(totalSentencesDeps.containsKey(depProp)){
+                        totalSentencesDep = totalSentencesDeps.get(depProp);
+                    }
+                    else{
+                        totalSentencesDep = sentenceDB.getNumberOfSentencesDep(dep, prop);
+                        totalSentencesDeps.put(depProp, totalSentencesDep);
+                    }
+*/
                     double pmi = AssociationMeasures.PMI(numberWordDep, depfreq, word1freq, word2freq);
 
                     double dice = AssociationMeasures.Dice(depfreq, word1freq, word2freq);
@@ -409,7 +426,9 @@ public class Coocorrencia extends RelationalElement{
 
 					double loglikelihood = AssociationMeasures.logLikelihood(numberWordDep, depfreq, word1freq, word2freq);
 
-					s.addBatch(uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice, chisquarePearson, loglikelihood));
+    //                double significance = AssociationMeasures.significance(word1freq,word2freq,depfreq, totalSentencesDep);
+
+					s.addBatch(uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice, chisquarePearson, loglikelihood));//, significance));
 
 				}
 				rs.close(); 
@@ -432,6 +451,9 @@ public class Coocorrencia extends RelationalElement{
 			}//end finally try
 
 			index = index + intervall;
+            japercorridas += intervall;
+
+            System.out.println((double)japercorridas/(double)totalrows);
 
 		}
 		try {

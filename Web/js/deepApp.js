@@ -78,19 +78,19 @@ deepApp.service('sharedInfo', function () {
 deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
    $scope.classes=['Nome','Verbo','Adjetivo','Advérbio']
    $scope.pos = "Classe";
-   $scope.measures=['Dice','LogDice', 'PMI','Frequência']
+   $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência']
    $scope.measure = "Medida";
 
    var posHash = new Array();
     posHash['Nome'] = 'NOUN';
     posHash['Verbo'] = 'VERB';
-    posHash['Adjectivo'] = 'ADJ';
+    posHash['Adjetivo'] = 'ADJ';
     posHash['Advérbio'] = 'ADV';
 
     var urlHash = new Array();
     urlHash['Nome'] = 'nome';
     urlHash['Verbo'] = 'verbo';
-    urlHash['Adjectivo'] = 'adjectivo';
+    urlHash['Adjetivo'] = 'adjetivo';
     urlHash['Advérbio'] = 'adverbio';
 
    $scope.changePos = function(value) {

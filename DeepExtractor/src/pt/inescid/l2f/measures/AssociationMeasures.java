@@ -37,8 +37,7 @@ public class AssociationMeasures {
         double den = (O11+O12)*(O11+O21)*(O12+O22)*(O21+O22);
 		Double result =  num/den;
 
-        System.out.println(ntotalCoocorrences +" "+ coocorrenceFreq+" "+word1CooFreq+" "+word2CooFreq);
-        System.exit(0);
+        //System.out.println(ntotalCoocorrences +" "+ coocorrenceFreq+" "+word1CooFreq+" "+word2CooFreq);
 
         if(result.isNaN())
             return 0;
@@ -46,7 +45,7 @@ public class AssociationMeasures {
         return result;
 	}
 
-    public static double logLikelihood(long ntotalWords, long depfreq, long word1freq, long word2freq ){
+    public static double logLikelihood(long ntotalWords, long depfreq, long word1freq, long word2freq){
         //System.out.println(ntotalWords + " "+ depfreq + " " + word1freq+" "+ word2freq );
 
         double p = (double)word2freq / (double)ntotalWords;
@@ -71,10 +70,25 @@ public class AssociationMeasures {
 
     }
 
+    public static double significance(long word1freq, long word2freq, long depfreq, long totalSentences) {
+        double z = (double)(word1freq * word2freq)/ (double)totalSentences;
+
+            //log(n!) = n*log(n) -n+1 log de base e
+        double logfactorial = depfreq * Math.log(depfreq) - depfreq +1;
+        Double result =  z - (depfreq * Math.log(z)) + logfactorial;
+
+        //System.out.println(word1freq + " " + word2freq + " " + depfreq + " " + totalSentences);
+
+        return result;
+
+    }
+
+
     //util
 	private static double log(double x, int base){
 		double num = Math.log(x);
 		double den = Math.log(base);
 		return (num/den);
 	}
+
 }

@@ -73,7 +73,12 @@
             <classpath refid="classpath"/>
             <arg value="/Users/josecorreia/Projects/DB/"/>
         </java>
-    </target>
+    </target><target name="runMedidasMacSite" depends="main" description="run" >
+	<java classname="${main1}" fork="true">
+		<classpath refid="classpath"/>
+		<arg value="/Users/josecorreia/Projects/DB_site/"/>
+	</java>
+</target>
 	<target name="runTudo" depends="main" description="run" >
 		    <java classname="${main}" fork="true">
 				<classpath refid="classpath"/>
