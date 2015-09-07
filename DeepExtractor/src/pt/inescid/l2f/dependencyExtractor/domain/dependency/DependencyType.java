@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
-import pt.inescid.l2f.connection.database.Coocorrencia;
-import pt.inescid.l2f.connection.database.Dependencia;
-import pt.inescid.l2f.connection.database.Palavra;
-import pt.inescid.l2f.connection.database.Propriedade;
+import pt.inescid.l2f.connection.database.CoocorrenceTable;
+import pt.inescid.l2f.connection.database.DependencyTable;
+import pt.inescid.l2f.connection.database.WordTable;
+import pt.inescid.l2f.connection.database.PropertyTable;
 import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
@@ -66,7 +66,7 @@ public abstract class DependencyType{
 		depname = newDepProp[0];  
 		prop = newDepProp[1];
 		
-		RelationalFactory.getPropriedade().checkProperty(prop, depname);
+		RelationalFactory.getProperty().checkProperty(prop, depname);
 		for (Word w : words) {
 			_storage.CheckWord(w, prop, depname);
 		}
@@ -194,7 +194,7 @@ public abstract class DependencyType{
 		}
 
 		for(String depname : depnames) {
-			RelationalFactory.getDependencia().insertNew(depname);			
+			RelationalFactory.getDependency().insertNew(depname);
 		}
 	}
 }

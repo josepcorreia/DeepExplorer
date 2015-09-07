@@ -13,10 +13,10 @@ import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.measures.AssociationMeasures;
 
 
-public class Coocorrencia extends RelationalElement{
+public class CoocorrenceTable extends RelationalElement{
 	private String _corpusName;
 
-	public Coocorrencia(Connection _connection, String corpusName) {
+	public CoocorrenceTable(Connection _connection, String corpusName) {
 		super(_connection);
 		_corpusName = corpusName;
 	}
@@ -273,11 +273,11 @@ public class Coocorrencia extends RelationalElement{
 		return sql;
 	}
 
-	public void UpdateMeasures(){
+	public void updateMeasures(){
 		Connection connection = getConnetion(); 
 		Statement s;
-        Palavra palavra = RelationalFactory.getPalavra();
-        SentenceDB sentenceDB = RelationalFactory.getSentenceDB();
+        WordTable wordTable = RelationalFactory.getWord();
+        SentenceTable sentenceTable = RelationalFactory.getSentence();
 
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
@@ -310,11 +310,11 @@ public class Coocorrencia extends RelationalElement{
 					String prop =  rs.getString("nomeProp");
                     String depProp = dep + "_" + prop;
 
-                    long word1freq = palavra.getWordFrequency(word1, dep, prop);
-                    long word2freq = palavra.getWordFrequency(word2, dep, prop);
+                    long word1freq = wordTable.getWordFrequency(word1, dep, prop);
+                    long word2freq = wordTable.getWordFrequency(word2, dep, prop);
 
-                    long word1CococorrenceFreq = palavra.getWordFrequency(word1, dep, prop);
-                    long word2CococorrenceFreq = palavra.getWordFrequency(word2, dep, prop);
+                    long word1CococorrenceFreq = wordTable.getWordFrequency(word1, dep, prop);
+                    long word2CococorrenceFreq = wordTable.getWordFrequency(word2, dep, prop);
 
 
                     long numberWordDep = 0;
@@ -326,7 +326,7 @@ public class Coocorrencia extends RelationalElement{
 						numberWordDep = totalWordsDeps.get(depProp);
 					}
 					else{
-						numberWordDep = palavra.getNumberWords(dep, prop);
+						numberWordDep = wordTable.getNumberWords(dep, prop);
                         totalWordsDeps.put(depProp, numberWordDep);
                     }
 
@@ -344,7 +344,7 @@ public class Coocorrencia extends RelationalElement{
                         totalSentencesDep = totalSentencesDeps.get(depProp);
                     }
                     else{
-                        totalSentencesDep = sentenceDB.getNumberOfSentencesDep(dep, prop);
+                        totalSentencesDep = sentenceTable.getNumberOfSentencesDep(dep, prop);
                         totalSentencesDeps.put(depProp, totalSentencesDep);
                     }
 

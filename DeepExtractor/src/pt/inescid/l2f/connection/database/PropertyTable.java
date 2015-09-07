@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Propriedade extends RelationalElement{
+public class PropertyTable extends RelationalElement{
 
-	public Propriedade(Connection _connection) {
+	public PropertyTable(Connection _connection) {
 		super(_connection);
 	}
 	

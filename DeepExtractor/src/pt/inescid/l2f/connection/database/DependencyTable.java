@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Dependencia extends RelationalElement{
+public class DependencyTable extends RelationalElement{
 
 
-	public Dependencia(Connection _connection) {
+	public DependencyTable(Connection _connection) {
 		super(_connection);
 	}
 

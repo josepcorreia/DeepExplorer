@@ -3,19 +3,18 @@ package pt.inescid.l2f.connection.database;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
+
 
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
 
-public class Palavra extends RelationalElement{
+public class WordTable extends RelationalElement{
 	private String _corpusName;
 
 
-	public Palavra(Connection _connection, String corpusName) {
+	public WordTable(Connection _connection, String corpusName) {
 		super(_connection);
 		_corpusName = corpusName;
 	}

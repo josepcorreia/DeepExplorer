@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Corpus extends RelationalElement{
+public class CorpusTable extends RelationalElement{
 
 	
-	public Corpus(Connection _connection) {
+	public CorpusTable(Connection _connection) {
 		super(_connection);
 	}
 

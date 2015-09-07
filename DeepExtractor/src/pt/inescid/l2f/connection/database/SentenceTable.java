@@ -12,11 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SentenceDB extends RelationalElement{
+public class SentenceTable extends RelationalElement{
 	private String _corpusName;
 
 
-	public SentenceDB(Connection _connection, String corpusName) {
+	public SentenceTable(Connection _connection, String corpusName) {
 		super(_connection);
 		_corpusName = corpusName;
 	}

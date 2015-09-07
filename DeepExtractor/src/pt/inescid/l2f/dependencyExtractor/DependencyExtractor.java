@@ -69,7 +69,4 @@ public class DependencyExtractor {
 		_storage.cleanMaps();
 	}
 
-	public void CalculateAssociationMeasures(){
-		RelationalFactory.getCoocorrencia().UpdateMeasures();
-	}
 }

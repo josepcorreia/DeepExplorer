@@ -57,7 +57,7 @@ public class DeepExtractor {
 				if(file.toFile().isFile() && file.toString().endsWith(".xml")){
 					String filename = file.getFileName().toString();
 
-                    if(!RelationalFactory.getFicheiro().fileExists(filename)) {
+                    if(!RelationalFactory.getFile().fileExists(filename)) {
 
                         System.out.println("FILE " + filename);
                         BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
@@ -65,7 +65,7 @@ public class DeepExtractor {
 
                         de.Extract(document, filename);
 
-                        RelationalFactory.getFicheiro().insertNewFile(filename);
+                        RelationalFactory.getFile().insertNewFile(filename);
                     }
 
 				}

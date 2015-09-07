@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
-import pt.inescid.l2f.connection.database.Coocorrencia;
-import pt.inescid.l2f.connection.database.Palavra;
+import pt.inescid.l2f.connection.database.CoocorrenceTable;
+import pt.inescid.l2f.connection.database.WordTable;
 import pt.inescid.l2f.connection.database.RelationalFactory;
-import pt.inescid.l2f.connection.database.SentenceDB;
+import pt.inescid.l2f.connection.database.SentenceTable;
 import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
@@ -28,7 +28,7 @@ public class DeepStorage {
 	}
 	
 	public void CheckWord(Word word, String prop, String depName){
-		Palavra palavra = RelationalFactory.getPalavra();
+		WordTable worddb = RelationalFactory.getWord();
 		
 		if(wordsMap.containsKey(word)){
 			Long id = wordsMap.get(word);
@@ -43,7 +43,7 @@ public class DeepStorage {
 			}			
 		}else{
 			try {
-				Long id = palavra.wordExists(word);
+				Long id = worddb.wordExists(word);
 				word.setIdPalavra(id);
 				wordsMap.put(word, id);
 				
@@ -51,7 +51,7 @@ public class DeepStorage {
 				wordBelongsMap.put(wb,1);
 				
 			} catch (WordNotExist e) {
-				Long id = RelationalFactory.getPalavra().insertNewPalavra(word);
+				Long id = RelationalFactory.getWord().insertNewPalavra(word);
 				word.setIdPalavra(id);
 				wordsMap.put(word, id);
 				
@@ -85,20 +85,20 @@ public class DeepStorage {
 
 	
 	public void storeInDatabase(){
-		Palavra palavra = RelationalFactory.getPalavra();
-		Coocorrencia coo = RelationalFactory.getCoocorrencia();
-        SentenceDB sentenceDB = RelationalFactory.getSentenceDB();
+		WordTable worddb = RelationalFactory.getWord();
+		CoocorrenceTable coo = RelationalFactory.getCoocorrence();
+        SentenceTable sentenceDB = RelationalFactory.getSentence();
 		
 		for (Entry<WordBelongs, Integer>  entry : wordBelongsMap.entrySet() ) {
 			WordBelongs wb = entry.getKey();
 			int freq = entry.getValue();
 			
 			try {
-				if(palavra.wordExistsCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp())){
-					palavra.uptadeFrequency(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
+				if(worddb.wordExistsCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp())){
+					worddb.uptadeFrequency(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
 				}
 			} catch (WordNotExistCorpus e) {
-				palavra.insertPalavraCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);				
+				worddb.insertPalavraCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
 			}	
 		}
 		

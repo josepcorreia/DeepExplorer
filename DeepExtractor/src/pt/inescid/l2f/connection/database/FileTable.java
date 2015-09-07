@@ -2,10 +2,10 @@ package pt.inescid.l2f.connection.database;
 
 import java.sql.*;
 
-public class Ficheiro extends RelationalElement{
+public class FileTable extends RelationalElement{
     private String _corpusName;
 
-	public Ficheiro(Connection _connection, String corpusName) {
+	public FileTable(Connection _connection, String corpusName) {
 		super(_connection);
         _corpusName =  corpusName;
 	}
