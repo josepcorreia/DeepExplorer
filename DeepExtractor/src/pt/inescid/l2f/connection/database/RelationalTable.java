@@ -2,12 +2,10 @@ package pt.inescid.l2f.connection.database;
 
 import java.sql.Connection;
 
-import pt.inescid.l2f.connection.ConnectionSQLite;
-
-public abstract class RelationalElement {
+public abstract class RelationalTable {
 	private Connection _connection = null;
 	
-	public RelationalElement(Connection connection) {
+	public RelationalTable(Connection connection) {
 		_connection = connection;
     }
 

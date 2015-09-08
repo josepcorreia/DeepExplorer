@@ -1,19 +1,22 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.ConnectionSQLite;
+
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import pt.inescid.l2f.connection.ConnectionSQLite;
 
 public class RelationalFactory {
 	private static Connection _connection;
 	private static WordTable _word;
+	private static WordBelongsTable _wordBelongs;
 	private static CoocorrenceTable _coo;
 	private static PropertyTable _prop;
 	private static CorpusTable _corpus;
-	private static DependencyTable _dependencia;
-    private static FileTable _ficheiro;
-	private static SentenceTable _sentenceDB;
+	private static DependencyTable _dependency;
+    private static FileTable _file;
+    private static SentenceTable _sentenceTable;
+    private static ExemplifiesTable _exemplifiesTable;
+
 
 	public RelationalFactory(String corpusName, String dirDB){
 		_connection = ConnectionSQLite.getConnectionSQLite(dirDB);
@@ -25,16 +28,22 @@ public class RelationalFactory {
 		}
 		_corpus = new CorpusTable(_connection);
 		_word = new WordTable(_connection,corpusName);
+        _wordBelongs = new WordBelongsTable(_connection,corpusName);
 		_coo = new CoocorrenceTable(_connection,corpusName);
 		_prop = new PropertyTable(_connection);
-		_dependencia = new DependencyTable(_connection);
-		_ficheiro = new FileTable(_connection,corpusName);
-        _sentenceDB = new SentenceTable(_connection, corpusName);
+		_dependency = new DependencyTable(_connection);
+		_file = new FileTable(_connection,corpusName);
+        _sentenceTable = new SentenceTable(_connection, corpusName);
+        _exemplifiesTable = new ExemplifiesTable(_connection, corpusName);
 	}
 
 	public static WordTable getWord() {
 		return _word;
 	}
+
+    public static WordBelongsTable getWordBelongs() {
+        return _wordBelongs;
+    }
 
 	public static CoocorrenceTable getCoocorrence() {
 		return _coo;
@@ -49,15 +58,19 @@ public class RelationalFactory {
 	}
 
 	public static DependencyTable getDependency() {
-		return _dependencia;
+		return _dependency;
 	}
 
     public static FileTable getFile(){
-        return _ficheiro;
+        return _file;
     }
 
     public static SentenceTable getSentence(){
-        return _sentenceDB;
+        return _sentenceTable;
+    }
+
+    public static ExemplifiesTable getExemplifies(){
+        return _exemplifiesTable;
     }
 
 	public void closeConnection() {

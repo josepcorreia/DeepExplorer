@@ -1,10 +1,10 @@
 package pt.inescid.l2f.xipapi.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Feature {
 

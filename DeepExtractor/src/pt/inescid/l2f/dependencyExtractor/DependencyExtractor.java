@@ -1,6 +1,5 @@
 package pt.inescid.l2f.dependencyExtractor;
 
-import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyFactory;

@@ -1,12 +1,8 @@
 package pt.inescid.l2f.connection.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class DependencyTable extends RelationalElement{
+public class DependencyTable extends RelationalTable {
 
 
 	public DependencyTable(Connection _connection) {

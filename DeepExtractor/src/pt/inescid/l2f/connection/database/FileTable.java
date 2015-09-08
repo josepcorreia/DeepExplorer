@@ -2,7 +2,7 @@ package pt.inescid.l2f.connection.database;
 
 import java.sql.*;
 
-public class FileTable extends RelationalElement{
+public class FileTable extends RelationalTable {
     private String _corpusName;
 
 	public FileTable(Connection _connection, String corpusName) {

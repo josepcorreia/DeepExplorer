@@ -1,16 +1,18 @@
 package pt.inescid.l2f.slotFilling;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Vector;
-
 import pt.inescid.l2f.globalVars.ConstantVals;
-import pt.inescid.l2f.slotFilling.domain.*;
+import pt.inescid.l2f.slotFilling.domain.GenericContainer;
+import pt.inescid.l2f.slotFilling.domain.Person;
+import pt.inescid.l2f.slotFilling.domain.TimeNorm;
 import pt.inescid.l2f.xipapi.domain.*;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
 
 /**
  * This class has the main method for the Slot Filling task.

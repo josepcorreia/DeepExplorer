@@ -1,8 +1,8 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
-import java.util.HashMap;
-
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
+
+import java.util.HashMap;
 
 public class DependencyFactory {
 	private HashMap<String,DependencyType> _dependenciesMap;

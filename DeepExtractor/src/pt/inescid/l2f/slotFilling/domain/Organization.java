@@ -1,12 +1,12 @@
 package pt.inescid.l2f.slotFilling.domain;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Stores information about a Organization entity type.

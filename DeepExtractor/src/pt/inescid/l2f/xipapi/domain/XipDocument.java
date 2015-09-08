@@ -1,25 +1,22 @@
 package pt.inescid.l2f.xipapi.domain;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Vector;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import pt.inescid.l2f.globalVars.ConstantVals;
+import pt.inescid.l2f.slotFilling.domain.Organization;
+import pt.inescid.l2f.slotFilling.domain.Person;
+import pt.inescid.l2f.xipapi.exception.NodeDoesNotExistException;
 
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-
-import org.w3c.dom.*;
-
-import pt.inescid.l2f.globalVars.ConstantVals;
-import pt.inescid.l2f.slotFilling.domain.*;
-import pt.inescid.l2f.xipapi.exception.NodeDoesNotExistException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.*;
 
 public class XipDocument {
 

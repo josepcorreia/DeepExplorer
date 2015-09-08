@@ -1,19 +1,13 @@
 package pt.inescid.l2f.xipapi.domain;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import pt.inescid.l2f.xipapi.exception.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import pt.inescid.l2f.xipapi.exception.FeatureDoesNotExistException;
-import pt.inescid.l2f.xipapi.exception.NodeDoesNotExistException;
-import pt.inescid.l2f.xipapi.exception.NodeHasNoNextSiblingException;
-import pt.inescid.l2f.xipapi.exception.NodeHasNoParentPhraseException;
-import pt.inescid.l2f.xipapi.exception.NodeHasNoPreviousSiblingException;
-import pt.inescid.l2f.xipapi.exception.NodeHasNoSiblingsException;
 
 public class XIPNode {
 

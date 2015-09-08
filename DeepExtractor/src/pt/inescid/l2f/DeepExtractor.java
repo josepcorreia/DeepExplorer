@@ -1,18 +1,15 @@
 package pt.inescid.l2f;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.DirectoryIteratorException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.*;
 
 
 public class DeepExtractor {
@@ -47,7 +44,8 @@ public class DeepExtractor {
 	
 	public static void inspectDirectory(Path path, XipDocumentFactory xipdc, DependencyExtractor de){
 		XipDocument document = null;
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+		try{
+			DirectoryStream<Path> stream = Files.newDirectoryStream(path);
 			for (Path file: stream) {
 				if(file.toFile().isDirectory()){
 					System.out.println("DIRECTORY " +file.getFileName());
@@ -71,11 +69,15 @@ public class DeepExtractor {
 				}
 
 			}
-		} catch (IOException | DirectoryIteratorException x) {
+		} catch (IOException x) {
 			// IOException can never be thrown by the iteration.
 			// In this snippet, it can only be thrown by newDirectoryStream.
 			System.err.println(x);
-		}catch(Exception e1){
+		} catch (DirectoryIteratorException x) {
+			// IOException can never be thrown by the iteration.
+			// In this snippet, it can only be thrown by newDirectoryStream.
+			System.err.println(x);
+		} catch(Exception e1){
 			System.err.println("DeepExplorer: input error");
 			e1.printStackTrace();
 		return;

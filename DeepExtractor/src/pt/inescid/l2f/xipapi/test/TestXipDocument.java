@@ -1,16 +1,8 @@
 package pt.inescid.l2f.xipapi.test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.xml.sax.SAXException;
-
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.Token;
@@ -19,6 +11,11 @@ import pt.inescid.l2f.xipapi.domain.XipDocument;
 import pt.inescid.l2f.xipapi.exception.NodeHasNoNextSiblingException;
 import pt.inescid.l2f.xipapi.exception.NodeHasNoPreviousSiblingException;
 import pt.inescid.l2f.xipapi.exception.NodeHasNoSiblingsException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class TestXipDocument extends TestCase {
 

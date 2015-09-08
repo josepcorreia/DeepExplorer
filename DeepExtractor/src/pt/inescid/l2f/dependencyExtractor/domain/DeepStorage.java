@@ -1,16 +1,13 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
-
-import pt.inescid.l2f.connection.database.CoocorrenceTable;
-import pt.inescid.l2f.connection.database.WordTable;
-import pt.inescid.l2f.connection.database.RelationalFactory;
-import pt.inescid.l2f.connection.database.SentenceTable;
+import pt.inescid.l2f.connection.database.*;
 import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
 
 public class DeepStorage {
 	private HashMap<Word,Long> wordsMap;
@@ -51,7 +48,7 @@ public class DeepStorage {
 				wordBelongsMap.put(wb,1);
 				
 			} catch (WordNotExist e) {
-				Long id = RelationalFactory.getWord().insertNewPalavra(word);
+				Long id = RelationalFactory.getWord().insertNewWord(word);
 				word.setIdPalavra(id);
 				wordsMap.put(word, id);
 				
@@ -86,19 +83,21 @@ public class DeepStorage {
 	
 	public void storeInDatabase(){
 		WordTable worddb = RelationalFactory.getWord();
+		WordBelongsTable wordBelongsdb = RelationalFactory.getWordBelongs();
 		CoocorrenceTable coo = RelationalFactory.getCoocorrence();
         SentenceTable sentenceDB = RelationalFactory.getSentence();
+		ExemplifiesTable exemplifiesDB = RelationalFactory.getExemplifies();
 		
 		for (Entry<WordBelongs, Integer>  entry : wordBelongsMap.entrySet() ) {
 			WordBelongs wb = entry.getKey();
 			int freq = entry.getValue();
 			
 			try {
-				if(worddb.wordExistsCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp())){
-					worddb.uptadeFrequency(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
+				if(wordBelongsdb.wordExistsCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp())){
+					wordBelongsdb.uptadeFrequency(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
 				}
 			} catch (WordNotExistCorpus e) {
-				worddb.insertPalavraCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
+				wordBelongsdb.insertWordCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
 			}	
 		}
 		
@@ -131,7 +130,7 @@ public class DeepStorage {
                if(!sentenceDB.sentenceExists(sentence)){
                    sentenceDB.insertNewSentence(sentence);
                }
-               sentenceDB.insertNewSetenceExample(ex);
+               exemplifiesDB.insertNewSetenceExample(ex);
            }
        }
 

@@ -1,19 +1,14 @@
 package pt.inescid.l2f.connection.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-
 import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
 import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
-import pt.inescid.l2f.dependencyExtractor.domain.Word;
 import pt.inescid.l2f.measures.AssociationMeasures;
 
+import java.sql.*;
+import java.util.HashMap;
 
-public class CoocorrenceTable extends RelationalElement{
+
+public class CoocorrenceTable extends RelationalTable {
 	private String _corpusName;
 
 	public CoocorrenceTable(Connection _connection, String corpusName) {
@@ -203,7 +198,7 @@ public class CoocorrenceTable extends RelationalElement{
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
-			System.out.println("Frequencia duma denpedencia");
+			System.out.println("Frequencia duma dependencia");
 			se.printStackTrace();
 
 		}finally{
@@ -276,8 +271,8 @@ public class CoocorrenceTable extends RelationalElement{
 	public void updateMeasures(){
 		Connection connection = getConnetion(); 
 		Statement s;
-        WordTable wordTable = RelationalFactory.getWord();
-        SentenceTable sentenceTable = RelationalFactory.getSentence();
+        WordBelongsTable wordBelongsTable = RelationalFactory.getWordBelongs();
+        ExemplifiesTable exemplifiesTable = RelationalFactory.getExemplifies();
 
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
@@ -310,11 +305,11 @@ public class CoocorrenceTable extends RelationalElement{
 					String prop =  rs.getString("nomeProp");
                     String depProp = dep + "_" + prop;
 
-                    long word1freq = wordTable.getWordFrequency(word1, dep, prop);
-                    long word2freq = wordTable.getWordFrequency(word2, dep, prop);
+                    long word1freq = wordBelongsTable.getWordFrequency(word1, dep, prop);
+                    long word2freq = wordBelongsTable.getWordFrequency(word2, dep, prop);
 
-                    long word1CococorrenceFreq = wordTable.getWordFrequency(word1, dep, prop);
-                    long word2CococorrenceFreq = wordTable.getWordFrequency(word2, dep, prop);
+                    long word1CococorrenceFreq = wordBelongsTable.getWordFrequency(word1, dep, prop);
+                    long word2CococorrenceFreq = wordBelongsTable.getWordFrequency(word2, dep, prop);
 
 
                     long numberWordDep = 0;
@@ -326,7 +321,7 @@ public class CoocorrenceTable extends RelationalElement{
 						numberWordDep = totalWordsDeps.get(depProp);
 					}
 					else{
-						numberWordDep = wordTable.getNumberWords(dep, prop);
+						numberWordDep = wordBelongsTable.getDepNumberWords(dep, prop);
                         totalWordsDeps.put(depProp, numberWordDep);
                     }
 
@@ -344,7 +339,7 @@ public class CoocorrenceTable extends RelationalElement{
                         totalSentencesDep = totalSentencesDeps.get(depProp);
                     }
                     else{
-                        totalSentencesDep = sentenceTable.getNumberOfSentencesDep(dep, prop);
+                        totalSentencesDep = exemplifiesTable.getNumberOfSentencesDep(dep, prop);
                         totalSentencesDeps.put(depProp, totalSentencesDep);
                     }
 

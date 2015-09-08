@@ -1,12 +1,8 @@
 package pt.inescid.l2f.connection.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class PropertyTable extends RelationalElement{
+public class PropertyTable extends RelationalTable {
 
 	public PropertyTable(Connection _connection) {
 		super(_connection);

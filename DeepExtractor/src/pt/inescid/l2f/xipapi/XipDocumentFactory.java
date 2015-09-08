@@ -1,28 +1,23 @@
 package pt.inescid.l2f.xipapi;
 
-import java.io.BufferedReader;
-//import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-//import java.util.Scanner;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import pt.inescid.l2f.xipapi.domain.Dependency;
-import pt.inescid.l2f.xipapi.domain.Feature;
-import pt.inescid.l2f.xipapi.domain.Token;
-import pt.inescid.l2f.xipapi.domain.XIPNode;
-import pt.inescid.l2f.xipapi.domain.XipDocument;
+import pt.inescid.l2f.xipapi.domain.*;
 import pt.inescid.l2f.xipapi.exception.NodeDoesNotExistException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+//import java.io.FileInputStream;
+//import java.util.Scanner;
 
 public class XipDocumentFactory {
 

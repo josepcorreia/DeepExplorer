@@ -1,9 +1,9 @@
 package pt.inescid.l2f.slotFilling;
 
-import java.util.Vector;
-
 import pt.inescid.l2f.slotFilling.domain.Organization;
 import pt.inescid.l2f.slotFilling.domain.Person;
+
+import java.util.Vector;
 
 
 /**

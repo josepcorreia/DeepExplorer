@@ -1,7 +1,5 @@
 package pt.inescid.l2f.measures;
 
-import java.lang.Math;
-
 public class AssociationMeasures {
 
 	public  static double PMI(long ntotalWords, long depfreq, long word1freq, long word2freq ){

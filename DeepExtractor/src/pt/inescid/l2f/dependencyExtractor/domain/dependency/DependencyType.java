@@ -1,23 +1,5 @@
 package pt.inescid.l2f.dependencyExtractor.domain.dependency;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
-
-import pt.inescid.l2f.connection.database.CoocorrenceTable;
-import pt.inescid.l2f.connection.database.DependencyTable;
-import pt.inescid.l2f.connection.database.WordTable;
-import pt.inescid.l2f.connection.database.PropertyTable;
 import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
@@ -28,7 +10,11 @@ import pt.inescid.l2f.xipapi.domain.Feature;
 import pt.inescid.l2f.xipapi.domain.Token;
 import pt.inescid.l2f.xipapi.domain.XIPNode;
 
-
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
 
 public abstract class DependencyType{
 	private DeepStorage _storage;
@@ -126,25 +112,22 @@ public abstract class DependencyType{
 		return pos;
 	}
 	protected Word getWord(XIPNode node, String pos, HashMap<String, String> namedEnteties) {
-		String lemma = CheckNomedEntity(node, namedEnteties); 
+		String lemma = CheckNomedEntity(node, namedEnteties);
 
-		switch (pos) {
-			case "TOP":  lemma = "Frase";
-				break;
-			default: 	
-				if(lemma.equals("noNE")){
-					for (Token token : node.getTokens()){
-						lemma = "";
-						if(!lemma.isEmpty()){
-							lemma += " " + token.getLemmas().element();
-						} 
-						else {
-							lemma = token.getLemmas().element();						
-						}
-					}
-				}
-				break;
-			}
+        if (pos.equals("TOP")) {
+            lemma = "Frase";
+        } else {
+            if (lemma.equals("noNE")) {
+                for (Token token : node.getTokens()) {
+                    lemma = "";
+                    if (!lemma.isEmpty()) {
+                        lemma += " " + token.getLemmas().element();
+                    } else {
+                        lemma = token.getLemmas().element();
+                    }
+                }
+            }
+        }
 		return new Word(lemma, pos);
 	}
 
@@ -174,7 +157,10 @@ public abstract class DependencyType{
                 depPropTable.put(aux[0], aux[1]);
 		    }
 
-		} catch (UnsupportedEncodingException | FileNotFoundException e) {
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {

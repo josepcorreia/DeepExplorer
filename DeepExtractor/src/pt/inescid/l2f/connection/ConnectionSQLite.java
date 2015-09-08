@@ -1,8 +1,9 @@
 package pt.inescid.l2f.connection;
 
 //Classes necessárias para a conexão à base de dados
-import java.sql.Connection; 
-import java.sql.DriverManager; 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionSQLite {

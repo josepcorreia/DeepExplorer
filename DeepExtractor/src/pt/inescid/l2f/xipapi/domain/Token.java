@@ -1,9 +1,9 @@
 package pt.inescid.l2f.xipapi.domain;
 
-import java.util.LinkedList;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import java.util.LinkedList;
 
 
 
