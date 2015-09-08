@@ -1,4 +1,4 @@
-package pt.inescid.l2f.dependencyExtractor.domain.dependency;
+package pt.inescid.l2f.dependencyExtractor.dependency;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;

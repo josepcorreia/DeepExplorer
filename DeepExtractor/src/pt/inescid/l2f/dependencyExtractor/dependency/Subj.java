@@ -1,11 +1,11 @@
-package pt.inescid.l2f.dependencyExtractor.domain.dependency;
+package pt.inescid.l2f.dependencyExtractor.dependency;
 
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 
-public class Quantd extends DependencyType{
+public class Subj extends DependencyType{
 
-	public Quantd(DeepStorage _storage) {
+	public Subj(DeepStorage _storage) {
 		super(_storage);
 	}
 
@@ -15,4 +15,5 @@ public class Quantd extends DependencyType{
 
 		return prop;
 	}
+
 }

@@ -2,8 +2,8 @@ package pt.inescid.l2f.dependencyExtractor;
 
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
-import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyFactory;
-import pt.inescid.l2f.dependencyExtractor.domain.dependency.DependencyType;
+import pt.inescid.l2f.dependencyExtractor.dependency.DependencyFactory;
+import pt.inescid.l2f.dependencyExtractor.dependency.DependencyType;
 import pt.inescid.l2f.xipapi.domain.Dependency;
 import pt.inescid.l2f.xipapi.domain.XIPNode;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
@@ -28,11 +28,8 @@ public class DependencyExtractor {
 					
 			//número da frase, sentence.getSentenceNumber() não está a funcinar
 			sentenceNumber = sentenceNode.getNodes().get(0).getSentenceNumber();
-			
-			String sentence_text = "";
-            for (XIPNode node : sentenceNode.getNodes()) {
-                sentence_text += node.getSentence();
-			}
+
+			String sentence_text = sentenceNode.getSentence();
 
             Sentence sentence = new Sentence(sentenceNumber, filename, sentence_text);
 
@@ -51,8 +48,8 @@ public class DependencyExtractor {
 			}
 			
 			_dependencyFactory.NE().ClearNamedEntetiesNodes();
-			/*
-			if(sentenceNumber==4){
+
+			/*if(sentenceNumber==4){
                 _storage.printSizes();
                 _storage.storeInDatabase();
                 _storage.commit();
