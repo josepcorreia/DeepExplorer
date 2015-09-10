@@ -37,7 +37,11 @@ public abstract class DependencyType{
 
 		for (XIPNode node : dep.getNodes()){
 			String pos = getPOS(node);
-			prop = getPropPOS(prop ,pos);
+
+
+			if(!prop.isEmpty())
+				prop += "_";
+			prop += pos;
 			
 			Word word = getWord(node, pos, namedEnteties);
 			words.add(word);
@@ -131,13 +135,6 @@ public abstract class DependencyType{
 		return new Word(lemma, pos);
 	}
 
-	protected String getPropPOS(String prop, String pos) {
-		if(!prop.isEmpty())
-			prop += "_"; 
-			
-		prop += pos;		
-		return prop;
-	}
 
 	private HashMap<String, String> getDepPropTable() {
 		HashMap<String, String> depPropTable = new HashMap<String, String>();
