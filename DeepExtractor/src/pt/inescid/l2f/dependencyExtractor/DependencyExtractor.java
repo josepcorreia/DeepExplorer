@@ -49,14 +49,14 @@ public class DependencyExtractor {
 			
 			_dependencyFactory.NE().ClearNamedEntetiesNodes();
 
-			/*if(sentenceNumber==4){
+			/*if(sentenceNumber==1){
                 _storage.printSizes();
                 _storage.storeInDatabase();
                 _storage.commit();
                 _storage.cleanMaps();
                 return;
-			}
-			*/
+			}*/
+
 		}
 		
 		//_storage.printSizes();

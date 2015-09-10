@@ -1,7 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
 public class Word {
-	private Long _idPalavra;
+	private Long _wordId;
 	private String _lemma;
 	private String _pos;
 	
@@ -10,13 +10,14 @@ public class Word {
 		this._pos = pos;
 	}
 	
-	public void setIdPalavra(Long id) {
-		_idPalavra = id;
+	public void setWordId(Long id) {
+		_wordId = id;
 	}
 	
-	public Long getIdPalavra() {
-		return _idPalavra;
+	public Long getWordId() {
+		return _wordId;
 	}
+
 	public String getLemma() {
 		return _lemma;
 	}
@@ -58,7 +59,7 @@ public class Word {
 
 	@Override
 	public String toString() {
-		return "Word [idPalavra=" + _idPalavra + ", lemma=" + _lemma
+		return "Word [idPalavra=" + _wordId + ", lemma=" + _lemma
 				+ ", pos=" + _pos + "]";
 	}
 }

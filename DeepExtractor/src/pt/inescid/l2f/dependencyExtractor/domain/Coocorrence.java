@@ -1,25 +1,33 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
 public class Coocorrence {
-	private long _idPalavra1;
-	private long _idPalavra2;
 	private String _property;
 	private String _depedency;
+	private Word _word1;
+	private Word _word2;
 
-	public Coocorrence(long _idPalavra1, long _idPalavra2, String _property,
-			String _depedency) {
-		this._idPalavra1 = _idPalavra1;
-		this._idPalavra2 = _idPalavra2;
+
+	public Coocorrence(Word word1, Word word2, String _property, String _depedency) {
+		this._word1 = word1;
+		this._word2 = word2;
 		this._property = _property;
 		this._depedency = _depedency;
 	}
-	public long getIdPalavra1() {
-		return _idPalavra1;
+	public long getWordId1() {
+		return _word1.getWordId();
 	}
 	
-	public long getIdPalavra2() {
-		return _idPalavra2;
+	public long getWordId2() {
+		return _word2.getWordId();
 	}
+
+    public Word getWord1(){
+        return _word1;
+    }
+
+    public Word getWord2(){
+        return _word2;
+    }
 
 	public String getProperty() {
 		return _property;
@@ -28,49 +36,34 @@ public class Coocorrence {
 	public String getDependency() {
 		return _depedency;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Coocorrence)) return false;
+
+		Coocorrence that = (Coocorrence) o;
+
+		if (_property != null ? !_property.equals(that._property) : that._property != null) return false;
+		if (_depedency != null ? !_depedency.equals(that._depedency) : that._depedency != null) return false;
+		if (_word1 != null ? !_word1.equals(that._word1) : that._word1 != null) return false;
+		return !(_word2 != null ? !_word2.equals(that._word2) : that._word2 != null);
+
+	}
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((_depedency == null) ? 0 : _depedency.hashCode());
-		result = prime * result + (int) (_idPalavra1 ^ (_idPalavra1 >>> 32));
-		result = prime * result + (int) (_idPalavra2 ^ (_idPalavra2 >>> 32));
-		result = prime * result
-				+ ((_property == null) ? 0 : _property.hashCode());
+		int result = _property != null ? _property.hashCode() : 0;
+		result = 31 * result + (_depedency != null ? _depedency.hashCode() : 0);
+		result = 31 * result + (_word1 != null ? _word1.hashCode() : 0);
+		result = 31 * result + (_word2 != null ? _word2.hashCode() : 0);
 		return result;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Coocorrence other = (Coocorrence) obj;
-		if (_depedency == null) {
-			if (other._depedency != null)
-				return false;
-		} else if (!_depedency.equals(other._depedency))
-			return false;
-		if (_idPalavra1 != other._idPalavra1)
-			return false;
-		if (_idPalavra2 != other._idPalavra2)
-			return false;
-		if (_property == null) {
-			if (other._property != null)
-				return false;
-		} else if (!_property.equals(other._property))
-			return false;
-		return true;
-	}
+
 	@Override
 	public String toString() {
-		return "Coocorrence [idPalavra1=" + _idPalavra1 + ", idPalavra2="
-				+ _idPalavra2 + ", property=" + _property + ", depedency="
+		return "Coocorrence [idPalavra1=" + _word1.getWordId() + ", idPalavra2="
+				+ _word2.getWordId() + ", property=" + _property + ", depedency="
 				+ _depedency + "]";
 	}
 

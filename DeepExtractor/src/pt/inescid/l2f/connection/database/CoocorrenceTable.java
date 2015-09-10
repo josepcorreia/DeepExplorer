@@ -170,8 +170,8 @@ public class CoocorrenceTable extends RelationalTable {
     }
 
 	public int getCoocorrenceFrequency(Coocorrence coocorrence){
-		long wordId1 = coocorrence.getIdPalavra1();
-		long wordId2 = coocorrence.getIdPalavra2();
+		long wordId1 = coocorrence.getWordId1();
+		long wordId2 = coocorrence.getWordId2();
 		String prop = coocorrence.getProperty();
 		String dep = coocorrence.getDependency();
 

@@ -10,57 +10,46 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 
 public class DeepStorage {
-	private HashMap<Word,Long> wordsMap;
+	private HashMap<String, Word> wordsMap;
 	private HashMap<WordBelongs, Integer> wordBelongsMap;
 	private HashMap<Coocorrence, Integer> coocorrenceMap;
 	private HashMap<Sentence, String> sentenceMap;
 	private HashSet<Exemplifies> exemplifiesSet;
 	
 	public DeepStorage() {
-		this.wordsMap = new HashMap<Word,Long>();
+		this.wordsMap = new HashMap<String, Word>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
         this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
 	
-	public void CheckWord(Word word, String prop, String depName){
-		WordTable worddb = RelationalFactory.getWord();
-		
-		if(wordsMap.containsKey(word)){
-			Long id = wordsMap.get(word);
-			WordBelongs wb = new WordBelongs(id, depName, prop);
-			word.setIdPalavra(id);
-			
-			if(wordBelongsMap.containsKey(wb)){
-				int freq = wordBelongsMap.get(wb) + 1;
-				wordBelongsMap.put(wb, freq);
-			}else{
-				wordBelongsMap.put(wb,1);
-			}			
-		}else{
-			try {
-				Long id = worddb.wordExists(word);
-				word.setIdPalavra(id);
-				wordsMap.put(word, id);
-				
-				WordBelongs wb = new WordBelongs(id, depName, prop);
-				wordBelongsMap.put(wb,1);
-				
-			} catch (WordNotExist e) {
-				Long id = RelationalFactory.getWord().insertNewWord(word);
-				word.setIdPalavra(id);
-				wordsMap.put(word, id);
-				
-				WordBelongs wb = new WordBelongs(id, depName, prop);
-				wordBelongsMap.put(wb,1);
-			}
-		}
-			
-	}
+	public Word checkWord(String lemma, String pos, String dep, String prop){
+        String key = lemma +"_"+ pos;
+        Word word;
 
-	public void CheckCoocorrence(Coocorrence coocorrence, Sentence sentence){
-		if(coocorrenceMap.containsKey(coocorrence)){
+        if(wordsMap.containsKey(key)){
+            word = wordsMap.get(key);
+		}else{
+            word = new Word(lemma,pos);
+            wordsMap.put(key, word);
+		}
+
+        checkWordBelongs(word, dep, prop);
+        return word;
+	}
+    public void checkWordBelongs(Word word, String depName,  String prop){
+        WordBelongs wb = new WordBelongs(word, depName, prop);
+
+        if(wordBelongsMap.containsKey(wb)){
+            int freq = wordBelongsMap.get(wb) + 1;
+            wordBelongsMap.put(wb, freq);
+        }else{
+            wordBelongsMap.put(wb,1);
+        }
+    }
+	public void checkCoocorrence(Coocorrence coocorrence, Sentence sentence){
+        if(coocorrenceMap.containsKey(coocorrence)){
 			int freq = coocorrenceMap.get(coocorrence) + 1;
 			coocorrenceMap.put(coocorrence, freq);
 		} else{
@@ -87,17 +76,31 @@ public class DeepStorage {
 		CoocorrenceTable coo = RelationalFactory.getCoocorrence();
         SentenceTable sentenceDB = RelationalFactory.getSentence();
 		ExemplifiesTable exemplifiesDB = RelationalFactory.getExemplifies();
-		
+
+        for (Entry<String, Word>  entry : wordsMap.entrySet() ) {
+
+            Word word = entry.getValue();
+
+            try {
+                Long id = worddb.wordExists(word);
+                word.setWordId(id);
+
+            } catch (WordNotExist e) {
+                Long id = RelationalFactory.getWord().insertNewWord(word);
+                word.setWordId(id);
+            }
+        }
+
 		for (Entry<WordBelongs, Integer>  entry : wordBelongsMap.entrySet() ) {
 			WordBelongs wb = entry.getKey();
 			int freq = entry.getValue();
 			
 			try {
-				if(wordBelongsdb.wordExistsCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp())){
-					wordBelongsdb.uptadeFrequency(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
+				if(wordBelongsdb.wordExistsCorpus(wb.getWordId(), wb.getDepName(), wb.getProp())){
+					wordBelongsdb.uptadeFrequency(wb.getWordId(), wb.getDepName(), wb.getProp(), freq);
 				}
 			} catch (WordNotExistCorpus e) {
-				wordBelongsdb.insertWordCorpus(wb.getIdPalavra(), wb.getDepName(), wb.getProp(), freq);
+				wordBelongsdb.insertWordCorpus(wb.getWordId(), wb.getDepName(), wb.getProp(), freq);
 			}	
 		}
 		
@@ -105,8 +108,8 @@ public class DeepStorage {
 			Coocorrence coocorrence = entry.getKey();
 			int freq = entry.getValue();
 			
-			Long id1 = coocorrence.getIdPalavra1(); 
-			Long id2 = coocorrence.getIdPalavra2();
+			Long id1 = coocorrence.getWordId1();
+			Long id2 = coocorrence.getWordId2();
 			String prop = coocorrence.getProperty();
 			String dep = coocorrence.getDependency();
 			
@@ -122,8 +125,8 @@ public class DeepStorage {
 
        for( Exemplifies ex : exemplifiesSet){
 
-           Sentence sentence = new Sentence(ex.getSentenceNumber(), ex.getFilename());
-           Coocorrence coocorrence = new Coocorrence(ex.getIdPalavra1(),ex.getIdPalavra2(), ex.getProperty(), ex.getDependency());
+           Sentence sentence = ex.getSentence();
+           Coocorrence coocorrence = ex.getCoocorrence();
 
            if(coo.getCoocorrenceFrequency(coocorrence) < 20) {
                sentence.setSentenceText(sentenceMap.get(sentence));
@@ -137,7 +140,7 @@ public class DeepStorage {
 	}
 	
 	public void cleanMaps(){
-		this.wordsMap = new HashMap<Word,Long>();
+		this.wordsMap = new HashMap<String,Word>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
 		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
         this.sentenceMap = new HashMap<Sentence,String>();

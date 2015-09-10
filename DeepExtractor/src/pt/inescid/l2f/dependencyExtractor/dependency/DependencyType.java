@@ -33,36 +33,33 @@ public abstract class DependencyType{
 		String depname = dep.getName();
 		String prop = getProperty(dep);
 
-		ArrayList<Word> words = new ArrayList<Word>();
 
-		for (XIPNode node : dep.getNodes()){
+		//para completar a propriedade inicial
+        for (XIPNode node : dep.getNodes()){
 			String pos = getPOS(node);
-
 
 			if(!prop.isEmpty())
 				prop += "_";
 			prop += pos;
-			
-			Word word = getWord(node, pos, namedEnteties);
-			words.add(word);
 		}
-		
-		String depProp = depname+" "+prop;
-		
-		if(!_depPropTable.containsKey(depProp))
-			return;
 
-		String newDepProp[] = _depPropTable.get(depProp).split(" ");
-		depname = newDepProp[0];  
-		prop = newDepProp[1];
-		
-		RelationalFactory.getProperty().checkProperty(prop, depname);
-		for (Word w : words) {
-			_storage.CheckWord(w, prop, depname);
-		}
-		
+        String depProp = depname+" "+prop;
+
+        if(!_depPropTable.containsKey(depProp)) {
+            return;
+        }
+        String newDepProp[] = _depPropTable.get(depProp).split(" ");
+        depname = newDepProp[0];
+        prop = newDepProp[1];
+
+        ArrayList<Word> words = new ArrayList<Word>();
+        for (XIPNode node : dep.getNodes()){
+            String pos = getPOS(node);
+            words.add(getWord(node, pos, depname,depProp,namedEnteties));
+        }
+
 		if(words.size()== 2){
-			_storage.CheckCoocorrence(new Coocorrence(words.get(0).getIdPalavra(), words.get(1).getIdPalavra(), prop, depname), sentence);
+			_storage.checkCoocorrence(new Coocorrence(words.get(0), words.get(1), prop, depname), sentence);
 		}
 		else{
 			String path = new File("src/out/depError.txt").getAbsolutePath();
@@ -115,7 +112,7 @@ public abstract class DependencyType{
 		
 		return pos;
 	}
-	protected Word getWord(XIPNode node, String pos, HashMap<String, String> namedEnteties) {
+	protected Word getWord(XIPNode node, String pos, String depname, String prop, HashMap<String, String> namedEnteties) {
 		String lemma = CheckNomedEntity(node, namedEnteties);
 
         if (pos.equals("TOP")) {
@@ -132,7 +129,7 @@ public abstract class DependencyType{
                 }
             }
         }
-		return new Word(lemma, pos);
+		return _storage.checkWord(lemma, pos, depname, prop);
 	}
 
 
@@ -167,17 +164,15 @@ public abstract class DependencyType{
 		return depPropTable;
 	}
 	
-	private void depInformation(){
-		HashSet<String> depnames = new HashSet<String>();
-		
-		for(Entry<String, String> entry : _depPropTable.entrySet()) {
-		
-			String depname = entry.getValue().split(" ")[0];
-		    depnames.add(depname);
-		}
+	private void depInformation() {
+        for (Entry<String, String> entry : _depPropTable.entrySet()) {
+            String split[] =  entry.getValue().split(" ");
+            String depname = split[0];
+            String prop = split[1];
 
-		for(String depname : depnames) {
-			RelationalFactory.getDependency().insertNew(depname);
-		}
-	}
+            RelationalFactory.getDependency().insertNew(depname);
+            RelationalFactory.getProperty().checkProperty(prop, depname);
+
+        }
+    }
 }

@@ -1,23 +1,19 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
 public class WordBelongs {
-	private Long _idPalavra;
+	private Word _word;
 	private String _depName;
 	private String _prop;
 
-	public WordBelongs(Long idPalavra, String depName, String prop) {
+	public WordBelongs(Word word, String depName, String prop) {
 		super();
-		this._idPalavra = idPalavra;
+		this._word = word;
 		this._depName = depName;
 		this._prop = prop;
 	}
 
-	public Long getIdPalavra() {
-		return _idPalavra;
-	}
-
-	public void setIdPalavra(Long idPalavra) {
-		this._idPalavra = idPalavra;
+	public Long getWordId() {
+		return _word.getWordId();
 	}
 
 	public String getDepName() {
@@ -29,47 +25,29 @@ public class WordBelongs {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof WordBelongs)) return false;
+
+		WordBelongs that = (WordBelongs) o;
+
+		if (_word != null ? !_word.equals(that._word) : that._word != null) return false;
+		if (_depName != null ? !_depName.equals(that._depName) : that._depName != null) return false;
+		return !(_prop != null ? !_prop.equals(that._prop) : that._prop != null);
+
+	}
+
+	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((_depName == null) ? 0 : _depName.hashCode());
-		result = prime * result
-				+ ((_idPalavra == null) ? 0 : _idPalavra.hashCode());
-		result = prime * result + ((_prop == null) ? 0 : _prop.hashCode());
+		int result = _word != null ? _word.hashCode() : 0;
+		result = 31 * result + (_depName != null ? _depName.hashCode() : 0);
+		result = 31 * result + (_prop != null ? _prop.hashCode() : 0);
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		WordBelongs other = (WordBelongs) obj;
-		if (_depName == null) {
-			if (other._depName != null)
-				return false;
-		} else if (!_depName.equals(other._depName))
-			return false;
-		if (_idPalavra == null) {
-			if (other._idPalavra != null)
-				return false;
-		} else if (!_idPalavra.equals(other._idPalavra))
-			return false;
-		if (_prop == null) {
-			if (other._prop != null)
-				return false;
-		} else if (!_prop.equals(other._prop))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		return "WordBelongs [idPalavra=" + _idPalavra + ", depName="
+		return "WordBelongs [idPalavra=" + _word.getWordId() + ", depName="
 				+ _depName + ", prop=" + _prop + "]";
 	}
 }
