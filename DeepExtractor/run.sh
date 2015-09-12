@@ -5,7 +5,7 @@ corpus='/ffs/tmp/string/CORPUS'
 #corpus='/Users/josecorreia/Projects/CetemPublico'
 
 #/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/
-db = '/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/'
+db='/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/'
 #db='/Users/josecorreia/Projects/DB/'
 
 
