@@ -22,7 +22,7 @@ public class DeepExtractor {
 		System.out.println("Inicio");
 	
 		String corpusName = "CETEMPúblico";
-		
+		System.out.println(args[0]);
 		RelationalFactory rf = new RelationalFactory(corpusName, args[0]);
 		DependencyExtractor de = new DependencyExtractor();
 		

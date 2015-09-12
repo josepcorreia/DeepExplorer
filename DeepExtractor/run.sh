@@ -1,16 +1,27 @@
 #!/bin/bash
 
 #/ffs/tmp/string/CORPUS/
-
 corpus='/ffs/tmp/string/CORPUS'
+#corpus='/Users/josecorreia/Projects/CetemPublico'
 
-for d in */ ; do
-    echo "$d"
+#/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/
+db = '/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/'
+#db='/Users/josecorreia/Projects/DB/'
 
-   	#dir=$corpus/$dir_aux;
-   	#txt="log/$dir_aux.txt"
-   	#ant runLinInesc -Dcorpus_dir=$corpus > $txt
-   	
+
+mkdir logDeepExtractor
+cd DeepExplorer/DeepExtractor
+
+ant main > ../../logDeepExtractor/compile.txt
+
+for dir in $corpus/Parte*; do
+    echo "$dir"
+
+	base=$(basename "$dir")
+	fname=$base'.txt'
+  
+   	ant runInesc -Ddb=$db -Dcorpus_dir=$dir > ../../logDeepExtractor/$fname
 done
 
+ant runMeasuresInesc -Ddb=$db > ../../logDeepExtractor/medidas.txt
 

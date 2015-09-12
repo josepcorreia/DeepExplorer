@@ -86,17 +86,17 @@
 				<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
 			</java>
 		</target>
-	<target name="runLinInesc" depends="main" description="run" >
+	<target name="runInesc" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
-			    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
+			    	<arg value="${db}"/>
 					<arg value="${corpus_dir}"/>
 				</java>
 	</target>
 	<target name="runMeasuresInesc" depends="main" description="run" >
 		<java  classname="${main1}" fork="true">
 			<classpath refid="classpath"/>
-			<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
+			<arg value="${db}"/>
 		</java>
 	</target>
 	<target name="runCorpus" depends="main" description="run">
