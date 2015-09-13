@@ -59,14 +59,21 @@ margin-bottom: 0;
 font-size: 16px;
 }
 
+
 .wordTitle{
   display: table;
   margin-right:auto;
   margin-left:auto;
-  margin-top: -3%;
-  padding-bottom: 3%;
-
+  margin-top: -5%;
 }
+.measureTitle{
+  display: table;
+  margin-right:auto;
+  margin-left:auto;
+  margin-top: -1%;
+  padding-bottom: 2%;
+}
+
 .panel-rightDepsGovernor{
   border-color:  darkseagreen;
 }

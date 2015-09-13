@@ -175,6 +175,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo) {
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
+    $scope.measure =  sharedInfo.getMeasure();
 
     $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
     $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
