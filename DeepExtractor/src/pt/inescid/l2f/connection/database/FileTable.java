@@ -48,47 +48,32 @@ public class FileTable extends RelationalTable {
         return false;
     }
 
-	public boolean insertNewFile(String fileName){
+	public void insertNewFile(String fileName){
 		Connection connection = getConnetion();
-		
-		PreparedStatement preparedStatement = null;
+
 		Statement stmt = null;
 			
 		try {
-
+			stmt = connection.createStatement();
 			
-			preparedStatement = connection.prepareStatement("insert into Ficheiro values (?, ?)");
-
-			preparedStatement.setString(1, fileName);
-			preparedStatement.setString(2, _corpusName);
+			String sql = "INSERT INTO Ficheiro VALUES ('"+fileName+"' , '"+_corpusName+"')";
 		
-			preparedStatement.executeUpdate();
+			stmt.executeUpdate(sql);
 
-			System.out.println("Record is inserted into Corpus table!");
+			System.out.println("Record is inserted into File table!");
 
 		} catch (SQLException e) {
-
-			System.out.println(e.getMessage());
-			return false;
-
+			e.printStackTrace();
 		} finally {
 
-			if (preparedStatement != null) {
+			if (stmt != null)
 				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 
-					if (preparedStatement != null) 
-						preparedStatement.close();
-					
-					if (stmt != null) 
-						stmt.close();
-
-					}
-					catch (SQLException e) {
-						e.printStackTrace();
-					}
-			}
 		}
-	  return true;
 	}
 
 }
