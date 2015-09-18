@@ -45,9 +45,11 @@ public abstract class DependencyType{
 
         String depProp = depname+" "+prop;
 
+
         if(!_depPropTable.containsKey(depProp)) {
             return;
         }
+
         String newDepProp[] = _depPropTable.get(depProp).split(" ");
         depname = newDepProp[0];
         prop = newDepProp[1];

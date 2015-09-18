@@ -1,5 +1,6 @@
 package pt.inescid.l2f.dependencyExtractor;
 
+import pt.inescid.l2f.connection.database.RelationalFactory;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 import pt.inescid.l2f.dependencyExtractor.dependency.DependencyFactory;
@@ -61,8 +62,10 @@ public class DependencyExtractor {
 		
 		//_storage.printSizes();
 		_storage.storeInDatabase();
-		_storage.commit();
 		_storage.cleanMaps();
+
+		RelationalFactory.getFile().insertNewFile(filename);
+		_storage.commit();
 	}
 
 }

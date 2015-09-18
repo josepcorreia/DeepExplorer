@@ -56,9 +56,6 @@ public class DeepExtractor {
                         document = xipdc.getXipResult(buffer);
 
                         de.Extract(document, filename);
-
-						RelationalFactory.getFile().insertNewFile(filename);
-                        RelationalFactory.commit();
                     }
 
 				}

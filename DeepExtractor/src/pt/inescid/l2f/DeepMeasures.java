@@ -18,6 +18,7 @@ public class DeepMeasures {
 
 		//calcula as medidas
 		rf.getCoocorrence().updateMeasures();
+		rf.commit();
 
 		rf.closeConnection();
 		System.out.println("FIM");		
