@@ -64,15 +64,18 @@ public class DeepExtractor {
 		} catch (IOException x) {
 			// IOException can never be thrown by the iteration.
 			// In this snippet, it can only be thrown by newDirectoryStream.
-			System.err.println(x);
+            RelationalFactory.closeConnection();
+            System.err.println(x);
 		} catch (DirectoryIteratorException x) {
 			// IOException can never be thrown by the iteration.
 			// In this snippet, it can only be thrown by newDirectoryStream.
-			System.err.println(x);
+            RelationalFactory.closeConnection();
+            System.err.println(x);
 		} catch(Exception e1){
 			System.err.println("DeepExplorer: input error");
 			e1.printStackTrace();
-		return;
+			RelationalFactory.closeConnection();
+            return;
 		}
 	} 
 	

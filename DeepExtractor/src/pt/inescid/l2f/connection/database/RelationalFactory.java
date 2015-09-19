@@ -73,7 +73,7 @@ public class RelationalFactory {
         return _exemplifiesTable;
     }
 
-	public void closeConnection() {
+	public static void closeConnection() {
 		ConnectionSQLite.closeConnection(_connection);
 	}
 

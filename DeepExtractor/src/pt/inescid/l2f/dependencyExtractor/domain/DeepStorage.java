@@ -71,6 +71,7 @@ public class DeepStorage {
 
 	
 	public void storeInDatabase(){
+
 		WordTable worddb = RelationalFactory.getWord();
 		WordBelongsTable wordBelongsdb = RelationalFactory.getWordBelongs();
 		CoocorrenceTable coo = RelationalFactory.getCoocorrence();
@@ -128,7 +129,7 @@ public class DeepStorage {
            Sentence sentence = ex.getSentence();
            Coocorrence coocorrence = ex.getCoocorrence();
 
-           if(coo.getCoocorrenceFrequency(coocorrence) < 20) {
+           if(coo.getCoocorrenceFrequency(coocorrence) < 16) {
                sentence.setSentenceText(sentenceMap.get(sentence));
                if(!sentenceDB.sentenceExists(sentence)){
                    sentenceDB.insertNewSentence(sentence);
