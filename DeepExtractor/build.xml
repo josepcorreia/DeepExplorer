@@ -78,8 +78,8 @@
     <target name="runParte1InescBDS" depends="main" description="run" >
         <java classname="${main}" fork="true">
             <classpath refid="classpath"/>
-            <arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
-            <arg value="/afs/l2f/home/jcorreia/Projects/Parte1/"/>
+            <arg value="/tmp/deepString_tmp/"/>
+            <arg value="/ffs/tmp/string/CORPUS/Parte01/"/>
         </java>
     </target>
     <target name="runMedidasMac" depends="main" description="run" >
