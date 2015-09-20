@@ -62,10 +62,10 @@ public class WordBelongsTable extends RelationalTable {
 	
 		try{
 			stmt = connection.createStatement();
-			String sql = "SELECT 1 FROM Pertence WHERE idPalavra = " + id +
+			String sql = "SELECT EXISTS(SELECT 1 FROM Pertence WHERE idPalavra = " + id +
 																" AND tipoDep = '" + depname + 
 																"' AND nomeProp = '" + prop +
-																"' AND nomeCorpus = '" + _corpusName +"' LIMIT 1";
+																"' AND nomeCorpus = '" + _corpusName +"' LIMIT 1)";
 			
 			
 			ResultSet rs = stmt.executeQuery(sql);
