@@ -15,7 +15,7 @@ deepApp.config(function($routeProvider, $locationProvider) {
                 templateUrl : 'partials/deep.html',
                 controller  : 'deepCtrl'
             }).
-            when('/nome', {
+           /* when('/nome', {
                 templateUrl : 'partials/nome.html',
                 controller  : 'nounCtrl'
             }).
@@ -30,7 +30,7 @@ deepApp.config(function($routeProvider, $locationProvider) {
             when('/adjetivo', {
                 templateUrl : 'partials/adjetivo.html',
                 controller  : 'adjCtrl'
-            }).
+            }).*/
 
             otherwise({
               redirectTo: '/'
@@ -129,6 +129,8 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
       }
    };
     $scope.postPhp = function() {
+       $(".waitfForWord").show();
+
        var url = 'php/deep.php';
        var data = {
                     'word':$scope.word,
