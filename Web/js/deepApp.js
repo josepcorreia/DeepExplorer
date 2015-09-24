@@ -15,22 +15,6 @@ deepApp.config(function($routeProvider, $locationProvider) {
                 templateUrl : 'partials/deep.html',
                 controller  : 'deepCtrl'
             }).
-           /* when('/nome', {
-                templateUrl : 'partials/nome.html',
-                controller  : 'nounCtrl'
-            }).
-            when('/verbo', {
-                templateUrl : 'partials/verbo.html',
-                controller  : 'verbCtrl'
-            }).
-             when('/adverbio', {
-                templateUrl : 'partials/adverbio.html',
-                controller  : 'advCtrl'
-            }).
-            when('/adjetivo', {
-                templateUrl : 'partials/adjetivo.html',
-                controller  : 'adjCtrl'
-            }).*/
 
             otherwise({
               redirectTo: '/'

@@ -36,7 +36,7 @@ abstract class DepInterface
     abstract function GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType);
 
     protected function GetDepDataFromWord2($conn, $idWord2, $dep, $prop,  $measure, $limit) {
-        $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
+      /*  $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
                  FROM ( SELECT idPalavra1,".$measure.",frequencia
                         FROM (SELECT *
                              FROM Coocorrencia
@@ -44,6 +44,17 @@ abstract class DepInterface
                         WHERE idPalavra2 = ".$idWord2."
                         and tipoDep = '".$dep."'
                         and nomeProp = '".$prop."'
+                        ORDER BY ".$measure." DESC
+                        LIMIT ".$limit. ") as Coo
+                Inner join Palavra on Coo.idPalavra1 = Palavra.idPalavra;";*/
+
+        $query = "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
+                 FROM ( SELECT idPalavra1,".$measure.",frequencia
+                        FROM Coocorrencia    
+                        WHERE idPalavra2 = ".$idWord2."
+                          and frequencia > 1
+                          and tipoDep = '".$dep."'
+                          and nomeProp = '".$prop."'
                         ORDER BY ".$measure." DESC
                         LIMIT ".$limit. ") as Coo
                 Inner join Palavra on Coo.idPalavra1 = Palavra.idPalavra;";
@@ -54,7 +65,7 @@ abstract class DepInterface
     }
 
     protected function GetDepDataFromWord1($conn, $idWord1, $dep, $prop,  $measure, $limit) {
-        $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
+        /*$query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
                  FROM ( SELECT idPalavra2,".$measure.",frequencia
                         FROM (SELECT *
                              FROM Coocorrencia
@@ -62,6 +73,17 @@ abstract class DepInterface
                         WHERE idPalavra1 =".$idWord1."
                         and tipoDep = '".$dep."'
                         and nomeProp = '".$prop."'
+                        ORDER BY ".$measure." DESC
+                        LIMIT ".$limit. ") as Coo
+                Inner join Palavra on Coo.idPalavra2 = Palavra.idPalavra;";*/
+
+        $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
+                 FROM ( SELECT idPalavra2,".$measure.",frequencia
+                        FROM Coocorrencia    
+                        WHERE idPalavra1 = ".$idWord1."
+                          and frequencia > 1
+                          and tipoDep = '".$dep."'
+                          and nomeProp = '".$prop."'
                         ORDER BY ".$measure." DESC
                         LIMIT ".$limit. ") as Coo
                 Inner join Palavra on Coo.idPalavra2 = Palavra.idPalavra;";
