@@ -277,7 +277,7 @@ public class CoocorrenceTable extends RelationalTable {
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 
-        int japercorridas = 0;
+        int alreadyDone = 0;
 
 		HashMap<String, Long> totalWordsDeps = new HashMap<String, Long>();
         HashMap<String, Long> totalCoocorrenceDeps = new HashMap<String, Long>();
@@ -293,10 +293,10 @@ public class CoocorrenceTable extends RelationalTable {
 				String sql = "SELECT * FROM Coocorrencia LIMIT " + index + "," +  intervall +  ";" ;
 				ResultSet rs = stmt.executeQuery(sql);
 				s = connection.createStatement();
-				
 
 				
-				while(rs.next()){  
+				while(rs.next()){
+
 					long word1 = rs.getLong("idPalavra1");
 					long word2 = rs.getLong("idPalavra2");
                     long depfreq = rs.getLong("frequencia");
@@ -355,8 +355,8 @@ public class CoocorrenceTable extends RelationalTable {
 
                     double significance = AssociationMeasures.significance(word1freq,word2freq,depfreq, totalSentencesDep);
 
-					s.addBatch(uptadeAssociationMeasure(word1, word2,prop, dep, pmi, dice, logDice, chisquarePearson,
-					 loglikelihood, significance));
+					s.addBatch(uptadeAssociationMeasure(word1, word2, prop, dep, pmi, dice, logDice, chisquarePearson,
+							loglikelihood, significance));
 
 				}
 				rs.close(); 
@@ -379,16 +379,15 @@ public class CoocorrenceTable extends RelationalTable {
 			}//end finally try
 
 			index = index + intervall;
-            japercorridas += intervall;
 
-            System.out.println((double)japercorridas/(double)totalrows);
+			alreadyDone += intervall;
+			if(alreadyDone > totalrows ){
+				alreadyDone = totalrows;
+			}
+
+			double totalPercentage = ((double)alreadyDone/(double)totalrows)* 100;
+            System.out.println(AssociationMeasures.round(totalPercentage, 3) + "%");
 
 		}
-		try {
-			connection.commit();
-		} catch (SQLException e) {
-
-		}
-
 	}
 }

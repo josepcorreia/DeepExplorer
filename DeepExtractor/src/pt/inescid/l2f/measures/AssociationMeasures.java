@@ -1,5 +1,8 @@
 package pt.inescid.l2f.measures;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class AssociationMeasures {
 
 	public  static double PMI(long ntotalWords, long depfreq, long word1freq, long word2freq ){
@@ -32,16 +35,20 @@ public class AssociationMeasures {
         long O22 = ntotalCoocorrences - O11 - O12 - O21 ;
 
         double num = ntotalCoocorrences * Math.pow((O11 * O22) - (O12 * O21), 2);
-        double den = (O11+O12)*(O11+O21)*(O12+O22)*(O21+O22);
+
+        double den = (plusChi(O11,O12))*(plusChi(O11,O21))*(plusChi(O12,O22))*(plusChi(O21,O22));
 		Double result =  num/den;
-
-        //System.out.println(ntotalCoocorrences +" "+ coocorrenceFreq+" "+word1CooFreq+" "+word2CooFreq);
-
-        if(result.isNaN())
-            return 0;
 
         return result;
 	}
+    private static long plusChi(long op1 , long op2){
+        long result = op1 + op2;
+
+        if(result == 0)
+             result = 1;
+
+        return result;
+    }
 
     public static double logLikelihood(long ntotalWords, long depfreq, long word1freq, long word2freq){
         //System.out.println(ntotalWords + " "+ depfreq + " " + word1freq+" "+ word2freq );
@@ -56,15 +63,15 @@ public class AssociationMeasures {
                         Math.log10(L(word2freq - depfreq,ntotalWords - word1freq,p2)));
 
 //        System.out.println(result);
-
-        if(result.isNaN())
-            return -1;
-        if(result.isInfinite())
-            return -10;
         return result;
     }
     private static double L(double k,double n, double z){
-        return Math.pow(z,k)*Math.pow((1 - z),(n-z));
+        double l = Math.pow(z,k)*Math.pow((1 - z),(n-z));
+
+            if(l == 0.0){
+                l=1.0;
+            }
+        return l;
 
     }
 
@@ -88,5 +95,13 @@ public class AssociationMeasures {
 		double den = Math.log(base);
 		return (num/den);
 	}
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
 }

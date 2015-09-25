@@ -57,7 +57,7 @@ public abstract class DependencyType{
         ArrayList<Word> words = new ArrayList<Word>();
         for (XIPNode node : dep.getNodes()){
             String pos = getPOS(node);
-            words.add(getWord(node, pos, depname,depProp,namedEnteties));
+            words.add(getWord(node, pos, depname,prop,namedEnteties));
         }
 
 		if(words.size()== 2){
@@ -172,9 +172,9 @@ public abstract class DependencyType{
             String depname = split[0];
             String prop = split[1];
 
-            RelationalFactory.getDependency().insertNew(depname);
+			RelationalFactory.getDependency().insertNew(depname);
             RelationalFactory.getProperty().checkProperty(prop, depname);
+		}
 
-        }
-    }
+	}
 }

@@ -74,12 +74,6 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
     posHash['Adjetivo'] = 'ADJ';
     posHash['Advérbio'] = 'ADV';
 
-    var urlHash = new Array();
-    urlHash['Nome'] = 'nome';
-    urlHash['Verbo'] = 'verbo';
-    urlHash['Adjetivo'] = 'adjetivo';
-    urlHash['Advérbio'] = 'adverbio';
-
    $scope.changePos = function(value) {
      $scope.pos = value;
    };
