@@ -1,23 +1,15 @@
-
-@media (max-width:960px){
-.deepword{
- padding-top: 2%;
-position: relative;
-width: 80%;
-margin-right: auto;
-margin-left: auto;
-}
-}
-@media (min-width:960px){
 .deepword{
 padding-top: 2%;
 position: relative;
-width: 40%;
 margin-right: auto;
 margin-left: auto;
 }
-}
 
+@media (min-width:990px){
+  .deepword{
+  width: 720px;
+  }
+}
 
 .showword{
 padding-top: 2%;
@@ -33,11 +25,28 @@ text-align:center
   	border-bottom-right-radius: 0;
 }
 
-.showButton{
-	padding-top: 2%;
-	width: 11%;
+.showmoreOptionButtons{
+  display: table;
+  position: relative;
+	padding-top: 5%;
 	margin-right: auto;
 	margin-left: auto;
+}
+.showlessOptionButtons{
+  display: none;
+  position: relative;
+  padding-top: 5%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.moreOptions{
+  display: none;
+  padding-top: 5%;
+  width: 75%
+}
+
+.inputNumber{
+  width: 60%;
 }
 
 .rowDeps{

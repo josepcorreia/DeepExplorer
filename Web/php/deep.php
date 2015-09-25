@@ -20,8 +20,8 @@ $conn = new SQLite3($dir."/".$filename);
 $word = $_POST['word'];
 $pos = $_POST['pos'];
 $Measure = $_POST['measure'];
-//limit
-//minimo de ocorrncias
+$limit =  $_POST['limit'];
+$minfreq = $_POST['minfreq'];
 
 if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
@@ -45,7 +45,7 @@ $Measure = "Dice";
 */
 
 $depInstance = new DepClass($pos);
-$deps = $depInstance->GetAllDependencies($conn,$word,$Measure,10);
+$deps = $depInstance->GetAllDependencies($conn,$word,$Measure,$limit, $minfreq);
 
 echo(json_encode($deps, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE ));
 

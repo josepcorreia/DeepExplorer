@@ -64,6 +64,9 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
    $scope.pos = "Classe";
    $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência']
    $scope.measure = "Medida";
+   $scope.minfreq = 2;
+   $scope.maxword = 10;
+
 
    var posHash = new Array();
     posHash['Nome'] = 'NOUN';
@@ -84,11 +87,18 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
      $scope.measure = value;
    };
 
-  var selectPath = function (){
-    var path = "/" + urlHash[$scope.pos];
+   $scope.moreOptions = function() {
+       $(".moreOptions").show();
+       $(".showmoreOptionButtons").hide();
+       $(".showlessOptionButtons").css("display","table");
+       
+   }
 
-    $location.path(path);
-  };
+   $scope.lessOptions = function() {
+       $(".moreOptions").hide();
+       $(".showmoreOptionButtons").css("display","table");
+       $(".showlessOptionButtons").hide();    
+   }
 
    $scope.searchWord = function() {
 
@@ -112,6 +122,8 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
         alert("Introduzir uma palavra");
       }
    };
+
+
     $scope.postPhp = function() {
        $(".waitfForWord").show();
 
@@ -119,7 +131,9 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
        var data = {
                     'word':$scope.word,
                     'pos':posHash[$scope.pos],
-                    'measure':$scope.measure
+                    'measure':$scope.measure,
+                    'limit':$scope.maxword,
+                    'minfreq':$scope.minfreq
           };
         // Variable to hold request
         var request;

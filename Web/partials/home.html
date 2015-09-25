@@ -1,10 +1,12 @@
 <div class="container">
-  <div class = "deepword">
-    <label for="palavra">Introduzir palavra</label>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Palavra" ng-model="word">
-         <span class="input-group-btn">
-          <button type="button" class="buttonMiddle btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+  <div class = "deepword"> 
+    <div class="jumbotron">
+      <div class="container">
+        <label for="palavra">Introduzir palavra</label>
+          <div class="input-group">
+              <input type="text" class="form-control" placeholder="Palavra" ng-model="word">
+          <span class="input-group-btn">
+          <button type="button" class="buttonMiddle btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 94px;">
             {{pos}}
             <span class="caret"></span>
             <!--<span class="sr-only">Toggle Dropdown</span>-->
@@ -16,7 +18,8 @@
           </ul>
         </span>
          <span class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+      
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 125px;">
             {{measure}}
             <span class="caret"></span>
             <!--<span class="sr-only">Toggle Dropdown</span>-->
@@ -28,10 +31,51 @@
           </ul>
         </span>
     </div>
-    <div class = "showButton"> 
+
+    <div class = "moreOptions">
+        
+        <table style="width:100%">
+          <tr>
+            <td>
+              <label class="control-label">Frequência mínima: </label>
+            </td>
+            <td>
+              <div class="inputNumber">
+                <input type="number" class="form-control" ng-model="minfreq">
+              </div>
+            </td> 
+          </tr>
+          <tr>
+            <td>
+            <label class="control-label">Número máximo de palavras:</label>
+            </td>
+            <td>
+              <div class="inputNumber">
+                <input type="number" class="form-control" ng-model="maxword">
+              </div>
+            </td> 
+          </tr>
+        </table>
+    </div>
+    <div class = "showmoreOptionButtons"> 
+      <div class="row">
+        <button type="button" class="btn btn-link" ng-click="moreOptions()">
+              Mais Opções
+        </button>
         <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+      </div>
+      </div>
+      <div class = "showlessOptionButtons"> 
+      <div class="row">
+        <button type="button" class="btn btn-link" ng-click="lessOptions()">
+              Esconder Opções
+        </button>
+        <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+      </div>
     </div>
     </div>
+  </div>
+  </div>
   <div class = "waitfForWord">
      <div class ="content">  
       <div class="progress">
@@ -41,5 +85,4 @@
       </div>
       </div>
   </div>
-
 </div>

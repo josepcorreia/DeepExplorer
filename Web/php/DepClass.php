@@ -11,8 +11,8 @@ class DepClass
         $this->depProps = $this->GetDependenciesFromFile($pos);
     }
 
-    public function GetAllDependencies($conn, $word, $measure, $limit) {
-        $result = $this->GetResult($this->depProps, $conn, $word, $this->pos,  $measure, $limit);
+    public function GetAllDependencies($conn, $word, $measure, $limit, $minfreq) {
+        $result = $this->GetResult($this->depProps, $conn, $word, $this->pos,  $measure, $limit, $minfreq);
         return $result;
     }
 
@@ -79,7 +79,7 @@ class DepClass
         return $dep." ".$prop;
     }
 
-    protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit){
+    protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit, $minfreq){
         $outp = array();
 
         $idWord = $this->GetWordId($conn, $word, $pos);
@@ -95,7 +95,7 @@ class DepClass
             $depPropName = $this->GetNameFromDep($dep, $prop);
 
             $depStrategy = new DepStrategy($dep);
-            $result = $depStrategy->GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType);
+            $result = $depStrategy->GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
 
             $words_array = array();
             while($rs = $result->fetchArray(SQLITE3_ASSOC)) {

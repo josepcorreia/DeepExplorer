@@ -27,15 +27,15 @@ class DepStrategy {
                 break;
         }
     }
-    public function GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType) {
-        return $this->strategy->GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType);
+    public function GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq) {
+        return $this->strategy->GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
     }
 }
 abstract class DepInterface
 {
-    abstract function GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType);
+    abstract function GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
 
-    protected function GetDepDataFromWord2($conn, $idWord2, $dep, $prop,  $measure, $limit) {
+    protected function GetDepDataFromWord2($conn, $idWord2, $dep, $prop,  $measure, $limit, $minfreq) {
       /*  $query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
                  FROM ( SELECT idPalavra1,".$measure.",frequencia
                         FROM (SELECT *
@@ -52,7 +52,7 @@ abstract class DepInterface
                  FROM ( SELECT idPalavra1,".$measure.",frequencia
                         FROM Coocorrencia    
                         WHERE idPalavra2 = ".$idWord2."
-                          and frequencia > 1
+                          and frequencia >=  ".$minfreq."
                           and tipoDep = '".$dep."'
                           and nomeProp = '".$prop."'
                         ORDER BY ".$measure." DESC
@@ -64,7 +64,7 @@ abstract class DepInterface
         return $result;
     }
 
-    protected function GetDepDataFromWord1($conn, $idWord1, $dep, $prop,  $measure, $limit) {
+    protected function GetDepDataFromWord1($conn, $idWord1, $dep, $prop,  $measure, $limit, $minfreq) {
         /*$query= "SELECT Palavra.palavra, Coo.".$measure.", Coo.frequencia
                  FROM ( SELECT idPalavra2,".$measure.",frequencia
                         FROM (SELECT *
@@ -81,7 +81,7 @@ abstract class DepInterface
                  FROM ( SELECT idPalavra2,".$measure.",frequencia
                         FROM Coocorrencia    
                         WHERE idPalavra1 = ".$idWord1."
-                          and frequencia > 1
+                          and frequencia >= ".$minfreq."
                           and tipoDep = '".$dep."'
                           and nomeProp = '".$prop."'
                         ORDER BY ".$measure." DESC
@@ -96,59 +96,59 @@ abstract class DepInterface
 
 class MOD_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType, $minfreq)
     {
         if (strpos($depType,'GOVERNED') !== false) {
-            return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+            return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
         }
         else{
             if (strpos($depType,'GOVERNOR') !== false) {
-                return parent::GetDepDataFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit);
+                return parent::GetDepDataFromWord2($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
             }
         }
     }
 }
 class SUBJ_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType, $minfreq)
     {
-        return parent::GetDepdataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+        return parent::GetDepdataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
 
     }
 }
 class CDIR_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType,$minfreq)
     {
-        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
     }
 }
 class CINDIR_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType, $minfreq)
     {
-        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
     }
 }
 class COMPL_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType, $minfreq)
     {
-        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
     }
 }
 class QUANTD_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType, $minfreq)
     {
-        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
     }
 }
 class CLASSD_Strategy extends DepInterface
 {
-    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType)
+    function GetDepData($conn, $idWord, $dep, $prop, $measure, $limit, $depType, $minfreq)
     {
-        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit);
+        return parent::GetDepDataFromWord1($conn, $idWord, $dep, $prop, $measure ,$limit, $minfreq);
     }
 }
 ?>
