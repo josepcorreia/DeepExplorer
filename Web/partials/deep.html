@@ -21,18 +21,18 @@
 						<h3 class="panel-title"> Alvo é Modificado à Esquerda</h3>
 					</div>
 					<div class="panel-body">
-						<div class="row rowDeps" ng-repeat="x in PRE_GOVERNED">
+						<div class="row">
+							<div class = "rowDeps" ng-repeat="x in PRE_GOVERNED">
 								<table class="table table-bordered">
-									<tr class="active">
-  										<td >{{x.name}}</td>
-									</tr>	
+									<label>{{x.name}}</label>
 									<tr class="warning" >
-    									<td >
-    										<span ng-repeat="y in x.data"> {{y.word}}  () -- </span>
+    									<td>
+    										<span ng-repeat="y in x.data">{{y.duallog}}: {{y.word}} -- </span>
     									</td>
 									</tr>
-								</table>	
-						</div>
+								</table>
+							</div>
+						</div>	
 					</div>
 				</div>
 			</div>
@@ -49,7 +49,7 @@
 									</tr>	
 									<tr class="warning" >
     									<td >
-    										<span ng-repeat="y in x.data"> {{y.word}}   () -- </span>
+    										<span ng-repeat="y in x.data">{{y.duallog}}: {{y.word}} -- </span>
     									</td>
 									</tr>
 								</table>	
@@ -60,7 +60,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-6">
-				<div class="panel panel-leftDepsGovernor">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Alvo é Modificador à Esquerda</h3>
 					</div>
@@ -72,7 +72,7 @@
 									</tr>	
 									<tr class="warning" >
     									<td >
-    										<span ng-repeat="y in x.data"> {{y.word}}   () -- </span>
+    										<span ng-repeat="y in x.data">{{y.duallog}}: {{y.word}} -- </span>
     									</td>
 									</tr>
 								</table>	
@@ -93,7 +93,7 @@
 									</tr>	
 									<tr class="warning" >
     									<td >
-    										<span ng-repeat="y in x.data"> {{y.word}}   () -- </span>
+    										<span ng-repeat="y in x.data">{{y.duallog}}: {{y.word}} -- </span>
     									</td>
 									</tr>
 								</table>	

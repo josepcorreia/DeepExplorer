@@ -50,7 +50,9 @@ text-align:center
 }
 
 .rowDeps{
-  padding-bottom: 4%;
+  padding-top: 2%;
+  padding-right: 2%;
+  padding-left: 2%;
 }
 
 .depTitle{
@@ -83,6 +85,7 @@ font-size: 16px;
   padding-bottom: 2%;
 }
 
+/*nao estava defenido no bootstrap*/
 .panel-rightDepsGovernor{
   border-color:  darkseagreen;
 }
@@ -91,13 +94,6 @@ font-size: 16px;
     color:white;
 }
 
-.panel-leftDepsGovernor{
-  border-color:  orchid;
-}
-.panel-leftDepsGovernor > .panel-heading{
-    background-color: orchid;
-    color:white;
-}
 
 .waitfForWord{
   display: none;
@@ -108,13 +104,21 @@ font-size: 16px;
   width: 100%;
   height:100%;
   background-color: black;
-  opacity: 0.5;
-    filter: alpha(opacity=50); /* For IE8 and earlier */
+  opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
 }
 
 .waitfForWord > .content{
   width: 70%;
   position: relative;
-  top:50%;
+  top:45%;
   margin:0px auto;
 }
+
+.waitfForWord > .content > .waitText{
+  text-align: center;
+  color: white;
+  font-size: 18px;
+}
+
+

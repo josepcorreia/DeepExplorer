@@ -29,7 +29,10 @@ deepApp.service('sharedInfo', function () {
         var word = "";
         var pos = "";
         var measure = "";
+        var minfreq ="";
+        var maxwords = "";
         var deps;
+        
         return {
             getWord: function () {
                 return word;
@@ -43,6 +46,12 @@ deepApp.service('sharedInfo', function () {
             getDeps: function () {
                 return deps;
             },
+            getMaxWords: function(){
+              return maxwords;
+            },
+            getMinfreq: function(){
+             return minfreq;
+            },
             setWord: function(value) {
                 word = value;
             },
@@ -54,12 +63,20 @@ deepApp.service('sharedInfo', function () {
             },
             setDeps: function(value) {
                 deps = value;
+            },
+            setMaxWords:function(value){
+               maxwords = value; 
+            },
+            setMinFreq:function(value){
+              minfreq = value;
             }
-
         };
 });
 
-deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
+deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route) {
+   // Variable to hold request (requet to php)
+        var request;
+
    $scope.classes=['Nome','Verbo','Adjetivo','Advérbio']
    $scope.pos = "Classe";
    $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência']
@@ -86,13 +103,22 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
        $(".showmoreOptionButtons").hide();
        $(".showlessOptionButtons").css("display","table");
        
-   }
+   };
 
    $scope.lessOptions = function() {
        $(".moreOptions").hide();
        $(".showmoreOptionButtons").css("display","table");
        $(".showlessOptionButtons").hide();    
-   }
+   };
+  
+  $scope.reloadHomePage = function() {
+    // Abort any pending request
+        if (request) {
+          request.abort();
+        }
+
+    $route.reload();
+  };
 
    $scope.searchWord = function() {
 
@@ -121,6 +147,10 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
     $scope.postPhp = function() {
        $(".waitfForWord").show();
 
+       sharedInfo.setMinFreq($scope.minfreq);
+       sharedInfo.setMaxWords($scope.maxword);
+           
+
        var url = 'php/deep.php';
        var data = {
                     'word':$scope.word,
@@ -129,8 +159,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
                     'limit':$scope.maxword,
                     'minfreq':$scope.minfreq
           };
-        // Variable to hold request
-        var request;
+        
         // Abort any pending request
         if (request) {
           request.abort();
@@ -149,7 +178,6 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
             sharedInfo.setDeps(response);
             console.log(response);
             $location.path("/deepexplorer");
-           // selectPath();
             $scope.$apply()
          });//request done
 
@@ -165,12 +193,57 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location) {
     }//postPhp
 });//controller
 
-deepApp.controller("deepCtrl", function($scope, sharedInfo) {
+deepApp.controller("deepCtrl", function($scope, sharedInfo, $rootScope) {
+  
     var Deps = sharedInfo.getDeps();
     $scope.word = sharedInfo.getWord();
     $scope.pos =  sharedInfo.getPos();
     $scope.measure =  sharedInfo.getMeasure();
+    $scope.maxword =  sharedInfo.getMaxWords();
+    $scope.minfreq =  sharedInfo.getMinfreq();
 
+  
+  /* $scope.postPhp = function() {
+    var url = 'php/deep.php';
+       var data = {
+                    'word':$scope.word,
+                    'pos':$scope.pos,
+                    'measure':$scope.measure,
+                    'limit':$scope.maxword,
+                    'minfreq':$scope.minfreq
+                  };
+
+       if (request) {
+          request.abort();
+        }
+        request = $.ajax({
+                    type: 'POST',
+                    url: url,
+                    dataType: "json",
+                    data: data,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    async: true
+        });//request
+
+          // Callback handler that will be called on success
+        request.done(function (response, textStatus, jqXHR){
+            sharedInfo.setDeps(response);
+            console.log(response);
+         });//request done
+        // Callback handler that will be called on failure
+        request.fail(function (jqXHR, textStatus, errorThrown){
+        // Log the error to the console
+        //return false;
+        console.error(
+            "The following error occurred: "+
+            textStatus, errorThrown
+        );
+        });//fail   
+
+    // the following line of code will prevent reload or navigating away.
+    event.preventDefault();
+};
+  */
     $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
     $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
     $scope.POST_GOVERNED = Deps.POST_GOVERNED;

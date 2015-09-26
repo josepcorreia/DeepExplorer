@@ -31,18 +31,10 @@ if($Measure == 'Frequência'){
 $word = "carro";
 $pos = "NOUN";
 $Measure = "Dice";
-
-/*
-$word = "ser";
-$pos = "VERB";
-$Measure = "Dice";
+$limit =  10;
+$minfreq = 1;
 */
 
-/*
-$word = "bonito";
-$pos = "ADJ";
-$Measure = "Dice";
-*/
 
 $depInstance = new DepClass($pos);
 $deps = $depInstance->GetAllDependencies($conn,$word,$Measure,$limit, $minfreq);

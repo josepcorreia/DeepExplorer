@@ -79,6 +79,11 @@ class DepClass
         return $dep." ".$prop;
     }
 
+     private function logarithmBase2($freq)
+    {
+        return (log10($freq) / log10(2));
+    }
+
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit, $minfreq){
         $outp = array();
 
@@ -102,9 +107,9 @@ class DepClass
                 $result_array = array();
 
                 $result_array["word"] = $rs["palavra"];
-                $result_array["measure"] = $rs[$measure];
+                $result_array["measure"] = round($rs[$measure],4);
                 $result_array["frequency"] = $rs["frequencia"];
-
+                $result_array["duallog"] = round($this->logarithmBase2($rs["frequencia"]));
                 array_push($words_array,$result_array);
             }
 
