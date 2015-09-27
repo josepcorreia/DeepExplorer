@@ -14,40 +14,38 @@
 				</span>
 			</h4>
 			<div class="dropdown">
-        		<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-            			{{measure}}
-           			<span class="caret"></span>
-            		<!--<span class="sr-only">Toggle Dropdown</span>-->
-          		</button>
-          		<ul class="dropdown-menu" role="menu">
-           		 	<li ng-repeat="x in measures" ng-click="changeMeasureDeps(x)">
-             		  	<a  href=""> {{ x }} </a>
-            		 </li>
-          		</ul>
-        	</div>
+				<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+					{{measure}}
+					<span class="caret"></span>
+					<!--<span class="sr-only">Toggle Dropdown</span>-->
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li ng-repeat="x in measures" ng-click="changeMeasureDeps(x)">
+						<a  href=""> {{ x }} </a>
+					</li>
+				</ul>
+			</div>
 		</div>
-	<div class="row">
+		<div class="row">
 			<div class="col-xs-6">
 				<div class="panel panel-info">
 					<div class="panel-heading">
 						<h3 class="panel-title"> Alvo é Modificado à Esquerda</h3>
 					</div>
 					<div class="panel-body">
-						<div class="row">
-							<div class = "rowDeps" ng-repeat="x in PRE_GOVERNED">
-								<table class="table table-bordered">
-									<label>{{x.name}}</label>
-									<tr class="warning" >
-    									<td>
-    										<span ng-repeat="y in x.data">
-    											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
-    											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-    										</span>
-    									</td>
-									</tr>
-								</table>
-							</div>
-						</div>	
+						<div class = "rowDeps" ng-repeat="x in PRE_GOVERNED">
+							<table class="table table-bordered">
+								<label>{{x.name}}</label>
+								<tr class="warning" >
+									<td>
+										<span ng-repeat="y in x.data">
+											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
+											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -57,21 +55,19 @@
 						<h3 class="panel-title">Alvo é Modificado à Direita</h3>
 					</div>
 					<div class="panel-body">
-						<div class="row">
-							<div class = "rowDeps" ng-repeat="x in POST_GOVERNED">
-								<table class="table table-bordered">
-									<label>{{x.name}}</label>
-									<tr class="warning" >
-    									<td>
-    										<span ng-repeat="y in x.data">
-    											 <b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
-    											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-    										</span>
-    									</td>
-									</tr>
-								</table>
-							</div>
-						</div>	
+						<div class = "rowDeps" ng-repeat="x in POST_GOVERNED">
+							<table class="table table-bordered">
+								<label>{{x.name}}</label>
+								<tr class="warning" >
+									<td>
+										<span ng-repeat="y in x.data">
+											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
+											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -83,21 +79,19 @@
 						<h3 class="panel-title">Alvo é Modificador à Esquerda</h3>
 					</div>
 					<div class="panel-body">
-						<div class="row">
-							<div class = "rowDeps" ng-repeat="x in PRE_GOVERNOR">
-								<table class="table table-bordered">
-									<label>{{x.name}}</label>
-									<tr class="warning" >
-    									<td>
-    										<span ng-repeat="y in x.data">
-    											{{y.word}} ({{y.duallog}}:{{y.measure}})
-    											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-    										</span>
-    									</td>
-									</tr>
-								</table>
-							</div>
-						</div>	
+						<div class = "rowDeps" ng-repeat="x in PRE_GOVERNOR">
+							<table class="table table-bordered">
+								<label>{{x.name}}</label>
+								<tr class="warning" >
+									<td>
+										<span ng-repeat="y in x.data">
+											{{y.word}} ({{y.duallog}}:{{y.measure}})
+											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -107,50 +101,48 @@
 						<h3 class="panel-title">Alvo é Modificador à Direita</h3>
 					</div>
 					<div class="panel-body">
-						<div class="row">
-							<div class = "rowDeps" ng-repeat="x in POST_GOVERNOR">
-								<table class="table table-bordered">
-									<label>{{x.name}}</label>
-									<tr class="warning" >
-    									<td>
-    										<span ng-repeat="y in x.data">
-    											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
-    											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-    										</span>
-    									</td>
-									</tr>
-								</table>
-							</div>
-						</div>	
-					</div>
+						<div class = "rowDeps" ng-repeat="x in POST_GOVERNOR">
+							<table class="table table-bordered">
+								<label>{{x.name}}</label>
+								<tr class="warning" >
+									<td>
+										<span ng-repeat="y in x.data">
+											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
+											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>	
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
- <div class = "waitfForWord">
-     <div class ="content">  
-        <div class = "waitText">
-          A processar ...
-        </div>
-        <div class="sk-circle">
-          <div class="sk-circle1 sk-child"></div>
-          <div class="sk-circle2 sk-child"></div>
-          <div class="sk-circle3 sk-child"></div>
-          <div class="sk-circle4 sk-child"></div>
-          <div class="sk-circle5 sk-child"></div>
-          <div class="sk-circle6 sk-child"></div>
-          <div class="sk-circle7 sk-child"></div>
-          <div class="sk-circle8 sk-child"></div>
-          <div class="sk-circle9 sk-child"></div>
-          <div class="sk-circle10 sk-child"></div>
-          <div class="sk-circle11 sk-child"></div>
-          <div class="sk-circle12 sk-child"></div>
-        </div>
-        <div class = "waitText">
-          <button type="button" class="btn btn-link" ng-click="reloadPage()">
-              Voltar ao início
-          </button>
-        </div>
-      </div>
+<div class = "waitfForWord">
+	<div class ="content">  
+		<div class = "waitText">
+			A processar ...
+		</div>
+		<div class="sk-circle">
+			<div class="sk-circle1 sk-child"></div>
+			<div class="sk-circle2 sk-child"></div>
+			<div class="sk-circle3 sk-child"></div>
+			<div class="sk-circle4 sk-child"></div>
+			<div class="sk-circle5 sk-child"></div>
+			<div class="sk-circle6 sk-child"></div>
+			<div class="sk-circle7 sk-child"></div>
+			<div class="sk-circle8 sk-child"></div>
+			<div class="sk-circle9 sk-child"></div>
+			<div class="sk-circle10 sk-child"></div>
+			<div class="sk-circle11 sk-child"></div>
+			<div class="sk-circle12 sk-child"></div>
+		</div>
+		<div class = "waitText">
+			<button type="button" class="btn btn-link" ng-click="reloadPage()">
+				Voltar ao início
+			</button>
+		</div>
+	</div>
 </div>

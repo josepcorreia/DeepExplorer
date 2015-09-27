@@ -82,14 +82,14 @@ font-size: 16px;
   display: table;
   margin-right:auto;
   margin-left:auto;
-  margin-top: -5%;
+  margin-top: -55px;
 }
 .measureTitle{
   display: table;
   margin-right:auto;
   margin-left:auto;
-  margin-top: -1%;
-  padding-bottom: 2%;
+  margin-top: -5px;
+  padding-bottom: 10px;
 }
 
 .measureTitle h4 {
