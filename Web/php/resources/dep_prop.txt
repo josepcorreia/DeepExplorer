@@ -1,36 +1,36 @@
 ## NOUN
-MOD PRE_FOCUS_NOUN_ADV,PRE_GOVERNED,Modificado por Advérbio de Foco
-MOD PRE_NOUN_ADJ,PRE_GOVERNED,Modificado por Adjetivo
-QUANTD NOUN_NOUN,PRE_GOVERNED,Modificado por Quantificador Nominal 
-CLASSD NOUN_NOUN,PRE_GOVERNED,Modificado por Classificador Nominal
-MOD POST_FOCUS_NOUN_ADV,POST_GOVERNED,Modificado por Advérbio de Foco
-MOD POST_NOUN_ADJ,POST_GOVERNED,Modificado por Adjetivo
+MOD PRE_FOCUS_NOUN_ADV,PRE_GOVERNED,Modificado por um Advérbio de Foco
+MOD PRE_NOUN_ADJ,PRE_GOVERNED,Modificado por um Adjetivo
+QUANTD NOUN_NOUN,PRE_GOVERNED,Modificado por um Quantificador Nominal 
+CLASSD NOUN_NOUN,PRE_GOVERNED,Modificado por um Classificador Nominal
+MOD POST_FOCUS_NOUN_ADV,POST_GOVERNED,Modificado por um Advérbio de Foco
+MOD POST_NOUN_ADJ,POST_GOVERNED,Modificado por um Adjetivo
 MOD POST_NOUN_NOUN,POST_GOVERNOR,Modifica um Nome
 
 ## VERB
 SUBJ SEM_PROP,PRE_GOVERNED,Sujeitos
-MOD PRE_VERB_ADV,PRE_GOVERNED,Modificado por Advérbio
+MOD PRE_VERB_ADV,PRE_GOVERNED,Modificado por um Advérbio
 CDIR SEM_PROP,POST_GOVERNED,Complementos Direto
 CINDIR SEM_PROP,POST_GOVERNED,Complementos Indireto
 COMPL SEM_PROP,POST_GOVERNED,Complementos Essenciais
-MOD VERB_NOUN,POST_GOVERNED,Modificado por Nome
-MOD VERB_ADJ,POST_GOVERNED,Modificado por Adjectivo
-MOD POST_VERB_ADV,POST_GOVERNED,Modificado por Advérbio
+MOD VERB_NOUN,POST_GOVERNED,Modificado por um Nome
+MOD VERB_ADJ,POST_GOVERNED,Modificado por um Adjectivo
+MOD POST_VERB_ADV,POST_GOVERNED,Modificado por um Advérbio
 
 
 ## ADJ
-MOD PRE_ADJ_ADV,PRE_GOVERNED,Modificado por Advérbio
+MOD PRE_ADJ_ADV,PRE_GOVERNED,Modificado por um Advérbio
 MOD PRE_NOUN_ADJ,PRE_GOVERNOR,Modifica um Nome
-MOD POST_ADJ_ADV,POST_GOVERNED,Modificado por Advérbio
+MOD POST_ADJ_ADV,POST_GOVERNED,Modificado por um Advérbio
 MOD POST_NOUN_ADJ,POST_GOVERNOR,Modifica um Adjétivo
 
 ## ADV
-MOD PRE_ADV_ADV,PRE_GOVERNED,Modificado por Advérbio
+MOD PRE_ADV_ADV,PRE_GOVERNED,Modificado por um Advérbio
 MOD PRE_ADJ_ADV,PRE_GOVERNOR,Modifica um Adjetivo
 MOD PRE_ADV_ADV,PRE_GOVERNOR,Modifica um Advérbio
 MOD PRE_FOCUS_NOUN_ADV,PRE_GOVERNOR,Modifica um Nome
 MOD PRE_VERB_ADV,PRE_GOVERNOR,Modifica um Verbo
-MOD POST_ADV_ADV,POST_GOVERNED,Modificado por Advérbio
+MOD POST_ADV_ADV,POST_GOVERNED,Modificado por um Advérbio
 MOD POST_ADJ_ADV,POST_GOVERNOR,Modifica um Adjetivo
 MOD POST_FOCUS_NOUN_ADV,POST_GOVERNOR,Modifica um Nome
 MOD POST_VERB_ADV,POST_GOVERNOR,Modifica um Verbo
