@@ -5,10 +5,12 @@ class DepClass
 {
     private $pos = NULL;
     private $depProps = NULL;
+    private $depTitles = NULL;
 
     public function __construct($pos){
         $this->pos = $pos;
         $this->depProps = $this->GetDependenciesFromFile($pos);
+        $this->depTitles = $this->GetDependenciesTitleFromFile($pos);
     }
 
     public function GetAllDependencies($conn, $word, $measure, $limit, $minfreq) {
@@ -25,13 +27,16 @@ class DepClass
 
             if( $split[0] ===  '##') {
                 if($split[1] === $pos) {
-                    return $this->GetDependenciesByClass($file);
+                    $result = $this->GetDependenciesByClass($file);
+                    fclose($file);
+                    return $result;
                 }
             }
         }
-        fclose($file);
+        
     }
-    protected function GetDependenciesByClass($file){
+
+     protected function GetDependenciesByClass($file){
         $deps = array();
 
         while ($line = fgets($file)) {
@@ -54,6 +59,46 @@ class DepClass
         return $deps;
     }
 
+    protected function GetDependenciesTitleFromFile($pos)
+    {
+        $file = fopen('resources/dep_prop.txt','r');
+        while ($line = fgets($file)) {
+            $line = trim(preg_replace('/\n/', '', $line));
+            $split = explode(" ",$line);
+
+            if( $split[0] ===  '##') {
+                if($split[1] === $pos) {
+                    $result = $this->GetDependenciesTitleByClass($file);
+                    fclose($file);
+                    return $result;
+                }
+            }
+        }
+        
+    }
+     protected function GetDependenciesTitleByClass($file){
+        $depTitles = array();
+
+        while ($line = fgets($file)) {
+            $line = trim(preg_replace('/\n/', '', $line));
+
+            //caso da linha em brnaco do ficheiro
+            if($line === ""){
+                continue;
+            }
+
+            $test = explode(" ",$line);
+            if( $test[0] ===  '##'){
+                break;
+            }
+            $split = explode(",",$line);
+
+            //add to array
+            $depTitles[$split[0]] = $split[2];
+        }
+        return $depTitles;
+    }
+
     private function GetWordId($conn, $word, $pos)
     {
         $query =   "SELECT idPalavra
@@ -69,19 +114,36 @@ class DepClass
         return $rs["idPalavra"];
     }
 
-    private function GetNameFromDep($dep, $prop)
-    {
-        $prop = str_replace("SEM_PROP", "", $prop);
-        $prop = str_replace("_", " ", $prop);
-        $prop = str_replace("PRE ", "", $prop);
-        $prop = str_replace("POST ", "", $prop);
-
-        return $dep." ".$prop;
-    }
-
      private function logarithmBase2($freq)
     {
         return (log10($freq) / log10(2));
+    }
+
+    private function roundMeasure($measure, $number)
+    {
+        switch ($measure) {
+            case 'Dice':
+                return round($number,3);
+                break;
+            case 'LogDice':
+                return round($number,1);
+                break;
+            case 'PMI':
+                return round($number,2);
+                break;
+            case 'ChiPearson':
+                return round($number,1);
+                break;
+            case 'LogLikelihood':
+                return round($number,1);
+                break;
+            case 'Significance':
+                return round($number,2);
+                break;
+            case 'frequencia':
+                return $number;
+                break;
+        }
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit, $minfreq){
@@ -92,12 +154,12 @@ class DepClass
 
         foreach ($depPropsKeys as $depProp){
             $depType = $depProps[$depProp];
+            $depPropName = $this->depTitles[$depProp];
+
             $split = explode(" ",$depProp);
             $dep = $split[0];
             $prop = $split[1];
             $depProp = $dep."_".$prop;
-
-            $depPropName = $this->GetNameFromDep($dep, $prop);
 
             $depStrategy = new DepStrategy($dep);
             $result = $depStrategy->GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
@@ -107,7 +169,7 @@ class DepClass
                 $result_array = array();
 
                 $result_array["word"] = $rs["palavra"];
-                $result_array["measure"] = round($rs[$measure],3);
+                $result_array["measure"] = $this->roundMeasure($measure,$rs[$measure]);
                 $result_array["frequency"] = $rs["frequencia"];
                 $result_array["duallog"] = round($this->logarithmBase2($rs["frequencia"]));
                 array_push($words_array,$result_array);
