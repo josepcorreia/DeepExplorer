@@ -107,7 +107,7 @@ class DepClass
                 $result_array = array();
 
                 $result_array["word"] = $rs["palavra"];
-                $result_array["measure"] = round($rs[$measure],4);
+                $result_array["measure"] = round($rs[$measure],3);
                 $result_array["frequency"] = $rs["frequencia"];
                 $result_array["duallog"] = round($this->logarithmBase2($rs["frequencia"]));
                 array_push($words_array,$result_array);

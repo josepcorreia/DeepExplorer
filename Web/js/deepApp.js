@@ -32,7 +32,7 @@ deepApp.service('sharedInfo', function () {
         var minfreq ="";
         var maxwords = "";
         var deps;
-        
+
         return {
             getWord: function () {
                 return word;
@@ -49,7 +49,7 @@ deepApp.service('sharedInfo', function () {
             getMaxWords: function(){
               return maxwords;
             },
-            getMinfreq: function(){
+            getMinFreq: function(){
              return minfreq;
             },
             setWord: function(value) {
@@ -116,7 +116,6 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
         if (request) {
           request.abort();
         }
-
     $route.reload();
   };
 
@@ -128,8 +127,10 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
             sharedInfo.setWord($scope.word);
             sharedInfo.setPos($scope.pos);
             sharedInfo.setMeasure($scope.measure);
+            sharedInfo.setMinFreq($scope.minfreq);
+            sharedInfo.setMaxWords($scope.maxword);
 
-            $scope.postPhp()
+            $scope.postPhp();
           }
           else{
             alert("Selecionar qual a Medida a usar");
@@ -193,21 +194,55 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
     }//postPhp
 });//controller
 
-deepApp.controller("deepCtrl", function($scope, sharedInfo, $rootScope) {
-  
-    var Deps = sharedInfo.getDeps();
-    $scope.word = sharedInfo.getWord();
-    $scope.pos =  sharedInfo.getPos();
-    $scope.measure =  sharedInfo.getMeasure();
-    $scope.maxword =  sharedInfo.getMaxWords();
-    $scope.minfreq =  sharedInfo.getMinfreq();
+deepApp.controller("deepCtrl", function($scope, sharedInfo, $route) {
+      var request;
 
-  
-  /* $scope.postPhp = function() {
-    var url = 'php/deep.php';
+      $scope.loadData = (function(){
+        var Deps = sharedInfo.getDeps();
+        $scope.word = sharedInfo.getWord();
+        $scope.pos =  sharedInfo.getPos();
+        $scope.measure =  sharedInfo.getMeasure();
+        $scope.maxword =  sharedInfo.getMaxWords();
+        $scope.minfreq =  sharedInfo.getMinFreq();
+
+        $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
+        $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
+        $scope.POST_GOVERNED = Deps.POST_GOVERNED;
+        $scope.POST_GOVERNOR = Deps.POST_GOVERNOR;
+      });
+      $scope.loadData();
+
+
+
+     var posHash = new Array();
+        posHash['Nome'] = 'NOUN';
+        posHash['Verbo'] = 'VERB';
+        posHash['Adjetivo'] = 'ADJ';
+        posHash['Advérbio'] = 'ADV';
+
+    $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência'];
+    $scope.changeMeasureDeps = function(value) {
+      $scope.measure = value;
+      sharedInfo.setPos($scope.pos);
+      $scope.postPhp();
+    };
+
+    $scope.reloadHomePage = function() {
+    // Abort any pending request
+        if (request) {
+          request.abort();
+        }
+    $route.reload();
+    };
+
+    $scope.postPhp = function() {
+      $(".waitfForWord").show();
+      var url = 'php/deep.php';
+      
+       
        var data = {
                     'word':$scope.word,
-                    'pos':$scope.pos,
+                    'pos':posHash[$scope.pos],
                     'measure':$scope.measure,
                     'limit':$scope.maxword,
                     'minfreq':$scope.minfreq
@@ -228,6 +263,9 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $rootScope) {
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
             sharedInfo.setDeps(response);
+            $scope.loadData();
+            $route.reload();
+            $(".waitfForWord").hide();
             console.log(response);
          });//request done
         // Callback handler that will be called on failure
@@ -239,14 +277,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $rootScope) {
             textStatus, errorThrown
         );
         });//fail   
-
-    // the following line of code will prevent reload or navigating away.
-    event.preventDefault();
-};
-  */
-    $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
-    $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
-    $scope.POST_GOVERNED = Deps.POST_GOVERNED;
-    $scope.POST_GOVERNOR = Deps.POST_GOVERNOR;
+    };
+  
 
   });
