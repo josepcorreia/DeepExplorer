@@ -194,16 +194,18 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
     }//postPhp
 });//controller
 
-deepApp.controller("deepCtrl", function($scope, sharedInfo, $route) {
+deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
       var request;
 
       $scope.loadData = (function(){
         var Deps = sharedInfo.getDeps();
+      
         $scope.word = sharedInfo.getWord();
         $scope.pos =  sharedInfo.getPos();
         $scope.measure =  sharedInfo.getMeasure();
         $scope.maxword =  sharedInfo.getMaxWords();
         $scope.minfreq =  sharedInfo.getMinFreq();
+
 
         $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
         $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
@@ -223,16 +225,16 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route) {
     $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência'];
     $scope.changeMeasureDeps = function(value) {
       $scope.measure = value;
-      sharedInfo.setPos($scope.pos);
+      sharedInfo.setMeasure($scope.measure);
       $scope.postPhp();
     };
 
-    $scope.reloadHomePage = function() {
+    $scope.reloadPage = function() {
     // Abort any pending request
         if (request) {
           request.abort();
         }
-    $route.reload();
+      $route.reload();
     };
 
     $scope.postPhp = function() {
@@ -278,6 +280,5 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route) {
         );
         });//fail   
     };
-  
 
   });
