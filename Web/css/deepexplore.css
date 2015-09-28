@@ -59,11 +59,15 @@ text-align:center
 .rowDeps{
   padding-right: 2%;
   padding-left: 2%;
-      /*font-size: 13px;*/
 }
 .rowDeps > .table{
   font-size: 13px;
 }
+
+.notApplicable{
+  display: none;
+}
+
 .depTitle{
   background-color: dimgrey;
   padding: 10px 15px;

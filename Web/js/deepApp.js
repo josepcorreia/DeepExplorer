@@ -176,7 +176,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
-            if(response.notWord == "true"){
+            if(response.hasOwnProperty("wordNotExist")){
               $(".waitfForWord").hide();
               alert("A palavra " +$scope.word+ "("+$scope.pos+") não existe na nossa base de dados");
             }              
@@ -211,24 +211,83 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
       var request;
 
+      $scope.loadPRE_Governed = function(Deps){
+       
+        if(Deps.hasOwnProperty("PRE_GOVERNED")){
+          $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
+          if(!jQuery.isPlainObject(Deps.PRE_GOVERNED)){
+            $scope.msg_1 ="Não se encontraram ocorrências";
+            $( "#PRE_GOVERNED" ).find('.notApplicable').show();
+          }
+        } 
+        else{
+          $scope.msg_1 ="Não se Aplica";
+          $( "#PRE_GOVERNED" ).find('.notApplicable').show();
+        }
+      }
+      $scope.loadPOST_Governed = function(Deps){
+       
+        if(Deps.hasOwnProperty("POST_GOVERNED")){
+          $scope.POST_GOVERNED = Deps.POST_GOVERNED;
+          if(!jQuery.isPlainObject(Deps.POST_GOVERNED)){
+            $scope.msg_2 ="Não se encontraram ocorrências";
+            $("#POST_GOVERNED").find('.notApplicable').show();
+          }
+        }
+        else{
+          $scope.msg_2 ="Não se Aplica";
+          $("#POST_GOVERNED").find('.notApplicable').show();
+        }
+      }
+      $scope.loadPRE_Governor = function(Deps){
+        
+        if(Deps.hasOwnProperty("PRE_GOVERNOR")){  
+          $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
+          if(!jQuery.isPlainObject(Deps.PRE_GOVERNOR)){
+            $scope.msg_3 ="Não se encontraram ocorrências";
+            $("#PRE_GOVERNOR" ).find('.notApplicable').show();
+          }
+        }
+        else{
+          $scope.msg_3 ="Não se Aplica";
+        $( "#PRE_GOVERNOR" ).find('.notApplicable').show();
+        }
+      }
+
+      $scope.loadPOST_Governor  = function(Deps){
+        
+        if(Deps.hasOwnProperty("POST_GOVERNOR")){
+          $scope.POST_GOVERNOR = Deps.POST_GOVERNOR;
+          if(!jQuery.isPlainObject(Deps.POST_GOVERNOR)){
+            $scope.msg_4 ="Não se encontraram ocorrências";
+            $( "#POST_GOVERNOR" ).find('.notApplicable').show();
+          }
+        }
+        else{
+          $scope.msg_4 ="Não se Aplica";
+          $( "#POST_GOVERNOR" ).find('.notApplicable').show();
+        }
+      }
+
+
       $scope.loadData = (function(){
         var Deps = sharedInfo.getDeps();
-      
+        
         $scope.word = sharedInfo.getWord();
         $scope.pos =  sharedInfo.getPos();
         $scope.measure =  sharedInfo.getMeasure();
         $scope.maxword =  sharedInfo.getMaxWords();
         $scope.minfreq =  sharedInfo.getMinFreq();
 
+        $scope.loadPRE_Governed(Deps);
+        $scope.loadPOST_Governed(Deps);
+        $scope.loadPRE_Governor(Deps);
+        $scope.loadPOST_Governor(Deps);
 
-        $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
-        $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
-        $scope.POST_GOVERNED = Deps.POST_GOVERNED;
-        $scope.POST_GOVERNOR = Deps.POST_GOVERNOR;
       });
       $scope.loadData();
 
-
+      
 
      var posHash = new Array();
         posHash['Nome'] = 'NOUN';

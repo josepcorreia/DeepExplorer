@@ -6,6 +6,7 @@ class DepClass
     private $pos = NULL;
     private $depProps = NULL;
     private $depTitles = NULL;
+    private $outp = array();
 
     public function __construct($pos){
         $this->pos = $pos;
@@ -55,6 +56,7 @@ class DepClass
 
             //add to array
             $deps[$split[0]] = $split[1];
+            $this->outp[$split[1]] = null;
         }
         return $deps;
     }
@@ -116,7 +118,7 @@ class DepClass
         } 
         else{
             $conn->close();
-            echo '{"notWord": "true"}';
+            echo '{"wordNotExist": "true"}';
             exit();  
             
         } 
@@ -155,7 +157,7 @@ class DepClass
     }
 
     protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit, $minfreq){
-        $outp = array();
+        
 
         $idWord = $this->GetWordId($conn, $word, $pos);
         $depPropsKeys = array_keys($depProps);
@@ -188,9 +190,9 @@ class DepClass
                 $depProp_array["name"] = $depPropName;
                 $depProp_array["data"] = $words_array;
 
-                $outp[$depType][$depProp] = $depProp_array;
+                $this->outp[$depType][$depProp] = $depProp_array;
             }
         }
-        return $outp;
+        return $this->outp;
     }
 }
