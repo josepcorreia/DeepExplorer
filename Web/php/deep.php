@@ -35,7 +35,6 @@ $limit =  10;
 $minfreq = 1;
 */
 
-
 $depInstance = new DepClass($pos);
 $deps = $depInstance->GetAllDependencies($conn,$word,$Measure,$limit, $minfreq);
 

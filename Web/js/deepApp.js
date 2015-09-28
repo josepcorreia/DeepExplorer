@@ -176,10 +176,24 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
-            sharedInfo.setDeps(response);
-            console.log(response);
-            $location.path("/deepexplorer");
-            $scope.$apply()
+            if(response.notWord == "true"){
+              $(".waitfForWord").hide();
+              alert("A palavra " +$scope.word+ "("+$scope.pos+") não existe na nossa base de dados");
+            }              
+            else{
+              if(jQuery.isEmptyObject(response)){
+                  $(".waitfForWord").hide();
+                alert("Para a palavra " +$scope.word+ "("+$scope.pos+") não se obtiveram resultados com as opções selecionadas");
+              }else{
+                sharedInfo.setDeps(response);
+                console.log(response);
+                $location.path("/deepexplorer");
+                $scope.$apply()
+              }
+            } 
+            
+
+
          });//request done
 
         // Callback handler that will be called on failure

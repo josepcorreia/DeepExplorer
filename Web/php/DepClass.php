@@ -111,7 +111,15 @@ class DepClass
 
         $rs = $result->fetchArray(SQLITE3_ASSOC);
 
-        return $rs["idPalavra"];
+        if(count($rs["idPalavra"]) > 0){
+            return $rs["idPalavra"];
+        } 
+        else{
+            $conn->close();
+            echo '{"notWord": "true"}';
+            exit();  
+            
+        } 
     }
 
      private function logarithmBase2($freq)
