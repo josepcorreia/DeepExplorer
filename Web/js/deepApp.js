@@ -188,7 +188,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
                 sharedInfo.setDeps(response);
                 console.log(response);
                 $location.path("/wordexplorer");
-                $scope.$apply()
+                $scope.$apply();
               }
             } 
             
@@ -408,21 +408,68 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
     
     //WORD Example
     $scope.loadWordExample = (function(depProp, word_obj, elementType){
-      
       var position = elementType.split("_")[0];  
       var type = elementType.split("_")[1];
 
       switch(type) {
         case 'GOVERNED':
-          $scope.exampleTitle = depProp.depProp + "("+ $scope.word +","+word_obj.word+")";
+          $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ $scope.word +","+word_obj.word+")";
+          var data = {
+                    'word1':$scope.word,
+                    'pos1':posHash[$scope.pos],
+                    'word2':word_obj.word,
+                    'pos2':word_obj.word_pos,
+                    'dep':depProp.dep,
+                    'prop':depProp.prop
+                  };
         break;
         case 'GOVERNOR':
-          $scope.exampleTitle = depProp.depProp + "("+ word_obj.word +","+ $scope.word +")";
+          $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ word_obj.word +","+ $scope.word +")";
+          var data = {
+                    'word1':word_obj.word,
+                    'pos1':word_obj.word_pos,
+                    'word2':$scope.word,
+                    'pos2':posHash[$scope.pos],
+                    'dep':depProp.dep,
+                    'prop':depProp.prop
+                  };
         break; 
       }
-
       $scope.otherWord = word_obj.word;
       $scope.pos_otherWord = word_obj.word_pos;
+
+
+       var url = 'php/deepConcordance.php';
+       if (request) {
+          request.abort();
+        }
+        request = $.ajax({
+                    type: 'POST',
+                    url: url,
+                    dataType: "json",
+                    data: data,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    async: true
+        });//request
+
+          // Callback handler that will be called on success
+        request.done(function (response, textStatus, jqXHR){
+            console.log(response);
+            $scope.sentences = response.sentences;
+            $('#myModal').load();
+            $scope.$apply();
+            $('#myModal').modal('show'); 
+         });//request done
+        // Callback handler that will be called on failure
+        request.fail(function (jqXHR, textStatus, errorThrown){
+        // Log the error to the console
+        //return false;
+        console.error(
+            "The following error occurred: "+
+            textStatus, errorThrown
+        );
+        });//fail 
+
 
       switch(position) {
         case 'PRE':
@@ -436,7 +483,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
       $scope.frequency = word_obj.frequency;
       $scope.logfrequency = word_obj.duallog;
 
-      $('#myModal').modal('show');  
+
     });
   
 

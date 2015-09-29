@@ -44,7 +44,7 @@ class DepQueries
         return $result;
     }
 
-    protected function GetConcordance($idWord1,$idWord2, $dep, $prop) {
+    public function GetConcordance($idWord1,$idWord2, $dep, $prop) {
 
         $query =   "SELECT Frase.numeroFrase, Frase.nomeFicheiro, Frase.frase
                     FROM (Select * from Exemplifica 

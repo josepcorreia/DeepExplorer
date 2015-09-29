@@ -168,7 +168,8 @@ class DepClass
             if(count($words_array) > 0){
                 $depProp_array = array();
                 $depProp_array["name"] = $depPropName;
-                $depProp_array["depProp"] = $depProp;
+                $depProp_array["dep"] = $dep;
+                $depProp_array["prop"] = $prop;
                 $depProp_array["data"] = $words_array;
 
                 $this->outp[$depType][$depProp] = $depProp_array;

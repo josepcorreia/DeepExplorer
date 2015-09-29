@@ -158,7 +158,7 @@
 						<div class = "col-md-4">
 							<label>Relação:</label>
 						</div>
-						<div class = "col-md-6">
+						<div class = "col-md-7">
 							{{depTitle}}
 						</div>
 					</div>
@@ -195,8 +195,16 @@
 						</div>
 					</div>
 				<div class = "concordance">
+					<label> Frases de exemplo </lable>
 					<table class="table table-striped">
-					  ...
+					  <tr ng-repeat="x in sentences">
+					  	<td>
+					  		{{x.number}},{{x.file}}
+					  	</td>
+					  	<td>
+					  		{{x.sentence}}
+					  	</td>
+					  </tr>
 					</table>
 				</div>
 			</div>
