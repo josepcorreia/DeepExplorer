@@ -1,10 +1,10 @@
-  <div class = "deepword"> 
-    <div class="jumbotron">
-      <div class="container">
-        <label for="palavra">Introduzir palavra</label>
-          <div class="input-group">
-              <input type="text" class="form-control" placeholder="Palavra" ng-model="word">
-          <span class="input-group-btn">
+<div class = "deepword"> 
+  <div class="jumbotron">
+    <div class="container">
+      <label for="palavra">Introduzir palavra</label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Palavra" ng-model="word">
+        <span class="input-group-btn">
           <button type="button" class="buttonMiddle btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 94px;">
             {{pos}}
             <span class="caret"></span>
@@ -17,8 +17,8 @@
           </ul>
         </span>
         <span class="input-group-btn">
-      
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 125px;">
+
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 125px;">
             {{measure}}
             <span class="caret"></span>
             <!--<span class="sr-only">Toggle Dropdown</span>-->
@@ -29,10 +29,8 @@
             </li>
           </ul>
         </span>
-    </div>
-
-    <div class = "moreOptions">
-        
+      </div>
+      <div class = "moreOptions">
         <table style="width:100%">
           <tr>
             <td>
@@ -46,7 +44,7 @@
           </tr>
           <tr>
             <td>
-            <label class="control-label">Número máximo de palavras:</label>
+              <label class="control-label">Número máximo de palavras:</label>
             </td>
             <td>
               <div class="inputNumber">
@@ -55,49 +53,49 @@
             </td> 
           </tr>
         </table>
-    </div>
-    <div class = "showmoreOptionButtons"> 
-      <div class="row">
-        <button type="button" class="btn btn-link" ng-click="moreOptions()">
-              Mais Opções
-        </button>
-        <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
       </div>
+      <div class = "showmoreOptionButtons"> 
+        <div class="row">
+          <button type="button" class="btn btn-link" ng-click="moreOptions()">
+            Mais Opções
+          </button>
+          <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+        </div>
       </div>
       <div class = "showlessOptionButtons"> 
-      <div class="row">
-        <button type="button" class="btn btn-link" ng-click="lessOptions()">
-              Esconder Opções
-        </button>
-        <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
-      </div>
-    </div>
-    </div>
-  </div>
-  </div>
-  <div class = "waitfForWord">
-     <div class ="content">  
-        <div class = "waitText">
-          A processar ...
-        </div>
-        <div class="sk-circle">
-          <div class="sk-circle1 sk-child"></div>
-          <div class="sk-circle2 sk-child"></div>
-          <div class="sk-circle3 sk-child"></div>
-          <div class="sk-circle4 sk-child"></div>
-          <div class="sk-circle5 sk-child"></div>
-          <div class="sk-circle6 sk-child"></div>
-          <div class="sk-circle7 sk-child"></div>
-          <div class="sk-circle8 sk-child"></div>
-          <div class="sk-circle9 sk-child"></div>
-          <div class="sk-circle10 sk-child"></div>
-          <div class="sk-circle11 sk-child"></div>
-          <div class="sk-circle12 sk-child"></div>
-        </div>
-        <div class = "waitText">
-          <button type="button" class="btn btn-link" ng-click="reloadHomePage()">
-              Voltar ao início
+        <div class="row">
+          <button type="button" class="btn btn-link" ng-click="lessOptions()">
+            Esconder Opções
           </button>
+          <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<div class = "waitfForWord">
+ <div class ="content">  
+  <div class = "waitText">
+    A processar ...
+  </div>
+  <div class="sk-circle">
+    <div class="sk-circle1 sk-child"></div>
+    <div class="sk-circle2 sk-child"></div>
+    <div class="sk-circle3 sk-child"></div>
+    <div class="sk-circle4 sk-child"></div>
+    <div class="sk-circle5 sk-child"></div>
+    <div class="sk-circle6 sk-child"></div>
+    <div class="sk-circle7 sk-child"></div>
+    <div class="sk-circle8 sk-child"></div>
+    <div class="sk-circle9 sk-child"></div>
+    <div class="sk-circle10 sk-child"></div>
+    <div class="sk-circle11 sk-child"></div>
+    <div class="sk-circle12 sk-child"></div>
+  </div>
+  <div class = "waitText">
+    <button type="button" class="btn btn-link" ng-click="reloadHomePage()">
+      Voltar ao início
+    </button>
+  </div>
+</div>
 </div>

@@ -11,7 +11,7 @@ deepApp.config(function($routeProvider, $locationProvider) {
             }).
 
             // route for the about page
-            when('/deepexplorer', {
+            when('/wordexplorer', {
                 templateUrl : 'partials/deep.html',
                 controller  : 'deepCtrl'
             }).
@@ -152,7 +152,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
        sharedInfo.setMaxWords($scope.maxword);
            
 
-       var url = 'php/deep.php';
+       var url = 'php/deepWords.php';
        var data = {
                     'word':$scope.word,
                     'pos':posHash[$scope.pos],
@@ -187,7 +187,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
               }else{
                 sharedInfo.setDeps(response);
                 console.log(response);
-                $location.path("/deepexplorer");
+                $location.path("/wordexplorer");
                 $scope.$apply()
               }
             } 
@@ -279,6 +279,8 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         $scope.maxword =  sharedInfo.getMaxWords();
         $scope.minfreq =  sharedInfo.getMinFreq();
 
+        $scope.title = $scope.word + "," +$scope.pos;
+
         $scope.loadPRE_Governed(Deps);
         $scope.loadPOST_Governed(Deps);
         $scope.loadPRE_Governor(Deps);
@@ -296,6 +298,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         posHash['Advérbio'] = 'ADV';
 
     $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência'];
+    
     $scope.changeMeasureDeps = function(value) {
       $scope.measure = value;
       sharedInfo.setMeasure($scope.measure);
@@ -310,9 +313,58 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
       $route.reload();
     };
 
+
+    /////parte copia do outrto controller
+    $scope.classes=['Nome','Verbo','Adjetivo','Advérbio']
+
+    $scope.changePos = function(value) {
+       $scope.pos = value;
+    };
+    $scope.changeMeasure = function(value) {
+     $scope.measure = value;
+    };
+
+    $scope.moreOptions = function() {
+       $(".moreOptions").show();
+       $(".showmoreOptionButtons").hide();
+       $(".showlessOptionButtons").css("display","table");   
+    };
+
+    $scope.lessOptions = function() {
+       $(".moreOptions").hide();
+       $(".showmoreOptionButtons").css("display","table");
+       $(".showlessOptionButtons").hide();    
+    };
+
+   $scope.searchWord = function() {
+
+      if(angular.isString($scope.word)){
+        if($scope.pos != "Classe"){
+          if($scope.measure != "Medida"){
+            sharedInfo.setWord($scope.word);
+            sharedInfo.setPos($scope.pos);
+            sharedInfo.setMeasure($scope.measure);
+            sharedInfo.setMinFreq($scope.minfreq);
+            sharedInfo.setMaxWords($scope.maxword);
+
+            $scope.postPhp();
+          }
+          else{
+            alert("Selecionar qual a Medida a usar");
+          }
+        }
+        else{
+          alert("Selecionar qual a classe da palavra");
+        }
+      }else{
+        alert("Introduzir uma palavra");
+      }
+   };
+
+    //este post e diferente do outro
     $scope.postPhp = function() {
       $(".waitfForWord").show();
-      var url = 'php/deep.php';
+      var url = 'php/deepWords.php';
       
        
        var data = {
@@ -353,5 +405,69 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         );
         });//fail   
     };
+    
+    //WORD Example
+    $scope.loadWordExample = (function(depProp, word_obj, elementType){
+      
+      var position = elementType.split("_")[0];  
+      var type = elementType.split("_")[1];
 
-  });
+      switch(type) {
+        case 'GOVERNED':
+          $scope.exampleTitle = depProp.depProp + "("+ $scope.word +","+word_obj.word+")";
+        break;
+        case 'GOVERNOR':
+          $scope.exampleTitle = depProp.depProp + "("+ word_obj.word +","+ $scope.word +")";
+        break; 
+      }
+
+      $scope.otherWord = word_obj.word;
+      $scope.pos_otherWord = word_obj.word_pos;
+
+      switch(position) {
+        case 'PRE':
+          $scope.depTitle = depProp.name + " à Esquerda";
+        break;
+        case 'POST':
+          $scope.depTitle = depProp.name + " à Direira";
+        break; 
+      }
+      $scope.m_value = word_obj.measure;
+      $scope.frequency = word_obj.frequency;
+      $scope.logfrequency = word_obj.duallog;
+
+      $('#myModal').modal('show');  
+    });
+  
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

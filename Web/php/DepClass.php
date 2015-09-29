@@ -1,21 +1,23 @@
 <?php
-require_once("DepStrategy.php");
+require_once("DepQueries.php");
 
 class DepClass
 {
+    private $DepQueries = NULL;
     private $pos = NULL;
     private $depProps = NULL;
     private $depTitles = NULL;
     private $outp = array();
 
-    public function __construct($pos){
+    public function __construct($pos, $conn){
         $this->pos = $pos;
         $this->depProps = $this->GetDependenciesFromFile($pos);
         $this->depTitles = $this->GetDependenciesTitleFromFile($pos);
+        $this->DepQueries =  new DepQueries($conn);
     }
 
-    public function GetAllDependencies($conn, $word, $measure, $limit, $minfreq) {
-        $result = $this->GetResult($this->depProps, $conn, $word, $this->pos,  $measure, $limit, $minfreq);
+    public function GetAllDependencies($word, $measure, $limit, $minfreq) {
+        $result = $this->GetResult($this->depProps, $word, $this->pos,  $measure, $limit, $minfreq);
         return $result;
     }
 
@@ -101,29 +103,6 @@ class DepClass
         return $depTitles;
     }
 
-    private function GetWordId($conn, $word, $pos)
-    {
-        $query =   "SELECT idPalavra
-                    FROM Palavra
-                    WHERE palavra = '".$word."'
-                    and classe = '".$pos."'
-                    LIMIT 1;";
-
-        $result = $conn->query($query);
-
-        $rs = $result->fetchArray(SQLITE3_ASSOC);
-
-        if(count($rs["idPalavra"]) > 0){
-            return $rs["idPalavra"];
-        } 
-        else{
-            $conn->close();
-            echo '{"wordNotExist": "true"}';
-            exit();  
-            
-        } 
-    }
-
      private function logarithmBase2($freq)
     {
         return (log10($freq) / log10(2));
@@ -156,10 +135,10 @@ class DepClass
         }
     }
 
-    protected function GetResult($depProps, $conn, $word, $pos, $measure , $limit, $minfreq){
+    protected function GetResult($depProps, $word, $pos, $measure , $limit, $minfreq){
         
 
-        $idWord = $this->GetWordId($conn, $word, $pos);
+        $idWord = $this->DepQueries->GetWordId($word, $pos);
         $depPropsKeys = array_keys($depProps);
 
         foreach ($depPropsKeys as $depProp){
@@ -171,14 +150,15 @@ class DepClass
             $prop = $split[1];
             $depProp = $dep."_".$prop;
 
-            $depStrategy = new DepStrategy($dep);
-            $result = $depStrategy->GetDepData($conn, $idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
+            
+            $result = $this->DepQueries->GetDepData($idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
 
             $words_array = array();
             while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
                 $result_array = array();
 
                 $result_array["word"] = $rs["palavra"];
+                $result_array["word_pos"] = $rs["classe"];
                 $result_array["measure"] = $this->roundMeasure($measure,$rs[$measure]);
                 $result_array["frequency"] = $rs["frequencia"];
                 $result_array["duallog"] = round($this->logarithmBase2($rs["frequencia"]));
@@ -188,6 +168,7 @@ class DepClass
             if(count($words_array) > 0){
                 $depProp_array = array();
                 $depProp_array["name"] = $depPropName;
+                $depProp_array["depProp"] = $depProp;
                 $depProp_array["data"] = $words_array;
 
                 $this->outp[$depType][$depProp] = $depProp_array;

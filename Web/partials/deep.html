@@ -3,7 +3,7 @@
 		<div class="wordTitle">
 			<h3>
 				<span class="label label-warning">
-					{{word}} , {{pos}} 
+					{{title}} 
 				</span>
 			</h3>
 		</div>
@@ -39,7 +39,10 @@
 								<tr class="warning" >
 									<td>
 										<span ng-repeat="y in x.data">
-											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
+											<a ng-click="loadWordExample(x,y,'PRE_GOVERNED')" href="javascript:void(0);">
+												<b>{{y.word}}</b>
+											</a> 
+											({{y.duallog}}:{{y.measure}})
 											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 										</span>
 									</td>
@@ -64,7 +67,10 @@
 								<tr class="warning" >
 									<td>
 										<span ng-repeat="y in x.data">
-											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
+											<a ng-click="loadWordExample(x,y,'POST_GOVERNED')" href="javascript:void(0);">
+												<b>{{y.word}}</b>
+											</a> 
+											({{y.duallog}}:{{y.measure}})
 											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 										</span>
 									</td>
@@ -91,7 +97,10 @@
 								<tr class="warning" >
 									<td>
 										<span ng-repeat="y in x.data">
-											{{y.word}} ({{y.duallog}}:{{y.measure}})
+											<a ng-click="loadWordExample(x,y,'PRE_GOVERNOR')" href="javascript:void(0);">
+												<b>{{y.word}}</b>
+											</a> 
+											({{y.duallog}}:{{y.measure}})
 											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 										</span>
 									</td>
@@ -116,7 +125,10 @@
 								<tr class="warning" >
 									<td>
 										<span ng-repeat="y in x.data">
-											<b>{{y.word}}</b> ({{y.duallog}}:{{y.measure}})
+											<a ng-click="loadWordExample(x,y,'POST_GOVERNOR')" href="javascript:void(0);">
+												<b>{{y.word}}</b>
+											</a> 
+											({{y.duallog}}:{{y.measure}})
 											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 										</span>
 									</td>
@@ -131,6 +143,142 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">{{exampleTitle}}</h4>
+			</div>
+			<div class="modal-body">
+					<div class = "row">
+						<div class = "col-md-4">
+							<label>Relação:</label>
+						</div>
+						<div class = "col-md-6">
+							{{depTitle}}
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-4">
+							<label>Palavra Alvo:</label>
+						</div>
+						<div class = "col-md-6">
+							<p>{{word}} ({{pos}})</p>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-4">
+							<label>Palavra Co-ocorrente:</label>
+						</div>
+						<div class = "col-md-6">
+							<p>{{otherWord}} ({{pos_otherWord}})</p>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-4">
+							<label>{{measure}}:</label>
+						</div>
+						<div class = "col-md-6">
+							<p>{{m_value}}</p>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-4">
+							<label>Frequência:</label>
+						</div>
+						<div class = "col-md-6">
+							<p>{{frequency}} ({{logfrequency}})</p>
+						</div>
+					</div>
+				<div class = "concordance">
+					<table class="table table-striped">
+					  ...
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--end Modal -->
+
+<div class = "deepword"> 
+  <div class="jumbotron">
+    <div class="container">
+      <label for="palavra">Introduzir palavra</label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Palavra" ng-model="word">
+        <span class="input-group-btn">
+          <button type="button" class="buttonMiddle btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 94px;">
+            {{pos}}
+            <span class="caret"></span>
+            <!--<span class="sr-only">Toggle Dropdown</span>-->
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="x in classes" ng-click="changePos(x)">
+              <a  href=""> {{ x }} </a>
+            </li>
+          </ul>
+        </span>
+        <span class="input-group-btn">
+
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 125px;">
+            {{measure}}
+            <span class="caret"></span>
+            <!--<span class="sr-only">Toggle Dropdown</span>-->
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="x in measures" ng-click="changeMeasure(x)">
+              <a  href=""> {{ x }} </a>
+            </li>
+          </ul>
+        </span>
+      </div>
+      <div class = "moreOptions">
+        <table style="width:100%">
+          <tr>
+            <td>
+              <label class="control-label">Frequência mínima: </label>
+            </td>
+            <td>
+              <div class="inputNumber">
+                <input type="number" class="form-control" ng-model="minfreq">
+              </div>
+            </td> 
+          </tr>
+          <tr>
+            <td>
+              <label class="control-label">Número máximo de palavras:</label>
+            </td>
+            <td>
+              <div class="inputNumber">
+                <input type="number" class="form-control" ng-model="maxword">
+              </div>
+            </td> 
+          </tr>
+        </table>
+      </div>
+      <div class = "showmoreOptionButtons"> 
+        <div class="row">
+          <button type="button" class="btn btn-link" ng-click="moreOptions()">
+            Mais Opções
+          </button>
+          <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+        </div>
+      </div>
+      <div class = "showlessOptionButtons"> 
+        <div class="row">
+          <button type="button" class="btn btn-link" ng-click="lessOptions()">
+            Esconder Opções
+          </button>
+          <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class = "waitfForWord">
 	<div class ="content">  
