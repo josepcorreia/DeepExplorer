@@ -14,7 +14,7 @@ $filename = "db_deep.db";
 $conn = new SQLite3($dir."/".$filename);
 
 //pode ser preciso
-//sqlite_busy_timeout($dbhandle, 100000); // set timeout to 100 seconds
+ini_set('max_execution_time', 300);
 
 
 $word = $_POST['word'];

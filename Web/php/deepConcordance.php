@@ -14,8 +14,7 @@ $filename = "db_deep.db";
 $conn = new SQLite3($dir."/".$filename);
 
 //pode ser preciso
-//sqlite_busy_timeout($dbhandle, 100000); // set timeout to 100 seconds
-
+ini_set('max_execution_time', 300);
 
 $word1 = $_POST['word1'];
 $pos1 = $_POST['pos1'];
@@ -23,6 +22,7 @@ $word2 = $_POST['word2'];
 $pos2 = $_POST['pos2'];
 $dep = $_POST['dep'];
 $prop =  $_POST['prop'];
+$freq = $_POST['freq'];
 
 /*
 $word1 = "volante";
@@ -31,27 +31,30 @@ $word2 = "carro";
 $pos2 = "NOUN";
 $dep = "MOD";
 $prop =  "POST_NOUN_NOUN";
+$freq=10;
 */
 
+if($freq >5 ){
+    $freq=5;
+}
 
-
-function GetResult($word1, $pos1, $word2, $pos2 ,$dep , $prop, $conn){     
+function GetResult($word1, $pos1, $word2, $pos2 ,$dep , $prop, $limit, $conn){     
 	$outp;
 
 	$DepQueries =  new DepQueries($conn);
     $id1= $DepQueries->GetWordId($word1, $pos1);
 	$id2= $DepQueries->GetWordId($word2, $pos2);	
 
-    $result = $DepQueries->GetConcordance($id1,$id2, $dep, $prop);
+    $result = $DepQueries->GetConcordance($id1,$id2, $dep, $prop, $limit);
 
    	$sentences_array = array();
 
     while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
         $result_array = array();
 
-        $result_array["file"] = $rs['Frase.nomeFicheiro'];
-        $result_array["number"] = $rs['Frase.numeroFrase'];
-        $result_array["sentence"] = $rs['Frase.frase'];
+        $result_array["file"] = $rs['nomeFicheiro'];
+        $result_array["number"] = $rs['numeroFrase'];
+        $result_array["sentence"] = $rs['frase'];
   
         array_push($sentences_array,$result_array);
         }
@@ -60,7 +63,7 @@ function GetResult($word1, $pos1, $word2, $pos2 ,$dep , $prop, $conn){
     return $outp;
     }
 
-echo(json_encode(GetResult($word1, $pos1, $word2, $pos2 ,$dep , $prop, $conn), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE ));
+echo(json_encode(GetResult($word1, $pos1, $word2, $pos2 ,$dep , $prop, $freq, $conn), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE ));
 
 $conn->close();
 

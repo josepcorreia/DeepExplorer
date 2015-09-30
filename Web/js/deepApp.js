@@ -146,7 +146,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 
 
     $scope.postPhp = function() {
-       $(".waitfForWord").show();
+       $("#waitForWord").show();
 
        sharedInfo.setMinFreq($scope.minfreq);
        sharedInfo.setMaxWords($scope.maxword);
@@ -177,16 +177,16 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
             if(response.hasOwnProperty("wordNotExist")){
-              $(".waitfForWord").hide();
+              $("#waitForWord").hide();
               alert("A palavra " +$scope.word+ "("+$scope.pos+") não existe na nossa base de dados");
             }              
             else{
               if(jQuery.isEmptyObject(response)){
-                  $(".waitfForWord").hide();
+                  $("#waitForWord").hide();
                 alert("Para a palavra " +$scope.word+ "("+$scope.pos+") não se obtiveram resultados com as opções selecionadas");
               }else{
                 sharedInfo.setDeps(response);
-                console.log(response);
+                //console.log(response);
                 $location.path("/wordexplorer");
                 $scope.$apply();
               }
@@ -198,7 +198,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 
         // Callback handler that will be called on failure
         request.fail(function (jqXHR, textStatus, errorThrown){
-        // Log the error to the console
+          alert("Ocorreu um erro, tente novamente!");
         //return false;
         console.error(
             "The following error occurred: "+
@@ -301,7 +301,6 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
     
     $scope.changeMeasureDeps = function(value) {
       $scope.measure = value;
-      sharedInfo.setMeasure($scope.measure);
       $scope.postPhp();
     };
 
@@ -310,7 +309,9 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         if (request) {
           request.abort();
         }
-      $route.reload();
+        $("body").css('overflow', 'scroll');
+        $("#waitForWord").hide();
+        $scope.loadData();
     };
 
 
@@ -363,7 +364,8 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
 
     //este post e diferente do outro
     $scope.postPhp = function() {
-      $(".waitfForWord").show();
+      $("body").css('overflow', 'hidden');
+      $("#waitForWord").show();
       var url = 'php/deepWords.php';
       
        
@@ -389,11 +391,15 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
 
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
+            //guarda a medida selecionada no sharedInfo
+            sharedInfo.setMeasure($scope.measure);
             sharedInfo.setDeps(response);
             $scope.loadData();
-            $route.reload();
-            $(".waitfForWord").hide();
-            console.log(response);
+            $scope.$apply();
+
+            $("body").css('overflow', 'scroll');
+            $("#waitForWord").hide();
+
          });//request done
         // Callback handler that will be called on failure
         request.fail(function (jqXHR, textStatus, errorThrown){
@@ -406,8 +412,13 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         });//fail   
     };
     
+    
     //WORD Example
     $scope.loadWordExample = (function(depProp, word_obj, elementType){
+      $scope.sentences = null;
+      $("#waitForConcordance").show();
+      $('#myModal').modal('show'); 
+      
       var position = elementType.split("_")[0];  
       var type = elementType.split("_")[1];
 
@@ -420,7 +431,8 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
                     'word2':word_obj.word,
                     'pos2':word_obj.word_pos,
                     'dep':depProp.dep,
-                    'prop':depProp.prop
+                    'prop':depProp.prop,
+                    'freq':word_obj.frequency
                   };
         break;
         case 'GOVERNOR':
@@ -431,7 +443,8 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
                     'word2':$scope.word,
                     'pos2':posHash[$scope.pos],
                     'dep':depProp.dep,
-                    'prop':depProp.prop
+                    'prop':depProp.prop,
+                    'freq':word_obj.frequency
                   };
         break; 
       }
@@ -454,20 +467,23 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
 
           // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
-            console.log(response);
+            //console.log(response);
             $scope.sentences = response.sentences;
             $('#myModal').load();
             $scope.$apply();
-            $('#myModal').modal('show'); 
+            $("#waitForConcordance").hide();
          });//request done
         // Callback handler that will be called on failure
         request.fail(function (jqXHR, textStatus, errorThrown){
-        // Log the error to the console
-        //return false;
-        console.error(
-            "The following error occurred: "+
-            textStatus, errorThrown
-        );
+            $('#myModal').modal('hide'); 
+            $("#waitForConcordance").hide();
+            alert("Ocorreu um erro a obter as frases, tente novamente!");
+
+            //return false;
+            console.error(
+              "The following error occurred: "+
+              textStatus, errorThrown
+            );
         });//fail 
 
 
@@ -483,14 +499,16 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
       $scope.frequency = word_obj.frequency;
       $scope.logfrequency = word_obj.duallog;
 
+      //This event is fired when the modal has finished being hidden from the user 
+    $('#myModal').on('hidden.bs.modal', function (e) {
+      $("#waitForConcordance").hide();
+      if (request) {
+          request.abort();
+        }
+    })
 
     });
   
-
-
-
-
-
 });
 
 

@@ -44,15 +44,16 @@ class DepQueries
         return $result;
     }
 
-    public function GetConcordance($idWord1,$idWord2, $dep, $prop) {
-
+    public function GetConcordance($idWord1,$idWord2, $dep, $prop, $limit) {
         $query =   "SELECT Frase.numeroFrase, Frase.nomeFicheiro, Frase.frase
-                    FROM (Select * from Exemplifica 
-                    WHERE idPalavra1 = ".$idWord1."
-                      and idPalavra2 = ".$idWord2."
-                      and tipoDep = '".$dep."'
-                      and nomeProp = '".$prop."') as ex
-                    Inner join Frase on (ex.numeroFrase = Frase.numeroFrase and ex.nomeFIcheiro = Frase.nomeFicheiro)";
+                    FROM (Select numeroFrase, nomeFicheiro 
+                            from Exemplifica 
+                            WHERE idPalavra1 = ".$idWord1."
+                            and idPalavra2 = ".$idWord2."
+                            and nomeProp = '".$prop."'
+                            and tipoDep = '".$dep."'
+                            LIMIT ".$limit. ") as ex
+                    Inner join Frase on (ex.numeroFrase = Frase.numeroFrase and ex.nomeFIcheiro = Frase.nomeFicheiro);";
 
         $result = $this->conn->query($query);
 
