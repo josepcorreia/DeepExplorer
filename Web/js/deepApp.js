@@ -208,7 +208,7 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
     }//postPhp
 });//controller
 
-deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
+deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
       var request;
 
       $scope.loadPRE_Governed = function(Deps){
@@ -279,7 +279,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         $scope.maxword =  sharedInfo.getMaxWords();
         $scope.minfreq =  sharedInfo.getMinFreq();
 
-        $scope.title = $scope.word + "," +$scope.pos;
+        $scope.title = $scope.word + ", " +$scope.pos;
 
         $scope.loadPRE_Governed(Deps);
         $scope.loadPOST_Governed(Deps);
@@ -318,49 +318,10 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
     /////parte copia do outrto controller
     $scope.classes=['Nome','Verbo','Adjetivo','Advérbio']
 
-    $scope.changePos = function(value) {
-       $scope.pos = value;
+
+    $scope.gotoHomePage = function() {
+          $location.path("/#/");
     };
-    $scope.changeMeasure = function(value) {
-     $scope.measure = value;
-    };
-
-    $scope.moreOptions = function() {
-       $(".moreOptions").show();
-       $(".showmoreOptionButtons").hide();
-       $(".showlessOptionButtons").css("display","table");   
-    };
-
-    $scope.lessOptions = function() {
-       $(".moreOptions").hide();
-       $(".showmoreOptionButtons").css("display","table");
-       $(".showlessOptionButtons").hide();    
-    };
-
-   $scope.searchWord = function() {
-
-      if(angular.isString($scope.word)){
-        if($scope.pos != "Classe"){
-          if($scope.measure != "Medida"){
-            sharedInfo.setWord($scope.word);
-            sharedInfo.setPos($scope.pos);
-            sharedInfo.setMeasure($scope.measure);
-            sharedInfo.setMinFreq($scope.minfreq);
-            sharedInfo.setMaxWords($scope.maxword);
-
-            $scope.postPhp();
-          }
-          else{
-            alert("Selecionar qual a Medida a usar");
-          }
-        }
-        else{
-          alert("Selecionar qual a classe da palavra");
-        }
-      }else{
-        alert("Introduzir uma palavra");
-      }
-   };
 
     //este post e diferente do outro
     $scope.postPhp = function() {
@@ -477,8 +438,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
         request.fail(function (jqXHR, textStatus, errorThrown){
             $('#myModal').modal('hide'); 
             $("#waitForConcordance").hide();
-            alert("Ocorreu um erro a obter as frases, tente novamente!");
-
+            
             //return false;
             console.error(
               "The following error occurred: "+
@@ -501,7 +461,6 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route, $window) {
 
       //This event is fired when the modal has finished being hidden from the user 
     $('#myModal').on('hidden.bs.modal', function (e) {
-      $("#waitForConcordance").hide();
       if (request) {
           request.abort();
         }

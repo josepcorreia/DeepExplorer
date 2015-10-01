@@ -6,13 +6,11 @@ class DepClass
     private $DepQueries = NULL;
     private $pos = NULL;
     private $depProps = NULL;
-    private $depTitles = NULL;
     private $outp = array();
 
     public function __construct($pos, $conn){
         $this->pos = $pos;
         $this->depProps = $this->GetDependenciesFromFile($pos);
-        $this->depTitles = $this->GetDependenciesTitleFromFile($pos);
         $this->DepQueries =  new DepQueries($conn);
     }
 
@@ -57,13 +55,14 @@ class DepClass
             $split = explode(",",$line);
 
             //add to array
-            $deps[$split[0]] = $split[1];
+            $deps[$split[1]][$split[0]] = $split[2];
+            //$deps[$split[0]] = $split[1];
             $this->outp[$split[1]] = null;
         }
         return $deps;
     }
 
-    protected function GetDependenciesTitleFromFile($pos)
+    /*protected function GetDependenciesTitleFromFile($pos)
     {
         $file = fopen('resources/dep_prop.txt','r');
         while ($line = fgets($file)) {
@@ -80,7 +79,7 @@ class DepClass
         }
         
     }
-     protected function GetDependenciesTitleByClass($file){
+     /*protected function GetDependenciesTitleByClass($file){
         $depTitles = array();
 
         while ($line = fgets($file)) {
@@ -98,10 +97,11 @@ class DepClass
             $split = explode(",",$line);
 
             //add to array
+            array_push($deps[$split[1]],$split[0])
             $depTitles[$split[0]] = $split[2];
         }
         return $depTitles;
-    }
+    }*/
 
      private function logarithmBase2($freq)
     {
@@ -139,40 +139,45 @@ class DepClass
         
 
         $idWord = $this->DepQueries->GetWordId($word, $pos);
-        $depPropsKeys = array_keys($depProps);
+        
+        $depPropRoles = array_keys($depProps);
 
-        foreach ($depPropsKeys as $depProp){
-            $depType = $depProps[$depProp];
-            $depPropName = $this->depTitles[$depProp];
+        foreach ($depPropRoles as $depPropRole){
+            $depPropsKeys = array_keys($depProps[$depPropRole]);
+            //var_dump($depPropsKeys);
 
-            $split = explode(" ",$depProp);
-            $dep = $split[0];
-            $prop = $split[1];
-            $depProp = $dep."_".$prop;
+            foreach ($depPropsKeys as $depProp){
+                $depPropName = $depProps[$depPropRole][$depProp];
 
-            
-            $result = $this->DepQueries->GetDepData($idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
+                $split = explode(" ",$depProp);
+                $dep = $split[0];
+                $prop = $split[1];
+                $depProp = $dep."_".$prop;
 
-            $words_array = array();
-            while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
-                $result_array = array();
+                
+                $result = $this->DepQueries->GetDepData($idWord, $dep, $prop, $measure ,$limit, $depPropRole, $minfreq);
+       
+                $words_array = array();
+                while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
+                    $result_array = array();
 
-                $result_array["word"] = $rs["palavra"];
-                $result_array["word_pos"] = $rs["classe"];
-                $result_array["measure"] = $this->roundMeasure($measure,$rs[$measure]);
-                $result_array["frequency"] = $rs["frequencia"];
-                $result_array["duallog"] = round($this->logarithmBase2($rs["frequencia"]));
-                array_push($words_array,$result_array);
-            }
+                    $result_array["word"] = $rs["palavra"];
+                    $result_array["word_pos"] = $rs["classe"];
+                    $result_array["measure"] = $this->roundMeasure($measure,$rs[$measure]);
+                    $result_array["frequency"] = $rs["frequencia"];
+                    $result_array["duallog"] = round($this->logarithmBase2($rs["frequencia"]));
+                    array_push($words_array,$result_array);
+                }
 
-            if(count($words_array) > 0){
-                $depProp_array = array();
-                $depProp_array["name"] = $depPropName;
-                $depProp_array["dep"] = $dep;
-                $depProp_array["prop"] = $prop;
-                $depProp_array["data"] = $words_array;
+                if(count($words_array) > 0){
+                    $depProp_array = array();
+                    $depProp_array["name"] = $depPropName;
+                    $depProp_array["dep"] = $dep;
+                    $depProp_array["prop"] = $prop;
+                    $depProp_array["data"] = $words_array;
 
-                $this->outp[$depType][$depProp] = $depProp_array;
+                    $this->outp[$depPropRole][$depProp] = $depProp_array;
+                }
             }
         }
         return $this->outp;

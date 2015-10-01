@@ -35,6 +35,14 @@ $limit =  10;
 $minfreq = 2;
 */
 
+/*
+$word = "ainda";
+$pos = "ADV";
+$Measure = "Dice";
+$limit =  10;
+$minfreq = 2;
+*/
+
 $depInstance = new DepClass($pos, $conn);
 $deps = $depInstance->GetAllDependencies($word,$Measure,$limit, $minfreq);
 

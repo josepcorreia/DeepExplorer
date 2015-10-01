@@ -20,8 +20,8 @@ class DepQueries
                         ORDER BY ".$measure." DESC
                         LIMIT ".$limit. ") as Coo
                 Inner join Palavra on Coo.idPalavra1 = Palavra.idPalavra;";
-
-        $result = $this->conn->query($query);
+    //var_dump($query);                
+       $result = $this->conn->query($query) or trigger_error($conn->error."[$sql]");
 
         return $result;
     }
@@ -38,8 +38,8 @@ class DepQueries
                         ORDER BY ".$measure." DESC
                         LIMIT ".$limit. ") as Coo
                 Inner join Palavra on Coo.idPalavra2 = Palavra.idPalavra;";
-
-        $result = $this->conn->query($query);
+        //var_dump($query);
+        $result = $this->conn->query($query) or trigger_error($conn->error."[$sql]");
 
         return $result;
     }
@@ -54,7 +54,7 @@ class DepQueries
                             and tipoDep = '".$dep."'
                             LIMIT ".$limit. ") as ex
                     Inner join Frase on (ex.numeroFrase = Frase.numeroFrase and ex.nomeFIcheiro = Frase.nomeFicheiro);";
-
+        
         $result = $this->conn->query($query);
 
         return $result;
@@ -91,6 +91,11 @@ class DepQueries
         else{
             if (strpos($depType,'GOVERNOR') !== false) {
                 return $this->GetDepDataFromWord2($idWord, $dep, $prop, $measure ,$limit, $minfreq);
+            } 
+            else {
+                if (strpos($depType,'EXTRA') !== false) {
+                return $this->GetDepDataFromWord2($idWord, $dep, $prop, $measure ,1, $minfreq);
+                }
             }
         }
     }
