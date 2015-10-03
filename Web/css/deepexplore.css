@@ -150,4 +150,8 @@ font-size: 16px;
   font-size: 18px;
 }
 
+#waitForConcordance{
+   opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+}
 

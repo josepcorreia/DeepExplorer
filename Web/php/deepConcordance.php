@@ -12,7 +12,7 @@ $filename = "db_deep.db";
 
 // Create connection
 $conn = new SQLite3($dir."/".$filename);
-
+$conn->exec("pragma synchronous = off;");
 //pode ser preciso
 ini_set('max_execution_time', 300);
 
