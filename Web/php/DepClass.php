@@ -6,16 +6,17 @@ class DepClass
     private $DepQueries = NULL;
     private $pos = NULL;
     private $depProps = NULL;
+    private $depPropsNames = NULL;
     private $outp = array();
 
     public function __construct($pos, $conn){
         $this->pos = $pos;
-        $this->depProps = $this->GetDependenciesFromFile($pos);
+        $this->GetDependenciesFromFile($pos);
         $this->DepQueries =  new DepQueries($conn);
     }
 
     public function GetAllDependencies($word, $measure, $limit, $minfreq) {
-        $result = $this->GetResult($this->depProps, $word, $this->pos,  $measure, $limit, $minfreq);
+        $result = $this->GetResult($word, $this->pos,  $measure, $limit, $minfreq);
         return $result;
     }
 
@@ -30,7 +31,7 @@ class DepClass
                 if($split[1] === $pos) {
                     $result = $this->GetDependenciesByClass($file);
                     fclose($file);
-                    return $result;
+                    return;
                 }
             }
         }
@@ -55,53 +56,12 @@ class DepClass
             $split = explode(",",$line);
 
             //add to array
-            $deps[$split[1]][$split[0]] = $split[2];
-            //$deps[$split[0]] = $split[1];
+            $this->depProps[$split[1]][$split[0]] = $split[2];
+            $this->depPropsNames[$split[1]][$split[0]] = $split[3];
             $this->outp[$split[1]] = null;
         }
-        return $deps;
+        return;
     }
-
-    /*protected function GetDependenciesTitleFromFile($pos)
-    {
-        $file = fopen('resources/dep_prop.txt','r');
-        while ($line = fgets($file)) {
-            $line = trim(preg_replace('/\n/', '', $line));
-            $split = explode(" ",$line);
-
-            if( $split[0] ===  '##') {
-                if($split[1] === $pos) {
-                    $result = $this->GetDependenciesTitleByClass($file);
-                    fclose($file);
-                    return $result;
-                }
-            }
-        }
-        
-    }
-     /*protected function GetDependenciesTitleByClass($file){
-        $depTitles = array();
-
-        while ($line = fgets($file)) {
-            $line = trim(preg_replace('/\n/', '', $line));
-
-            //caso da linha em brnaco do ficheiro
-            if($line === ""){
-                continue;
-            }
-
-            $test = explode(" ",$line);
-            if( $test[0] ===  '##'){
-                break;
-            }
-            $split = explode(",",$line);
-
-            //add to array
-            array_push($deps[$split[1]],$split[0])
-            $depTitles[$split[0]] = $split[2];
-        }
-        return $depTitles;
-    }*/
 
      private function logarithmBase2($freq)
     {
@@ -135,27 +95,26 @@ class DepClass
         }
     }
 
-    protected function GetResult($depProps, $word, $pos, $measure , $limit, $minfreq){
+    protected function GetResult($word, $pos, $measure , $limit, $minfreq){
         
 
         $idWord = $this->DepQueries->GetWordId($word, $pos);
         
-        $depPropRoles = array_keys($depProps);
+        $depPropRoles = array_keys($this->depProps);
 
         foreach ($depPropRoles as $depPropRole){
-            $depPropsKeys = array_keys($depProps[$depPropRole]);
-            //var_dump($depPropsKeys);
+            $depPropsKeys = array_keys($this->depProps[$depPropRole]);
 
-            foreach ($depPropsKeys as $depProp){
-                $depPropName = $depProps[$depPropRole][$depProp];
-
-                $split = explode(" ",$depProp);
+            foreach ($depPropsKeys as $dep_prop){
+                $split = explode(" ",$dep_prop);
                 $dep = $split[0];
                 $prop = $split[1];
                 $depProp = $dep."_".$prop;
-
                 
-                $result = $this->DepQueries->GetDepData($idWord, $dep, $prop, $measure ,$limit, $depPropRole, $minfreq);
+                $depPropName = $this->depPropsNames[$depPropRole][$dep_prop];
+                $depType = $this->depProps[$depPropRole][$dep_prop];
+                
+                $result = $this->DepQueries->GetDepData($idWord, $dep, $prop, $measure ,$limit, $depType, $minfreq);
        
                 $words_array = array();
                 while($rs = $result->fetchArray(SQLITE3_ASSOC)) {
@@ -174,6 +133,7 @@ class DepClass
                     $depProp_array["name"] = $depPropName;
                     $depProp_array["dep"] = $dep;
                     $depProp_array["prop"] = $prop;
+                    $depProp_array["dep_type"] = $depType;
                     $depProp_array["data"] = $words_array;
 
                     $this->outp[$depPropRole][$depProp] = $depProp_array;

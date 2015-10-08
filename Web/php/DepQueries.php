@@ -54,7 +54,7 @@ class DepQueries
                             and tipoDep = '".$dep."'
                             LIMIT ".$limit. ") as ex
                     Inner join Frase on (ex.numeroFrase = Frase.numeroFrase and ex.nomeFIcheiro = Frase.nomeFicheiro);";
-        
+        //var_dump($query); 
         $result = $this->conn->query($query);
 
         return $result;

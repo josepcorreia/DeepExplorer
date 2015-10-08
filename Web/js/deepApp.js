@@ -209,110 +209,95 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 });//controller
 
 deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
-      var request;
+  var request;
 
-      $scope.loadPRE_Governed = function(Deps){
-       
-        if(Deps.hasOwnProperty("PRE_GOVERNED")){
-          $scope.PRE_GOVERNED = Deps.PRE_GOVERNED;
-          if(!jQuery.isPlainObject(Deps.PRE_GOVERNED)){
-            $scope.msg_1 ="Não se encontraram ocorrências";
-            $( "#PRE_GOVERNED" ).find('.notApplicable').show();
-          }
-        } 
-        else{
-          $scope.msg_1 ="Não se Aplica";
-          $( "#PRE_GOVERNED" ).find('.notApplicable').show();
-        }
+  $scope.loadPRE_WORD = function(Deps){
+
+    if(Deps.hasOwnProperty("PRE_WORD")){
+      $scope.PRE_WORD = Deps.PRE_WORD;
+      if(!jQuery.isPlainObject(Deps.PRE_WORD)){
+        $scope.msg_1 ="Não se encontraram ocorrências";
+        $( "#PRE_WORD" ).find('.notApplicable').show();
       }
-      $scope.loadPOST_Governed = function(Deps){
-       
-        if(Deps.hasOwnProperty("POST_GOVERNED")){
-          $scope.POST_GOVERNED = Deps.POST_GOVERNED;
-          if(!jQuery.isPlainObject(Deps.POST_GOVERNED)){
-            $scope.msg_2 ="Não se encontraram ocorrências";
-            $("#POST_GOVERNED").find('.notApplicable').show();
-          }
-        }
-        else{
-          $scope.msg_2 ="Não se Aplica";
-          $("#POST_GOVERNED").find('.notApplicable').show();
-        }
+    } 
+  }
+  $scope.loadPOST_WORD = function(Deps){
+
+    if(Deps.hasOwnProperty("POST_WORD")){
+      $scope.POST_WORD = Deps.POST_WORD;
+      if(!jQuery.isPlainObject(Deps.POST_WORD)){
+        $scope.msg_2 ="Não se encontraram ocorrências";
+        $("#POST_WORD").find('.notApplicable').show();
       }
-      $scope.loadPRE_Governor = function(Deps){
-        
-        if(Deps.hasOwnProperty("PRE_GOVERNOR")){  
-          $scope.PRE_GOVERNOR = Deps.PRE_GOVERNOR;
-          if(!jQuery.isPlainObject(Deps.PRE_GOVERNOR)){
-            $scope.msg_3 ="Não se encontraram ocorrências";
-            $("#PRE_GOVERNOR" ).find('.notApplicable').show();
-          }
-        }
-        else{
-          $scope.msg_3 ="Não se Aplica";
-        $( "#PRE_GOVERNOR" ).find('.notApplicable').show();
-        }
+    }
+  }
+
+  $scope.loadPRE_VERB = function(Deps){
+
+    if(Deps.hasOwnProperty("PRE_VERB")){
+      $scope.PRE_VERB = Deps.PRE_VERB;
+      $( ".Verb_content" ).show();
+      if(!jQuery.isPlainObject(Deps.PRE_VERB)){
+        $scope.msg_1 ="Não se encontraram ocorrências";
+        $( "#PRE_VERB" ).find('.notApplicable').show();
       }
+    }  
+  }
+  $scope.loadPOST_VERB = function(Deps){
 
-      $scope.loadPOST_Governor  = function(Deps){
-        
-        if(Deps.hasOwnProperty("POST_GOVERNOR")){
-          $scope.POST_GOVERNOR = Deps.POST_GOVERNOR;
-          if(!jQuery.isPlainObject(Deps.POST_GOVERNOR)){
-            $scope.msg_4 ="Não se encontraram ocorrências";
-            $( "#POST_GOVERNOR" ).find('.notApplicable').show();
-          }
-        }
-        else{
-          $scope.msg_4 ="Não se Aplica";
-          $( "#POST_GOVERNOR" ).find('.notApplicable').show();
-        }
+    if(Deps.hasOwnProperty("POST_VERB")){
+      $scope.POST_VERB = Deps.POST_VERB;
+      $( ".Verb_content" ).show();
+      if(!jQuery.isPlainObject(Deps.POST_VERB)){
+        $scope.msg_2 ="Não se encontraram ocorrências";
+        $("#POST_VERB").find('.notApplicable').show();
       }
+    }
+  }
+
+  $scope.loadData = (function(){
+    var Deps = sharedInfo.getDeps();
+
+    $scope.word = sharedInfo.getWord();
+    $scope.pos =  sharedInfo.getPos();
+    $scope.measure =  sharedInfo.getMeasure();
+    $scope.maxword =  sharedInfo.getMaxWords();
+    $scope.minfreq =  sharedInfo.getMinFreq();
+
+    $scope.title = $scope.word + ", " +$scope.pos;
+
+    $scope.loadPRE_WORD(Deps);
+    $scope.loadPOST_WORD(Deps);
+    $scope.loadPRE_VERB(Deps);
+    $scope.loadPOST_VERB(Deps);
+
+  });
+  $scope.loadData();
 
 
-      $scope.loadData = (function(){
-        var Deps = sharedInfo.getDeps();
-        
-        $scope.word = sharedInfo.getWord();
-        $scope.pos =  sharedInfo.getPos();
-        $scope.measure =  sharedInfo.getMeasure();
-        $scope.maxword =  sharedInfo.getMaxWords();
-        $scope.minfreq =  sharedInfo.getMinFreq();
 
-        $scope.title = $scope.word + ", " +$scope.pos;
+  var posHash = new Array();
+  posHash['Nome'] = 'NOUN';
+  posHash['Verbo'] = 'VERB';
+  posHash['Adjetivo'] = 'ADJ';
+  posHash['Advérbio'] = 'ADV';
 
-        $scope.loadPRE_Governed(Deps);
-        $scope.loadPOST_Governed(Deps);
-        $scope.loadPRE_Governor(Deps);
-        $scope.loadPOST_Governor(Deps);
+  $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência'];
 
-      });
-      $scope.loadData();
+  $scope.changeMeasureDeps = function(value) {
+    $scope.measure = value;
+    $scope.postPhp();
+  };
 
-      
-
-     var posHash = new Array();
-        posHash['Nome'] = 'NOUN';
-        posHash['Verbo'] = 'VERB';
-        posHash['Adjetivo'] = 'ADJ';
-        posHash['Advérbio'] = 'ADV';
-
-    $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência'];
-    
-    $scope.changeMeasureDeps = function(value) {
-      $scope.measure = value;
-      $scope.postPhp();
-    };
-
-    $scope.reloadPage = function() {
+  $scope.reloadPage = function() {
     // Abort any pending request
-        if (request) {
-          request.abort();
-        }
-        $("body").css('overflow', 'scroll');
-        $("#waitForWord").hide();
-        $scope.loadData();
-    };
+    if (request) {
+      request.abort();
+    }
+    $("body").css('overflow', 'scroll');
+    $("#waitForWord").hide();
+    $scope.loadData();
+  };
 
 
     /////parte copia do outrto controller
@@ -320,7 +305,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
 
 
     $scope.gotoHomePage = function() {
-          $location.path("/#/");
+      $location.path("/#/");
     };
 
     //este post e diferente do outro
@@ -329,29 +314,29 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
       $("#waitForWord").show();
       var url = 'php/deepWords.php';
       
-       
-       var data = {
-                    'word':$scope.word,
-                    'pos':posHash[$scope.pos],
-                    'measure':$scope.measure,
-                    'limit':$scope.maxword,
-                    'minfreq':$scope.minfreq
-                  };
 
-       if (request) {
-          request.abort();
-        }
-        request = $.ajax({
-                    type: 'POST',
-                    url: url,
-                    dataType: "json",
-                    data: data,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    async: true
+      var data = {
+        'word':$scope.word,
+        'pos':posHash[$scope.pos],
+        'measure':$scope.measure,
+        'limit':$scope.maxword,
+        'minfreq':$scope.minfreq
+      };
+
+      if (request) {
+        request.abort();
+      }
+      request = $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: "json",
+        data: data,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        async: true
         });//request
 
           // Callback handler that will be called on success
-        request.done(function (response, textStatus, jqXHR){
+          request.done(function (response, textStatus, jqXHR){
             //guarda a medida selecionada no sharedInfo
             sharedInfo.setMeasure($scope.measure);
             sharedInfo.setDeps(response);
@@ -367,107 +352,113 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
         // Log the error to the console
         //return false;
         console.error(
-            "The following error occurred: "+
-            textStatus, errorThrown
-        );
+          "The following error occurred: "+
+          textStatus, errorThrown
+          );
         });//fail   
-    };
-    
-    
+      };
+
+
     //WORD Example
     $scope.loadWordExample = (function(depProp, word_obj, elementType){
       $scope.sentences = null;
       $("#waitForConcordance").show();
       $('#myModal').modal('show'); 
       
-      var position = elementType.split("_")[0];  
-      var type = elementType.split("_")[1];
+      var type = depProp.dep_type;
 
       switch(type) {
         case 'GOVERNED':
-          $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ $scope.word +","+word_obj.word+")";
-          var data = {
-                    'word1':$scope.word,
-                    'pos1':posHash[$scope.pos],
-                    'word2':word_obj.word,
-                    'pos2':word_obj.word_pos,
-                    'dep':depProp.dep,
-                    'prop':depProp.prop,
-                    'freq':word_obj.frequency
-                  };
+        $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ $scope.word +","+word_obj.word+")";
+        var data = {
+          'word1':$scope.word,
+          'pos1':posHash[$scope.pos],
+          'word2':word_obj.word,
+          'pos2':word_obj.word_pos,
+          'dep':depProp.dep,
+          'prop':depProp.prop,
+          'freq':word_obj.frequency
+        };
         break;
         case 'GOVERNOR':
-          $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ word_obj.word +","+ $scope.word +")";
-          var data = {
-                    'word1':word_obj.word,
-                    'pos1':word_obj.word_pos,
-                    'word2':$scope.word,
-                    'pos2':posHash[$scope.pos],
-                    'dep':depProp.dep,
-                    'prop':depProp.prop,
-                    'freq':word_obj.frequency
-                  };
+        $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ word_obj.word +","+ $scope.word +")";
+        var data = {
+          'word1':word_obj.word,
+          'pos1':word_obj.word_pos,
+          'word2':$scope.word,
+          'pos2':posHash[$scope.pos],
+          'dep':depProp.dep,
+          'prop':depProp.prop,
+          'freq':word_obj.frequency
+        };
         break; 
       }
       $scope.otherWord = word_obj.word;
       $scope.pos_otherWord = word_obj.word_pos;
 
 
-       var url = 'php/deepConcordance.php';
-       if (request) {
-          request.abort();
-        }
-        request = $.ajax({
-                    type: 'POST',
-                    url: url,
-                    dataType: "json",
-                    data: data,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    async: true
-        });//request
+      var url = 'php/deepConcordance.php';
+      if (request) {
+        request.abort();
+      }
+      request = $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: "json",
+        data: data,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        async: true
+      });//request
 
           // Callback handler that will be called on success
-        request.done(function (response, textStatus, jqXHR){
+      request.done(function (response, textStatus, jqXHR){
             //console.log(response);
             $scope.sentences = response.sentences;
             $('#myModal').load();
             $scope.$apply();
             $("#waitForConcordance").hide();
-         });//request done
+      });//request done
         // Callback handler that will be called on failure
-        request.fail(function (jqXHR, textStatus, errorThrown){
-            $('#myModal').modal('hide'); 
-            $("#waitForConcordance").hide();
-            
+      request.fail(function (jqXHR, textStatus, errorThrown){
+          $('#myModal').modal('hide'); 
+          $("#waitForConcordance").hide();
+
             //return false;
             console.error(
               "The following error occurred: "+
               textStatus, errorThrown
-            );
-        });//fail 
+              );
+      });//fail 
 
 
-      switch(position) {
-        case 'PRE':
+      switch(elementType) {
+          case 'PRE_WORD':
           $scope.depTitle = depProp.name + " à Esquerda";
-        break;
-        case 'POST':
+          break;
+          case 'POST_WORD':
           $scope.depTitle = depProp.name + " à Direira";
-        break; 
+          break;
+          case 'PRE_VERB':
+          $scope.depTitle = depProp.name;
+          break;
+          case 'POST_VERB':
+          $scope.depTitle = depProp.name;
+          break;  
       }
+
       $scope.m_value = word_obj.measure;
       $scope.frequency = word_obj.frequency;
       $scope.logfrequency = word_obj.duallog;
 
       //This event is fired when the modal has finished being hidden from the user 
-    $('#myModal').on('hidden.bs.modal', function (e) {
-      if (request) {
+      $('#myModal').on('hidden.bs.modal', function (e) {
+        if (request) {
           request.abort();
         }
-    })
+      })
 
     });
-  
+
 });
 
 

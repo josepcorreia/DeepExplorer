@@ -26,20 +26,72 @@
 				</ul>
 			</div>
 		</div>
+		<div class="row Verb_content">
+			<div class="panel" id ="verb">
+				<div class="panel-body">
+					<div class="col-xs-6">
+						<div id="PRE_VERB">
+							<div class = "rowDeps" ng-repeat="x in PRE_VERB">
+								<table class="table table-bordered">
+									<label>{{x.name}}</label>
+									<tr class="warning" >
+										<td>
+											<span ng-repeat="y in x.data">
+												<a ng-click="loadWordExample(x,y,'PRE_VERB')" href="javascript:void(0);">
+													<b>{{y.word}}</b>
+												</a> 
+												({{y.duallog}}:{{y.measure}})
+												<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+											</span>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class = "notApplicable">
+							<h4>{{msg_1}}</h4>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div id="POST_VERB">
+							<div class = "rowDeps" ng-repeat="x in POST_VERB">
+								<table class="table table-bordered">
+									<label>{{x.name}}</label>
+									<tr class="warning" >
+										<td>
+											<span ng-repeat="y in x.data">
+												<a ng-click="loadWordExample(x,y,'POST_VERB')" href="javascript:void(0);">
+													<b>{{y.word}}</b>
+												</a> 
+												({{y.duallog}}:{{y.measure}})
+												<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+											</span>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class = "notApplicable">
+								<h4>{{msg_2}}</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="row">
-			<div class="col-xs-6" id="PRE_GOVERNED">
+			<div class="col-xs-6" id="PRE_WORD">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title"> Alvo é Modificado à Esquerda</h3>
+						<h3 class="panel-title"> à esquerda</h3>
 					</div>
 					<div class="panel-body">
-						<div class = "rowDeps" ng-repeat="x in PRE_GOVERNED">
+						<div class = "rowDeps" ng-repeat="x in PRE_WORD">
 							<table class="table table-bordered">
 								<label>{{x.name}}</label>
 								<tr class="warning" >
 									<td>
 										<span ng-repeat="y in x.data">
-											<a ng-click="loadWordExample(x,y,'PRE_GOVERNED')" href="javascript:void(0);">
+											<a ng-click="loadWordExample(x,y,'PRE_WORD')" href="javascript:void(0);">
 												<b>{{y.word}}</b>
 											</a> 
 											({{y.duallog}}:{{y.measure}})
@@ -55,19 +107,19 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-6" id="POST_GOVERNED">
+			<div class="col-xs-6" id="POST_WORD">
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h3 class="panel-title">Alvo é Modificado à Direita</h3>
+						<h3 class="panel-title">à direita</h3>
 					</div>
 					<div class="panel-body">
-						<div class = "rowDeps" ng-repeat="x in POST_GOVERNED">
+						<div class = "rowDeps" ng-repeat="x in POST_WORD">
 							<table class="table table-bordered">
 								<label>{{x.name}}</label>
 								<tr class="warning" >
 									<td>
 										<span ng-repeat="y in x.data">
-											<a ng-click="loadWordExample(x,y,'POST_GOVERNED')" href="javascript:void(0);">
+											<a ng-click="loadWordExample(x,y,'POST_WORD')" href="javascript:void(0);">
 												<b>{{y.word}}</b>
 											</a> 
 											({{y.duallog}}:{{y.measure}})
@@ -85,65 +137,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-6" id="PRE_GOVERNOR">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Alvo é Modificador à Esquerda</h3>
-					</div>
-					<div class="panel-body">
-						<div class = "rowDeps" ng-repeat="x in PRE_GOVERNOR">
-							<table class="table table-bordered">
-								<label>{{x.name}}</label>
-								<tr class="warning" >
-									<td>
-										<span ng-repeat="y in x.data">
-											<a ng-click="loadWordExample(x,y,'PRE_GOVERNOR')" href="javascript:void(0);">
-												<b>{{y.word}}</b>
-											</a> 
-											({{y.duallog}}:{{y.measure}})
-											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-										</span>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class = "notApplicable">
-								<h4>{{msg_3}}</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-6" id="POST_GOVERNOR">
-				<div class="panel panel-rightDepsGovernor">
-					<div class="panel-heading">
-						<h3 class="panel-title">Alvo é Modificador à Direita</h3>
-					</div>
-					<div class="panel-body">
-						<div class = "rowDeps" ng-repeat="x in POST_GOVERNOR">
-							<table class="table table-bordered">
-								<label>{{x.name}}</label>
-								<tr class="warning" >
-									<td>
-										<span ng-repeat="y in x.data">
-											<a ng-click="loadWordExample(x,y,'POST_GOVERNOR')" href="javascript:void(0);">
-												<b>{{y.word}}</b>
-											</a> 
-											({{y.duallog}}:{{y.measure}})
-											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-										</span>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class = "notApplicable">
-								<h4>{{msg_4}}</h4>
-						</div>
-					</div>	
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class = "showmoreOptionButtons"> 
+			<div class = "newSearchButton"> 
           		<button type="button" class="btn btn-link" ng-click="gotoHomePage()">
             	 Nova Pesquisa
          		</button>

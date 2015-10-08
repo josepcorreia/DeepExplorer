@@ -50,11 +50,35 @@ text-align:center
   padding-top: 5%;
   width: 75%
 }
-
 .inputNumber{
   width: 60%;
 }
 
+.Verb_content{
+  display: none;
+}
+
+.Verb_content > #verb{
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+#PRE_VERB{
+margin-left: -15px;
+margin-right: 15px;
+}
+
+#POST_VERB{
+margin-right: -15px;
+margin-left: 15px;
+}
+
+.newSearchButton{
+  display: table;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+}
 
 .rowDeps{
   padding-right: 2%;

@@ -13,6 +13,7 @@ $filename = "db_deep.db";
 // Create connection
 $conn = new SQLite3($dir."/".$filename);
 
+
 //pode ser preciso
 ini_set('max_execution_time', 300);
 
@@ -26,6 +27,7 @@ $minfreq = $_POST['minfreq'];
 if($Measure == 'Frequência'){
 	$Measure = 'frequencia';
 }
+
 
 /*
 $word = "carro";
