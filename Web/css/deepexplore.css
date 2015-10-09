@@ -73,11 +73,28 @@ margin-right: -15px;
 margin-left: 15px;
 }
 
+#ADV_EXTRA{
+  display: none;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.label-white {
+  color: black;
+  background-color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
 .newSearchButton{
   display: table;
   position: relative;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: -30px;
+
 }
 
 .rowDeps{

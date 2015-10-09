@@ -210,6 +210,12 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
 
 deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
   var request;
+  var posHash = new Array();
+  posHash['Nome'] = 'NOUN';
+  posHash['Verbo'] = 'VERB';
+  posHash['Adjetivo'] = 'ADJ';
+  posHash['Advérbio'] = 'ADV';
+
 
   $scope.loadPRE_WORD = function(Deps){
 
@@ -219,6 +225,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
         $scope.msg_1 ="Não se encontraram ocorrências";
         $( "#PRE_WORD" ).find('.notApplicable').show();
       }
+
     } 
   }
   $scope.loadPOST_WORD = function(Deps){
@@ -271,16 +278,22 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
     $scope.loadPRE_VERB(Deps);
     $scope.loadPOST_VERB(Deps);
 
+    if(posHash[$scope.pos] == "ADV"){
+     if(Deps.hasOwnProperty("SENTENCE")){
+        var freq = Deps.SENTENCE.MOD_TOP_ADV.data[0].frequency;
+        if(freq > 0){
+        $scope.top_count = freq;
+        $("#ADV_EXTRA").show()
+        }
+      }
+      
+    }
   });
   $scope.loadData();
 
 
 
-  var posHash = new Array();
-  posHash['Nome'] = 'NOUN';
-  posHash['Verbo'] = 'VERB';
-  posHash['Adjetivo'] = 'ADJ';
-  posHash['Advérbio'] = 'ADV';
+  
 
   $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequência'];
 
@@ -298,11 +311,6 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
     $("#waitForWord").hide();
     $scope.loadData();
   };
-
-
-    /////parte copia do outrto controller
-    $scope.classes=['Nome','Verbo','Adjetivo','Advérbio']
-
 
     $scope.gotoHomePage = function() {
       $location.path("/#/");
@@ -433,10 +441,10 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
 
       switch(elementType) {
           case 'PRE_WORD':
-          $scope.depTitle = depProp.name + " à Esquerda";
+          $scope.depTitle = depProp.name + " à esquerda";
           break;
           case 'POST_WORD':
-          $scope.depTitle = depProp.name + " à Direira";
+          $scope.depTitle = depProp.name + " à direira";
           break;
           case 'PRE_VERB':
           $scope.depTitle = depProp.name;
