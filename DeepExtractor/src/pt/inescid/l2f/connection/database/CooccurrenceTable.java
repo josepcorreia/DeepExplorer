@@ -8,10 +8,10 @@ import java.sql.*;
 import java.util.HashMap;
 
 
-public class CoocorrenceTable extends RelationalTable {
+public class CooccurrenceTable extends RelationalTable {
 	private String _corpusName;
 
-	public CoocorrenceTable(Connection _connection, String corpusName) {
+	public CooccurrenceTable(Connection _connection, String corpusName) {
 		super(_connection);
 		_corpusName = corpusName;
 	}

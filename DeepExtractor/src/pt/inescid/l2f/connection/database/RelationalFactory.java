@@ -9,7 +9,7 @@ public class RelationalFactory {
 	private static Connection _connection;
 	private static WordTable _word;
 	private static WordBelongsTable _wordBelongs;
-	private static CoocorrenceTable _coo;
+	private static CooccurrenceTable _coo;
 	private static PropertyTable _prop;
 	private static CorpusTable _corpus;
 	private static DependencyTable _dependency;
@@ -29,7 +29,7 @@ public class RelationalFactory {
 		_corpus = new CorpusTable(_connection);
 		_word = new WordTable(_connection,corpusName);
         _wordBelongs = new WordBelongsTable(_connection,corpusName);
-		_coo = new CoocorrenceTable(_connection,corpusName);
+		_coo = new CooccurrenceTable(_connection,corpusName);
 		_prop = new PropertyTable(_connection);
 		_dependency = new DependencyTable(_connection);
 		_file = new FileTable(_connection,corpusName);
@@ -45,7 +45,7 @@ public class RelationalFactory {
         return _wordBelongs;
     }
 
-	public static CoocorrenceTable getCoocorrence() {
+	public static CooccurrenceTable getCoocorrence() {
 		return _coo;
 	}
 

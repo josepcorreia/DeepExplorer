@@ -74,7 +74,7 @@ public class DeepStorage {
 
 		WordTable worddb = RelationalFactory.getWord();
 		WordBelongsTable wordBelongsdb = RelationalFactory.getWordBelongs();
-		CoocorrenceTable coo = RelationalFactory.getCoocorrence();
+		CooccurrenceTable coo = RelationalFactory.getCoocorrence();
         SentenceTable sentenceDB = RelationalFactory.getSentence();
 		ExemplifiesTable exemplifiesDB = RelationalFactory.getExemplifies();
 
