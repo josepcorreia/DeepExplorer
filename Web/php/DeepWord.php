@@ -1,17 +1,19 @@
 <?php
 require_once("DepQueries.php");
 
-class DepClass
+class DeepWord
 {
     private $DepQueries = NULL;
     private $pos = NULL;
     private $depProps = NULL;
     private $depPropsNames = NULL;
+    private $word_depProps_exception = NULL;
     private $outp = array();
 
     public function __construct($pos, $conn){
         $this->pos = $pos;
         $this->GetDependenciesFromFile($pos);
+        $this->GetWordDepPropsExceptions();
         $this->DepQueries =  new DepQueries($conn);
     }
 
@@ -35,7 +37,6 @@ class DepClass
                 }
             }
         }
-        
     }
 
      protected function GetDependenciesByClass($file){
@@ -63,7 +64,21 @@ class DepClass
         return;
     }
 
-     private function logarithmBase2($freq)
+    protected function  GetWordDepPropsExceptions()
+    {
+        $file = fopen('resources/exceptions.txt','r');
+        while ($line = fgets($file)) {
+            $line = trim(preg_replace('/\n/', '', $line));
+            $split = explode(",",$line);
+
+            $this->word_depProps_exception[$split[0]] = array();
+            array_push($this->word_depProps_exception[$split[0]],$split[1]);
+            }
+
+        fclose($file);
+    }
+
+    private function logarithmBase2($freq)
     {
         return (log10($freq) / log10(2));
     }
@@ -96,7 +111,7 @@ class DepClass
     }
 
     protected function GetResult($word, $pos, $measure , $limit, $minfreq){
-        
+        $word_exceptions = $this->word_depProps_exception[$word];
 
         $idWord = $this->DepQueries->GetWordId($word, $pos);
         
@@ -106,6 +121,14 @@ class DepClass
             $depPropsKeys = array_keys($this->depProps[$depPropRole]);
 
             foreach ($depPropsKeys as $dep_prop){
+                
+                //patterns depedency-property that do not occurs in some words
+                if(!empty($word_exceptions)){
+                    if(in_array($dep_prop,$word_exceptions)){
+                        continue;
+                    }
+                }
+
                 $split = explode(" ",$dep_prop);
                 $dep = $split[0];
                 $prop = $split[1];

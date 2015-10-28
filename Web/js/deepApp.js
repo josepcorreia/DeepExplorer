@@ -15,6 +15,10 @@ deepApp.config(function($routeProvider, $locationProvider) {
                 templateUrl : 'partials/deep.html',
                 controller  : 'deepCtrl'
             }).
+            when('/about', {
+                templateUrl : 'partials/about.html',
+                controller  : 'deepCtrl'
+            }).
 
             otherwise({
               redirectTo: '/'
@@ -152,8 +156,9 @@ deepApp.controller("searchCtrl", function($scope, sharedInfo, $location, $route)
        sharedInfo.setMaxWords($scope.maxword);
            
 
-       var url = 'php/deepWords.php';
+       var url = 'php/deepApp.php';
        var data = {
+                    'request_type':'word',
                     'word':$scope.word,
                     'pos':posHash[$scope.pos],
                     'measure':$scope.measure,
@@ -320,7 +325,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
     $scope.postPhp = function() {
       $("body").css('overflow', 'hidden');
       $("#waitForWord").show();
-      var url = 'php/deepWords.php';
+      var url = 'php/deepApp.php';
       
 
       var data = {
@@ -379,6 +384,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
         case 'GOVERNED':
         $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ $scope.word +","+word_obj.word+")";
         var data = {
+          'request_type':'concordance',
           'word1':$scope.word,
           'pos1':posHash[$scope.pos],
           'word2':word_obj.word,
@@ -391,6 +397,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
         case 'GOVERNOR':
         $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ word_obj.word +","+ $scope.word +")";
         var data = {
+          'request_type':'concordance',
           'word1':word_obj.word,
           'pos1':word_obj.word_pos,
           'word2':$scope.word,
@@ -405,7 +412,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
       $scope.pos_otherWord = word_obj.word_pos;
 
 
-      var url = 'php/deepConcordance.php';
+      var url = 'php/deepApp.php';
       if (request) {
         request.abort();
       }
