@@ -329,6 +329,7 @@ deepApp.controller("deepCtrl", function($scope, sharedInfo, $route,  $location) 
       
 
       var data = {
+        'request_type':'word',
         'word':$scope.word,
         'pos':posHash[$scope.pos],
         'measure':$scope.measure,
