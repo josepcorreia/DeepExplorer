@@ -1,1 +1,0 @@
-ser,CDIR SEM_PROP
