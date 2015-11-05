@@ -1,0 +1,267 @@
+<div class="jumbotron jumbotron_deep">
+	<div class="container">
+		<div class="wordTitle">
+			<h3>
+				<span class="label label-warning">
+					{{title}} 
+				</span>
+			</h3>
+		</div>
+		<div class="measureTitle">
+			<h4>
+				<span class="label label-default label_measures">
+					Medida:  
+				</span>
+			</h4>
+			<div class="dropdown">
+				<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+					{{measure}}
+					<span class="caret"></span>
+					<!--<span class="sr-only">Toggle Dropdown</span>-->
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li ng-repeat="x in measures" ng-click="changeMeasureDeps(x)">
+						<a  href=""> {{ x }} </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row Verb_content">
+			<div class="panel" id ="verb">
+				<div class="panel-body">
+					<div class="col-xs-6">
+						<div id="PRE_VERB">
+							<div class = "rowDeps" ng-repeat="x in PRE_VERB">
+								<table class="table table-bordered">
+									<label>{{x.name}}</label>
+									<tr class="warning" >
+										<td>
+											<span ng-repeat="y in x.data">
+												<a ng-click="loadWordExample(x,y,'PRE_VERB')" href="javascript:void(0);">
+													<b>{{y.word}}</b>
+												</a> 
+												({{y.duallog}}:{{y.measure}})
+												<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+											</span>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class = "notApplicable">
+							<h4>{{msg_1}}</h4>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div id="POST_VERB">
+							<div class = "rowDeps" ng-repeat="x in POST_VERB">
+								<table class="table table-bordered">
+									<label>{{x.name}}</label>
+									<tr class="warning" >
+										<td>
+											<span ng-repeat="y in x.data">
+												<a ng-click="loadWordExample(x,y,'POST_VERB')" href="javascript:void(0);">
+													<b>{{y.word}}</b>
+												</a> 
+												({{y.duallog}}:{{y.measure}})
+												<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+											</span>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class = "notApplicable">
+								<h4>{{msg_2}}</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-6" id="PRE_WORD">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title"> à esquerda</h3>
+					</div>
+					<div class="panel-body">
+						<div class = "rowDeps" ng-repeat="x in PRE_WORD">
+							<table class="table table-bordered">
+								<label>{{x.name}}</label>
+								<tr class="warning" >
+									<td>
+										<span ng-repeat="y in x.data">
+											<a ng-click="loadWordExample(x,y,'PRE_WORD')" href="javascript:void(0);">
+												<b>{{y.word}}</b>
+											</a> 
+											({{y.duallog}}:{{y.measure}})
+											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class = "notApplicable">
+								<h4>{{msg_1}}</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6" id="POST_WORD">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">à direita</h3>
+					</div>
+					<div class="panel-body">
+						<div class = "rowDeps" ng-repeat="x in POST_WORD">
+							<table class="table table-bordered">
+								<label>{{x.name}}</label>
+								<tr class="warning" >
+									<td>
+										<span ng-repeat="y in x.data">
+											<a ng-click="loadWordExample(x,y,'POST_WORD')" href="javascript:void(0);">
+												<b>{{y.word}}</b>
+											</a> 
+											({{y.duallog}}:{{y.measure}})
+											<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class = "notApplicable">
+								<h4>{{msg_2}}</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" id = "ADV_EXTRA">					
+          	<h4> <span class="label label-white"> este advérbio modifica {{top_count}} frase(s). </span></h4>
+        </div>
+		<div class="row">
+			<div class = "newSearchButton"> 
+          		<button type="button" class="btn btn-link" ng-click="gotoHomePage()">
+            	 Nova Pesquisa
+         		</button>
+         	</div>
+        </div>
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">{{exampleTitle}}</h4>
+			</div>
+			<div class="modal-body">
+				<div class = "row">
+					<div class = "col-md-4">
+						<label>Relação:</label>
+					</div>
+					<div class = "col-md-7">
+						{{depTitle}}
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-xs-4">
+						<label>Palavra Alvo:</label>
+					</div>
+					<div class = "col-xs-6">
+						<p>{{word}} ({{pos}})</p>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-xs-4">
+						<label>Palavra Co-ocorrente:</label>
+					</div>
+					<div class = "col-xs-6">
+						<p>{{otherWord}} ({{pos_otherWord}})</p>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-xs-4">
+						<label>{{measure}}:</label>
+					</div>
+					<div class = "col-xs-6">
+						<p>{{m_value}}</p>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-xs-4">
+						<label>Frequência:</label>
+					</div>
+					<div class = "col-xs-6">
+						<p>{{frequency}} ({{logfrequency}})</p>
+					</div>
+				</div>
+				<div class = "concordance">
+					<label> Frases de exemplo: </label>
+					<table class="table table-striped">
+						<tr ng-repeat="x in sentences">
+							<td>
+								{{x.number}},{{x.file}}
+							</td>
+							<td>
+								{{x.sentence}}
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		
+			<div id="waitForConcordance"class = "waitFor">
+				<div class ="content">  
+					<div class = "waitText">
+					A processar ...
+					</div>
+					<div class="sk-circle">
+						<div class="sk-circle1 sk-child"></div>
+						<div class="sk-circle2 sk-child"></div>
+						<div class="sk-circle3 sk-child"></div>
+						<div class="sk-circle4 sk-child"></div>
+						<div class="sk-circle5 sk-child"></div>
+						<div class="sk-circle6 sk-child"></div>
+						<div class="sk-circle7 sk-child"></div>
+						<div class="sk-circle8 sk-child"></div>
+						<div class="sk-circle9 sk-child"></div>
+						<div class="sk-circle10 sk-child"></div>
+						<div class="sk-circle11 sk-child"></div>
+						<div class="sk-circle12 sk-child"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--end Modal -->
+
+<div class = "waitFor" id ="waitForWord">
+	<div class ="content">  
+		<div class = "waitText">
+			A processar ...
+		</div>
+		<div class="sk-circle">
+			<div class="sk-circle1 sk-child"></div>
+			<div class="sk-circle2 sk-child"></div>
+			<div class="sk-circle3 sk-child"></div>
+			<div class="sk-circle4 sk-child"></div>
+			<div class="sk-circle5 sk-child"></div>
+			<div class="sk-circle6 sk-child"></div>
+			<div class="sk-circle7 sk-child"></div>
+			<div class="sk-circle8 sk-child"></div>
+			<div class="sk-circle9 sk-child"></div>
+			<div class="sk-circle10 sk-child"></div>
+			<div class="sk-circle11 sk-child"></div>
+			<div class="sk-circle12 sk-child"></div>
+		</div>
+		<div class = "waitText">
+			<button type="button" class="btn btn-link" ng-click="reloadPage()">
+				Voltar ao início
+			</button>
+		</div>
+	</div>
+</div>

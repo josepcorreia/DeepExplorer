@@ -1,0 +1,198 @@
+/*redefenition*/
+ @media screen and (min-width:768px){ 
+  .container .jumbotron,.container-fluid .jumbotron
+  {padding-right:30px;padding-left:30px}
+}
+
+.deepword{
+padding-top: 2%;
+position: relative;
+margin-right: auto;
+margin-left: auto;
+}
+
+@media (min-width:990px){
+  .deepword{
+  width: 720px;
+  }
+}
+
+.showword{
+padding-top: 2%;
+position: relative;
+text-align:center
+}
+
+/*button in the midle*/
+.buttonMiddle{
+  	border-bottom-left-radius: 0;
+  	border-top-left-radius: 0;
+  	border-top-right-radius: 0;
+  	border-bottom-right-radius: 0;
+}
+
+.showmoreOptionButtons{
+  display: table;
+  position: relative;
+	padding-top: 5%;
+	margin-right: auto;
+	margin-left: auto;
+}
+.showlessOptionButtons{
+  display: none;
+  position: relative;
+  padding-top: 5%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.moreOptions{
+  display: none;
+  padding-top: 5%;
+  width: 75%
+}
+.inputNumber{
+  width: 60%;
+}
+
+.Verb_content{
+  display: none;
+}
+
+.Verb_content > #verb{
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+#PRE_VERB{
+margin-left: -15px;
+margin-right: 15px;
+}
+
+#POST_VERB{
+margin-right: -15px;
+margin-left: 15px;
+}
+
+#ADV_EXTRA{
+  display: none;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.label-white {
+  color: black;
+  background-color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
+.newSearchButton{
+  display: table;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: -30px;
+
+}
+
+.rowDeps{
+  padding-right: 2%;
+  padding-left: 2%;
+}
+.rowDeps > .table{
+  font-size: 13px;
+}
+
+.notApplicable{
+  display: none;
+}
+
+.depTitle{
+  background-color: dimgrey;
+  padding: 10px 15px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.depTitle > .title{
+  color:white;
+margin-top: 0;
+margin-bottom: 0;
+font-size: 16px;
+}
+
+
+.wordTitle{
+  display: table;
+  margin-right:auto;
+  margin-left:auto;
+  margin-top: -55px;
+}
+.measureTitle{
+  display: table;
+  margin-right:auto;
+  margin-left:auto;
+  margin-top: -5px;
+  padding-bottom: 10px;
+}
+
+.measureTitle h4 {
+    display: inline-block;
+    vertical-align: middle;    
+}
+
+.measureTitle > .dropdown {
+    display: inline-block;
+    vertical-align: middle;
+}
+.measureTitle > .dropdown button {
+    width: 105px;
+    padding-bottom: 2px;
+    margin-top: 4px;
+}
+
+
+/*nao estava defenido no bootstrap*/
+.panel-rightDepsGovernor{
+  border-color:  darkseagreen;
+}
+.panel-rightDepsGovernor > .panel-heading{
+    background-color: darkseagreen;
+    color:white;
+}
+
+
+.waitFor{
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1001;
+  width: 100%;
+  height:100%;
+  background-color: black;
+  opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+.waitFor > .content{
+  width: 70%;
+  position: relative;
+  top:45%;
+  margin:0px auto;
+}
+
+.waitFor > .content > .waitText{
+  text-align: center;
+  color: white;
+  font-size: 18px;
+}
+
+#waitForConcordance{
+   opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+}
+

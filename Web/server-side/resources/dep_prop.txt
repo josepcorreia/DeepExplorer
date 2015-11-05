@@ -1,0 +1,35 @@
+## NOUN
+MOD PRE_NOUN_ADJ,PRE_WORD,GOVERNED,é modificado pelo adjetivo
+QUANTD NOUN_NOUN,PRE_WORD,GOVERNED,é modificado pelo quantificador nominal 
+CLASSD NOUN_NOUN,PRE_WORD,GOVERNED,é modificado pelo classificador nominal
+MOD POST_NOUN_ADJ,POST_WORD,GOVERNED,é modificado pelo adjetivo
+MOD POST_NOUN_NOUN,POST_WORD,GOVERNOR,é complemento do nome
+
+## VERB
+SUBJ SEM_PROP,PRE_VERB,GOVERNED,sujeito
+CDIR SEM_PROP,POST_VERB,GOVERNED,complemento direto
+CINDIR SEM_PROP,POST_VERB,GOVERNED,complemento indireto
+COMPL SEM_PROP,POST_VERB,GOVERNED,complemento essencial
+MOD VERB_NOUN,POST_VERB,GOVERNED,complemento preposicional (N)
+MOD VERB_ADJ,POST_VERB,GOVERNED,complemento preposicional (A)
+MOD PRE_VERB_ADV,PRE_WORD,GOVERNED,é modificado pelo advérbio
+MOD POST_VERB_ADV,POST_WORD,GOVERNED,é modificado pelo advérbio
+
+
+## ADJ
+MOD PRE_ADJ_ADV,PRE_WORD,GOVERNED,é modificado pelo advérbio
+MOD PRE_NOUN_ADJ,PRE_WORD,GOVERNOR,modifica o nome
+MOD POST_ADJ_ADV,POST_WORD,GOVERNED,é modificado pelo advérbio
+MOD POST_NOUN_ADJ,POST_WORD,GOVERNOR,modifica o nome
+
+## ADV
+MOD PRE_ADV_ADV,PRE_WORD,GOVERNED,é modificado pelo advérbio
+MOD POST_ADV_ADV,POST_WORD,GOVERNED,é modificado pelo advérbio
+MOD PRE_ADJ_ADV,PRE_WORD,GOVERNOR,modifica o adjetivo
+MOD PRE_ADV_ADV,PRE_WORD,GOVERNOR,modifica o advérbio
+MOD PRE_FOCUS_NOUN_ADV,PRE_WORD,GOVERNOR,modifica o nome
+MOD PRE_VERB_ADV,PRE_WORD,GOVERNOR,modifica o verbo
+MOD POST_ADJ_ADV,POST_WORD,GOVERNOR,modifica o adjetivo
+MOD POST_FOCUS_NOUN_ADV,POST_WORD,GOVERNOR,modifica o nome
+MOD POST_VERB_ADV,POST_WORD,GOVERNOR,modifica o verbo
+MOD TOP_ADV,SENTENCE,EXTRA,modifica uma frase
