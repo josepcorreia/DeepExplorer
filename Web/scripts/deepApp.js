@@ -12,7 +12,7 @@ deepApp.config(function($routeProvider, $locationProvider) {
 
             // route for the about page
             when('/wordexplorer', {
-                templateUrl : 'partials/deep.html',
+                templateUrl : 'partials/deep_result.html',
                 controller  : 'deepCtrl'
             }).
             when('/about', {
