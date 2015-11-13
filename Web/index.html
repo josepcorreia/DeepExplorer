@@ -20,6 +20,8 @@
 	<!--mine -->
 	 <link rel="stylesheet" type="text/css" href="styles/deepstring.css">
    <script src="scripts/deepApp.js"></script>
+   <script src="scripts/services.js"></script>
+  <script src="scripts/controllers.js"></script>
 
 
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,23 +34,45 @@
    <title>DeepSTRING</title>
   </head>
 
-<!-- HEADER AND NAVBAR -->
-  <header>
-    <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
-        <a class="navbar-brand" href="/#/">DeepSTRING</a>
-         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Help</a></li>
-          <li><a href="#">About</a></li>
-          </ul>
-      </div>
-    </nav>
-  </header>
   <div class="container">
-    <div ng-view></div>
+    <h2 class="title"> DeepString - Syntax Deep Explorer</h2>
+      <div class = "deep_content">
+        <ul class="nav nav-pills">
+          <li role="presentation" class="active"><a href="#/">New Search</a></li>
+          <li role="presentation"><a href="#">Help</a></li>
+          <li role="presentation"><a href="#">About</a></li>
+        </ul>
+        
+        <div ng-view></div>
+      </div>   
+
   </div>
-  <div id="footer">
-  
- </div>
+
+<div class = "waitFor" id ="waitForWord">
+  <div class ="content">  
+    <div class = "waitText">
+      Searching...
+    </div>
+    <div class="sk-circle">
+      <div class="sk-circle1 sk-child"></div>
+      <div class="sk-circle2 sk-child"></div>
+      <div class="sk-circle3 sk-child"></div>
+      <div class="sk-circle4 sk-child"></div>
+      <div class="sk-circle5 sk-child"></div>
+      <div class="sk-circle6 sk-child"></div>
+      <div class="sk-circle7 sk-child"></div>
+      <div class="sk-circle8 sk-child"></div>
+      <div class="sk-circle9 sk-child"></div>
+      <div class="sk-circle10 sk-child"></div>
+      <div class="sk-circle11 sk-child"></div>
+      <div class="sk-circle12 sk-child"></div>
+    </div>
+    <div class = "waitText">
+      <button type="button" class="btn btn-link" ng-click="reloadPage()">
+        New Search
+      </button>
+    </div>
+  </div>
+</div>
  </body>
 </html>

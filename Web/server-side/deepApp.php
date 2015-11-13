@@ -25,7 +25,7 @@ if($request_type === 'word'){
 	$limit =  $_POST['limit'];
 	$minfreq = $_POST['minfreq'];
 
-	if($Measure == 'Frequência'){
+	if($Measure == 'Frequency'){
 		$Measure = 'frequencia';
 	}
 

@@ -1,9 +1,9 @@
 <div class = "deepword"> 
   <div class="jumbotron">
     <div class="container">
-      <label for="palavra">Introduzir o lema da palavra</label>
+      <label for="palavra">Insert a word's lemma</label>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Lema" ng-model="word">
+        <input type="text" class="form-control" placeholder="Lemma" ng-model="word">
         <span class="input-group-btn">
           <button type="button" class="buttonMiddle btn btn-default dropdown-toggle" data-toggle="dropdown" style= "width: 94px;">
             {{pos}}
@@ -34,7 +34,7 @@
         <table style="width:100%">
           <tr>
             <td>
-              <label class="control-label">Frequência mínima: </label>
+              <label class="control-label">Minimum occurrence: </label>
             </td>
             <td>
               <div class="inputNumber">
@@ -44,7 +44,7 @@
           </tr>
           <tr>
             <td>
-              <label class="control-label">Número máximo de palavras:</label>
+              <label class="control-label">Words' maximum number:</label>
             </td>
             <td>
               <div class="inputNumber">
@@ -57,23 +57,23 @@
       <div class = "showmoreOptionButtons"> 
         <div class="row">
           <button type="button" class="btn btn-link" ng-click="moreOptions()">
-            Mais Opções
+            More Options
           </button>
-          <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+          <button class="btn btn-default" type="submit" value="Search" ng-click="searchWord()">Search</button>
         </div>
       </div>
       <div class = "showlessOptionButtons"> 
         <div class="row">
           <button type="button" class="btn btn-link" ng-click="lessOptions()">
-            Esconder Opções
+            Hide Options
           </button>
-          <button class="btn btn-default" type="submit" value="Mostrar" ng-click="searchWord()">Mostrar</button>
+          <button class="btn btn-default" type="submit" value="Search" ng-click="searchWord()">Search</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class = "waitFor" id ="waitForWord">
+<!--<div class = "waitFor" id ="waitForWord">
  <div class ="content">  
   <div class = "waitText">
     A processar ...
@@ -98,4 +98,4 @@
     </button>
   </div>
 </div>
-</div>
+</div>-->

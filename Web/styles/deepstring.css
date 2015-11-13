@@ -4,11 +4,26 @@
   {padding-right:30px;padding-left:30px}
 }
 
+/*style da pagina string*/
+h2.title {
+background: none;
+    font-weight: normal;
+    margin: 0;
+    padding-top: .5em;
+    padding-bottom: .17em;
+    border-bottom: 1px solid #aaa;
+    color: #369;
+}
+
+.deep_content{
+  margin-top: 2vh;
+}
+
 .deepword{
-padding-top: 2%;
-position: relative;
-margin-right: auto;
-margin-left: auto;
+  margin-top: 5vh;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media (min-width:990px){
@@ -18,7 +33,6 @@ margin-left: auto;
 }
 
 .showword{
-padding-top: 2%;
 position: relative;
 text-align:center
 }
@@ -50,6 +64,12 @@ text-align:center
   padding-top: 5%;
   width: 75%
 }
+
+
+#jumbotron_deep{
+  margin-top: 1vh;
+}
+
 .inputNumber{
   width: 60%;
 }
@@ -195,4 +215,7 @@ font-size: 16px;
    opacity: 0.8;
     filter: alpha(opacity=80); /* For IE8 and earlier */
 }
+
+
+
 
