@@ -12,17 +12,18 @@ config(function($routeProvider, $locationProvider) {
                 templateUrl : 'partials/home.html',
                 controller  : 'searchCtrl'
             }).
-
-            // route for the about page
             when('/wordexplorer', {
                 templateUrl : 'partials/deep_result.html',
                 controller  : 'deepCtrl'
             }).
             when('/about', {
                 templateUrl : 'partials/about.html',
-                controller  : 'deepCtrl'
+                controller  : 'searchCtrl'
             }).
-
+            when('/help', {
+                templateUrl : 'partials/help.html',
+                controller  : 'searchCtrl'
+            }).
             otherwise({
               redirectTo: '/'
           });

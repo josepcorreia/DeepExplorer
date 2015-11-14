@@ -1,22 +1,18 @@
 angular.module('deepApp.controllers', []).
 
-controller("searchCtrl", function($scope, sharedInfo, $location, $route) {
+controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location, $window, $route) {
    // Variable to hold request (requet to php)
-        var request;
+   var request;
 
+   $scope.pos = "POS";     
    $scope.classes=['Noun','Verb','Adjective','Adverb']
-   $scope.pos = "POS";
-   $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequency']
+   
    $scope.measure = "Measure";
+   $scope.measures = sharedInfo.getMeasures();
+   
+   //default values
    $scope.minfreq = 2;
    $scope.maxword = 10;
-
-
-   var posHash = new Array();
-    posHash['Noun'] = 'NOUN';
-    posHash['Verb'] = 'VERB';
-    posHash['Adjective'] = 'ADJ';
-    posHash['Advérbio'] = 'ADV';
 
    $scope.changePos = function(value) {
      $scope.pos = value;
@@ -52,100 +48,29 @@ controller("searchCtrl", function($scope, sharedInfo, $location, $route) {
         if($scope.pos != "POS"){
           if($scope.measure != "Measure"){
             sharedInfo.setWord($scope.word);
-            sharedInfo.setPos($scope.pos);
+            sharedInfo.setPos($scope.pos); 
             sharedInfo.setMeasure($scope.measure);
             sharedInfo.setMinFreq($scope.minfreq);
             sharedInfo.setMaxWords($scope.maxword);
 
-            $scope.postPhp();
+            postPHPservice.postWordPhp(request);
           }
           else{
-            alert("Select the Association Measure");
+            $window.alert("Select the Association Measure");
           }
         }
         else{
-          alert("Select the Word Part Of Speech");
+          $window.alert("Select the Word Part Of Speech");
         }
       }else{
-        alert("Insert a Word's Lemma");
+        $window.alert("Insert a Word's Lemma");
       }
    };
-
-
-    $scope.postPhp = function() {
-       $("#waitForWord").show();
-
-       sharedInfo.setMinFreq($scope.minfreq);
-       sharedInfo.setMaxWords($scope.maxword);
-           
-
-       var url = 'server-side/deepApp.php';
-       var data = {
-                    'request_type':'word',
-                    'word':$scope.word,
-                    'pos':posHash[$scope.pos],
-                    'measure':$scope.measure,
-                    'limit':$scope.maxword,
-                    'minfreq':$scope.minfreq
-          };
-        
-        // Abort any pending request
-        if (request) {
-          request.abort();
-        }
-        request = $.ajax({
-                    type: 'POST',
-                    url: url,
-                    dataType: "json",
-                    data: data,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    async: true
-        });//request
-
-          // Callback handler that will be called on success
-        request.done(function (response, textStatus, jqXHR){
-            if(response.hasOwnProperty("wordNotExist")){
-              $("#waitForWord").hide();
-              alert("The lemma " +$scope.word+ "("+$scope.pos+") does not exist in the database");
-            }              
-            else{
-              if(jQuery.isEmptyObject(response)){
-                  $("#waitForWord").hide();
-                alert("No results have been found for the lemma  " +$scope.word+ "("+$scope.pos+")  with the selected options");
-              }else{
-                sharedInfo.setDeps(response);
-                $("#waitForWord").hide();
-                //console.log(response);
-                $location.path("/wordexplorer");
-                $scope.$apply();
-              }
-            } 
-            
-
-
-         });//request done
-
-        // Callback handler that will be called on failure
-        request.fail(function (jqXHR, textStatus, errorThrown){
-          alert("Error, try again!");
-        //return false;
-        console.error(
-            "The following error occurred: "+
-            textStatus, errorThrown
-        );
-        });//fail
-    }//postPhp
 }).
 
-
-controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
+controller("deepCtrl", function($scope, sharedInfo, postPHPservice, $route,  $location) {
   var request;
-  var posHash = new Array();
-  posHash['Noun'] = 'NOUN';
-  posHash['Verb'] = 'VERB';
-  posHash['Adjective'] = 'ADJ';
-  posHash['Adverb'] = 'ADV';
-
+  $scope.measures = sharedInfo.getMeasures();
 
   $scope.loadPRE_WORD = function(Deps){
 
@@ -196,7 +121,7 @@ controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
     var Deps = sharedInfo.getDeps();
 
     $scope.word = sharedInfo.getWord();
-    $scope.pos =  sharedInfo.getPos();
+    $scope.pos =  sharedInfo.getPOS();
     $scope.measure =  sharedInfo.getMeasure();
     $scope.maxword =  sharedInfo.getMaxWords();
     $scope.minfreq =  sharedInfo.getMinFreq();
@@ -208,28 +133,23 @@ controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
     $scope.loadPRE_VERB(Deps);
     $scope.loadPOST_VERB(Deps);
 
-    if(posHash[$scope.pos] == "ADV"){
+    if($scope.pos == "Adverb"){
      if(Deps.hasOwnProperty("SENTENCE")){
         var freq = Deps.SENTENCE.MOD_TOP_ADV.data[0].frequency;
         if(freq > 0){
         $scope.top_count = freq;
         $("#ADV_EXTRA").show()
         }
-      }
-      
+      }      
     }
   });
   $scope.loadData();
 
-
-
-  
-
-  $scope.measures=['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequency'];
-
   $scope.changeMeasureDeps = function(value) {
     $scope.measure = value;
-    $scope.postPhp();
+    sharedInfo.setMeasure($scope.measure);
+
+    postPHPservice.postWordPhp(request);
   };
 
   $scope.reloadPage = function() {
@@ -246,99 +166,7 @@ controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
       $location.path("/#/");
     };
 
-    //este post e diferente do outro
-    $scope.postPhp = function() {
-      $("body").css('overflow', 'hidden');
-      $("#waitForWord").show();
-      var url = 'server-side/deepApp.php';
-      
-
-      var data = {
-        'request_type':'word',
-        'word':$scope.word,
-        'pos':posHash[$scope.pos],
-        'measure':$scope.measure,
-        'limit':$scope.maxword,
-        'minfreq':$scope.minfreq
-      };
-
-      if (request) {
-        request.abort();
-      }
-      request = $.ajax({
-        type: 'POST',
-        url: url,
-        dataType: "json",
-        data: data,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        async: true
-        });//request
-
-          // Callback handler that will be called on success
-          request.done(function (response, textStatus, jqXHR){
-            //guarda a medida selecionada no sharedInfo
-            sharedInfo.setMeasure($scope.measure);
-            sharedInfo.setDeps(response);
-            $scope.loadData();
-            $scope.$apply();
-
-            $("body").css('overflow', 'scroll');
-            $("#waitForWord").hide();
-
-         });//request done
-        // Callback handler that will be called on failure
-        request.fail(function (jqXHR, textStatus, errorThrown){
-        // Log the error to the console
-        //return false;
-        console.error(
-          "The following error occurred: "+
-          textStatus, errorThrown
-          );
-        });//fail   
-      };
-
-
-    //WORD Example
-    $scope.loadWordExample = (function(depProp, word_obj, elementType){
-      $scope.sentences = null;
-      $("#waitForConcordance").show();
-      $('#myModal').modal('show'); 
-      
-      var type = depProp.dep_type;
-
-      switch(type) {
-        case 'GOVERNED':
-        $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ $scope.word +","+word_obj.word+")";
-        var data = {
-          'request_type':'concordance',
-          'word1':$scope.word,
-          'pos1':posHash[$scope.pos],
-          'word2':word_obj.word,
-          'pos2':word_obj.word_pos,
-          'dep':depProp.dep,
-          'prop':depProp.prop,
-          'freq':word_obj.frequency
-        };
-        break;
-        case 'GOVERNOR':
-        $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + "("+ word_obj.word +","+ $scope.word +")";
-        var data = {
-          'request_type':'concordance',
-          'word1':word_obj.word,
-          'pos1':word_obj.word_pos,
-          'word2':$scope.word,
-          'pos2':posHash[$scope.pos],
-          'dep':depProp.dep,
-          'prop':depProp.prop,
-          'freq':word_obj.frequency
-        };
-        break; 
-      }
-      
-      $scope.otherWord = word_obj.word;
-      $scope.pos_otherWord = word_obj.word_pos;
-
-
+    var postSentencesRequestPhp = function(reuqest, data){
       var url = 'server-side/deepApp.php';
       if (request) {
         request.abort();
@@ -352,7 +180,7 @@ controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
         async: true
       });//request
 
-          // Callback handler that will be called on success
+      // Callback handler that will be called on success
       request.done(function (response, textStatus, jqXHR){
             //console.log(response);
             $scope.sentences = response.sentences;
@@ -371,14 +199,62 @@ controller("deepCtrl", function($scope, sharedInfo, $route,  $location) {
               textStatus, errorThrown
               );
       });//fail 
+    };
 
+    //setence Examples
+    $scope.loadCoocorrenceExample = (function(depProp, word_obj, elementType){
+      $scope.sentences = null;
+      $("#waitForConcordance").show();
+      $('#myModal').modal('show'); 
+
+      var type = depProp.dep_type;
+
+      switch(type) {
+        case 'GOVERNED':
+            //title of modal
+            $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + " ("+ $scope.word +","+word_obj.word+")";
+            
+            var data = {
+              'request_type':'concordance',
+              'word1':$scope.word,
+              'pos1':sharedInfo.getDatabasePOS(),
+              'word2':word_obj.word,
+              'pos2':word_obj.word_pos,
+              'dep':depProp.dep,
+              'prop':depProp.prop,
+              'freq':word_obj.frequency
+            };
+        break;
+        case 'GOVERNOR':
+            //title of modal
+            $scope.exampleTitle = depProp.dep +"_"+ depProp.prop + " ("+ word_obj.word +","+ $scope.word +")";
+            
+            var data = {
+              'request_type':'concordance',
+              'word1':word_obj.word,
+              'pos1':word_obj.word_pos,
+              'word2':$scope.word,
+              'pos2':sharedInfo.getDatabasePOS(),
+              'dep':depProp.dep,
+              'prop':depProp.prop,
+              'freq':word_obj.frequency
+            };
+            break; 
+      }
+      
+      //request to the php side
+      postSentencesRequestPhp(request, data); 
+
+      //modal information
+      $scope.otherWord = word_obj.word;
+      $scope.pos_otherWord = sharedInfo.getNormalPOS(word_obj.word_pos);
 
       switch(elementType) {
           case 'PRE_WORD':
-          $scope.depTitle = depProp.name + " à esquerda";
+          $scope.depTitle = depProp.name + " on the left";
           break;
           case 'POST_WORD':
-          $scope.depTitle = depProp.name + " à direira";
+          $scope.depTitle = depProp.name + " on the right";
           break;
           case 'PRE_VERB':
           $scope.depTitle = depProp.name;

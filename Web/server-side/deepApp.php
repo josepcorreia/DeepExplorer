@@ -12,8 +12,6 @@ $filename = "db_deep.db";
 // Create connection
 $conn = new SQLite3($dir."/".$filename);
 
-
-//pode ser preciso
 ini_set('max_execution_time', 300);
 
 $request_type = $_POST['request_type']; 
@@ -32,14 +30,6 @@ if($request_type === 'word'){
 	/*
 	$word = "carro";
 	$pos = "NOUN";
-	$Measure = "Dice";
-	$limit =  10;
-	$minfreq = 2;
-	*/
-
-	/*
-	$word = "ainda";
-	$pos = "ADV";
 	$Measure = "Dice";
 	$limit =  10;
 	$minfreq = 2;
@@ -69,8 +59,9 @@ if($request_type === 'word'){
 	$freq=10;
 	*/
 
-	if($freq >5 ){
-    	$freq=5;
+	//max number of setences that exemplifies a coocorrence 
+	if($freq >10 ){
+    	$freq=10;
 	}
 
 	$deepConcordanceInstance = new DeepConcordance($conn);
