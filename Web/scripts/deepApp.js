@@ -18,11 +18,11 @@ config(function($routeProvider, $locationProvider) {
             }).
             when('/about', {
                 templateUrl : 'partials/about.html',
-                controller  : 'searchCtrl'
+                controller  : 'aboutCtrl'
             }).
             when('/help', {
                 templateUrl : 'partials/help.html',
-                controller  : 'searchCtrl'
+                controller  : 'helpCtrl'
             }).
             otherwise({
               redirectTo: '/'

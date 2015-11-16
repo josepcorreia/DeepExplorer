@@ -14,13 +14,15 @@ background: none;
     border-bottom: 1px solid #aaa;
     color: #369;
 }
+.deep_nav{
+  margin-top: 2vh;
+}
 
 .deep_content{
   margin-top: 2vh;
 }
 
 .deepword{
-  margin-top: 5vh;
   position: relative;
   margin-right: auto;
   margin-left: auto;
@@ -144,7 +146,6 @@ margin-bottom: 0;
 font-size: 16px;
 }
 
-
 .wordTitle{
   display: table;
   margin-right:auto;
@@ -184,7 +185,18 @@ font-size: 16px;
     color:white;
 }
 
-
+.text_container{
+  margin-top: -30px;
+  margin-bottom: -30px;
+}
+.text_container > p{
+  font-size: 14px;
+  font-weight: normal;
+}
+.image_text{
+  margin-top: 10px;
+  margin-bottom: 10px; 
+}
 .waitFor{
   display: none;
   position: absolute;

@@ -37,14 +37,16 @@
 
   <div class="container">
     <h2 class="title"> DeepString - Syntax Deep Explorer</h2>
-      <div class = "deep_content">
+      <div class = "deep_nav">
         <ul class="nav nav-pills">
-          <li role="presentation" class="active"><a href="#/">New Search</a></li>
-          <li role="presentation"><a ng-href="#/help">Help</a></li>
-          <li role="presentation"><a ng-href="#/about">About</a></li>
+          <li id ="search" role="presentation"><a href="#/">Search</a></li>
+          <li id ="help" role="presentation"><a ng-href="#/help">Help</a></li>
+          <li id ="about" role="presentation"><a ng-href="#/about">About</a></li>
         </ul>
-        
-        <div ng-view></div>
+      </div>  
+      <div class = "deep_content"> 
+          <div ng-view></div>
+       </div>   
       </div>   
 
   </div>

@@ -1,15 +1,20 @@
 angular.module('deepApp.controllers', []).
 
 controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location, $window, $route) {
+   //changes in the nav bar
+   $('#search').tab('show');
+
    // Variable to hold request (requet to php)
    var request;
+
+   $scope.pos="Active";  
 
    $scope.pos = "POS";     
    $scope.classes=['Noun','Verb','Adjective','Adverb']
    
    $scope.measure = "Measure";
    $scope.measures = sharedInfo.getMeasures();
-   
+  
    //default values
    $scope.minfreq = 2;
    $scope.maxword = 10;
@@ -69,6 +74,7 @@ controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location,
 }).
 
 controller("deepCtrl", function($scope, sharedInfo, postPHPservice, $route,  $location) {
+
   var request;
   $scope.measures = sharedInfo.getMeasures();
 
@@ -274,7 +280,14 @@ controller("deepCtrl", function($scope, sharedInfo, postPHPservice, $route,  $lo
           request.abort();
         }
       })
-
     });
+}).
+controller("aboutCtrl", function($scope) {
+  //changes in the nav bar
+   $('#about').tab('show');
+}).  
 
+controller("helpCtrl", function($scope) {
+  //changes in the nav bar
+   $('#help').tab('show');
 });

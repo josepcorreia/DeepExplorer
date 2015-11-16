@@ -82,7 +82,7 @@
 			<div class="col-xs-6" id="PRE_WORD">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title"> à esquerda</h3>
+						<h3 class="panel-title"> on the left</h3>
 					</div>
 					<div class="panel-body">
 						<div class = "rowDeps" ng-repeat="x in PRE_WORD">
@@ -110,7 +110,7 @@
 			<div class="col-xs-6" id="POST_WORD">
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h3 class="panel-title">à direita</h3>
+						<h3 class="panel-title">on the right</h3>
 					</div>
 					<div class="panel-body">
 						<div class = "rowDeps" ng-repeat="x in POST_WORD">
@@ -139,6 +139,13 @@
 		<div class="row" id = "ADV_EXTRA">					
           	<h4> <span class="label label-white"> This adverb modifies {{top_count}} sentence(s). </span></h4>
         </div>
+        <div class="row">		
+			<div class = "newSearchButton"> 		
+          		<button type="button" class="btn btn-link" ng-click="gotoHomePage()">		
+            	 New Search
+        		</button>		
+         	</div>
+        </div> 
 	</div>
 </div>
 
@@ -156,7 +163,7 @@
 						<label>Relation:</label>
 					</div>
 					<div class = "col-xs-6">
-						{{depTitle}}
+						<p>{{depTitle}}</p>
 					</div>
 				</div>
 				<div class = "row">

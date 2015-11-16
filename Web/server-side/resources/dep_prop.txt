@@ -1,35 +1,35 @@
 ## NOUN
-MOD PRE_NOUN_ADJ,PRE_WORD,GOVERNED,é modificado pelo adjetivo
-QUANTD NOUN_NOUN,PRE_WORD,GOVERNED,é modificado pelo quantificador nominal 
-CLASSD NOUN_NOUN,PRE_WORD,GOVERNED,é modificado pelo classificador nominal
-MOD POST_NOUN_ADJ,POST_WORD,GOVERNED,é modificado pelo adjetivo
-MOD POST_NOUN_NOUN,POST_WORD,GOVERNOR,é complemento do nome
+MOD PRE_NOUN_ADJ,PRE_WORD,GOVERNED,it is modified by the adjective
+QUANTD NOUN_NOUN,PRE_WORD,GOVERNED,it is modified by the quantifier
+CLASSD NOUN_NOUN,PRE_WORD,GOVERNED,it is modified by the nominal classifier
+MOD POST_NOUN_ADJ,POST_WORD,GOVERNED,it is modified by the adjective
+MOD POST_NOUN_NOUN,POST_WORD,GOVERNOR,it is complement of the name
 
 ## VERB
-SUBJ SEM_PROP,PRE_VERB,GOVERNED,sujeito
-CDIR SEM_PROP,POST_VERB,GOVERNED,complemento direto
-CINDIR SEM_PROP,POST_VERB,GOVERNED,complemento indireto
-COMPL SEM_PROP,POST_VERB,GOVERNED,complemento essencial
-MOD VERB_NOUN,POST_VERB,GOVERNED,complemento preposicional (N)
-MOD VERB_ADJ,POST_VERB,GOVERNED,complemento preposicional (A)
-MOD PRE_VERB_ADV,PRE_WORD,GOVERNED,é modificado pelo advérbio
-MOD POST_VERB_ADV,POST_WORD,GOVERNED,é modificado pelo advérbio
+SUBJ SEM_PROP,PRE_VERB,GOVERNED,subject
+CDIR SEM_PROP,POST_VERB,GOVERNED,direct object
+CINDIR SEM_PROP,POST_VERB,GOVERNED,indirect object
+COMPL SEM_PROP,POST_VERB,GOVERNED,essential complement
+MOD VERB_NOUN,POST_VERB,GOVERNED,prepositional complement (N)
+MOD VERB_ADJ,POST_VERB,GOVERNED,prepositional complement (A)
+MOD PRE_VERB_ADV,PRE_WORD,GOVERNED,it is modified by the adverb
+MOD POST_VERB_ADV,POST_WORD,GOVERNED,it is modified by the adverb
 
 
 ## ADJ
-MOD PRE_ADJ_ADV,PRE_WORD,GOVERNED,é modificado pelo advérbio
-MOD PRE_NOUN_ADJ,PRE_WORD,GOVERNOR,modifica o nome
-MOD POST_ADJ_ADV,POST_WORD,GOVERNED,é modificado pelo advérbio
-MOD POST_NOUN_ADJ,POST_WORD,GOVERNOR,modifica o nome
+MOD PRE_ADJ_ADV,PRE_WORD,GOVERNED,it is modified by the adverb
+MOD PRE_NOUN_ADJ,PRE_WORD,GOVERNOR,it modifies the name
+MOD POST_ADJ_ADV,POST_WORD,GOVERNED,it is modified by the adverb
+MOD POST_NOUN_ADJ,POST_WORD,GOVERNOR,it modifies the name
 
 ## ADV
-MOD PRE_ADV_ADV,PRE_WORD,GOVERNED,é modificado pelo advérbio
-MOD POST_ADV_ADV,POST_WORD,GOVERNED,é modificado pelo advérbio
-MOD PRE_ADJ_ADV,PRE_WORD,GOVERNOR,modifica o adjetivo
-MOD PRE_ADV_ADV,PRE_WORD,GOVERNOR,modifica o advérbio
-MOD PRE_FOCUS_NOUN_ADV,PRE_WORD,GOVERNOR,modifica o nome
-MOD PRE_VERB_ADV,PRE_WORD,GOVERNOR,modifica o verbo
-MOD POST_ADJ_ADV,POST_WORD,GOVERNOR,modifica o adjetivo
-MOD POST_FOCUS_NOUN_ADV,POST_WORD,GOVERNOR,modifica o nome
-MOD POST_VERB_ADV,POST_WORD,GOVERNOR,modifica o verbo
-MOD TOP_ADV,SENTENCE,EXTRA,modifica uma frase
+MOD PRE_ADV_ADV,PRE_WORD,GOVERNED,it is modified by the adverb
+MOD POST_ADV_ADV,POST_WORD,GOVERNED,it is modified by the adverb
+MOD PRE_ADJ_ADV,PRE_WORD,GOVERNOR,it modifies the adjective
+MOD PRE_ADV_ADV,PRE_WORD,GOVERNOR,it modifies the adverb
+MOD PRE_FOCUS_NOUN_ADV,PRE_WORD,GOVERNOR,it modifies the name
+MOD PRE_VERB_ADV,PRE_WORD,GOVERNOR,it modifies the verb
+MOD POST_ADJ_ADV,POST_WORD,GOVERNOR,it modifies the adjective
+MOD POST_FOCUS_NOUN_ADV,POST_WORD,GOVERNOR,it modifies the name
+MOD POST_VERB_ADV,POST_WORD,GOVERNOR,it modifies the verb
+MOD TOP_ADV,SENTENCE,EXTRA,it modifies a sentence
