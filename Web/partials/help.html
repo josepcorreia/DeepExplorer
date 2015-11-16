@@ -6,14 +6,14 @@
 	  				class="img-responsive img-rounded" >
 	  	</div>
 	  	<p>
-			This form is presented to the user where this can choose 
-			the <strong> word's lemma (1)</strong> and <strong>POS (2)</strong> and 
-			also the <strong>association measure (3)</strong>. 
+			The form presented to the user allows him/her to choose 
+			the <strong> word's lemma (1)</strong> and <strong>POS (2)</strong> 
+			and also the <strong>association measure (3)</strong>. 
 			However, the user can still choose some additional options 
-			like <strong>the minimum frequency</strong> of each 
-			co-occurrence and the <strong>maximum number of words</strong> 
+			like <strong>the minimum frequency (5)</strong> of each 
+			co-occurrence and the <strong>maximum number of words (5)</strong> 
 			in each dependency-property pattern. 
-			The button <strong>Search (6)</strong> show the result for the lemma searched.
+			The button <strong>Search (6)</strong> shows the result for the selected lemma.
 		</p>
 
 		<div class ="image_text" >
@@ -21,20 +21,18 @@
 	  				class="img-responsive img-rounded" >
 	  	</div>	
 	  	<p>
-	  		The image shows an example with a set of co-occurrences detected for the 
-	  		<strong>noun</strong> <strong>"país"</strong>. 
+	  		The image shows an example with a set of co-occurrences detected for the <strong>noun</strong> <strong>"carro"</strong>. 
 	  		The association measure selected for this result was <strong>LogDice</strong>.
 	  	</p>
 
 	  	<p>
-	  		When the word has a result, this is presented in two groups: word to the left and word to the right with whom it co-occurs. For each dependency-property pattern in which the target word is 	involved, the words that co-occur with the target word are presented in descending order of the selected association measure value.  
+	  		The result is presented in two groups: word on the left and word on the right with whom it co-occurs. For each dependency-property pattern in which the target word is involved, the words that co-occur with the target word are presented in descending order of the selected association measure value.  
 			Each word that co-occurs is displayed in the format <strong>lemma (l:m)</strong>, where <strong>l</strong> is the base 2 logarithm of the co-occurrence's frequency, and <strong>m</strong> the value of the selected measure. 
 			The user may change the association measure without having to re-entering the information about the current word.
 	  	</p>
 	  		
 	  	<p>
-	  		In the result, it is possible to ask for more information about a specific co-occurrence. By clicking on a word present in the result, the server is queried for a set of sentences in which this word occurred. 
-			As a result the user is presented the details of this co-occurrence and the set of sentences that exemplify the co-occurrence in the corpus.
+	  		In the result, it is possible to get more information about a specific co-occurrence. By clicking a word, it is shown the details of this co-occurrence and the set of sentences that exemplifies the co-occurrence in the corpus.
 	  	</p>
 	  	<div class ="image_text" >
 	  			<img src="images/frases_carro_help.png" alt="architecture"  
