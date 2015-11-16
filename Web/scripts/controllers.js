@@ -73,7 +73,9 @@ controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location,
    };
 }).
 
-controller("deepCtrl", function($scope, sharedInfo, postPHPservice, $route,  $location) {
+controller("deepCtrl", function($scope, sharedInfo, postPHPservice, scopeApplyService, $route,  $location) {
+  //changes in the nav bar
+   $('#search').tab('show');
 
   var request;
   $scope.measures = sharedInfo.getMeasures();
@@ -126,29 +128,39 @@ controller("deepCtrl", function($scope, sharedInfo, postPHPservice, $route,  $lo
   $scope.loadData = (function(){
     var Deps = sharedInfo.getDeps();
 
-    $scope.word = sharedInfo.getWord();
-    $scope.pos =  sharedInfo.getPOS();
-    $scope.measure =  sharedInfo.getMeasure();
-    $scope.maxword =  sharedInfo.getMaxWords();
-    $scope.minfreq =  sharedInfo.getMinFreq();
+    if(!angular.isUndefined(Deps)){
+      $scope.word = sharedInfo.getWord();
+      $scope.pos =  sharedInfo.getPOS();
+      $scope.measure =  sharedInfo.getMeasure();
+      $scope.maxword =  sharedInfo.getMaxWords();
+      $scope.minfreq =  sharedInfo.getMinFreq();
 
-    $scope.title = $scope.word + ", " +$scope.pos;
+      $scope.title = $scope.word + ", " +$scope.pos;
 
-    $scope.loadPRE_WORD(Deps);
-    $scope.loadPOST_WORD(Deps);
-    $scope.loadPRE_VERB(Deps);
-    $scope.loadPOST_VERB(Deps);
+      $scope.loadPRE_WORD(Deps);
+      $scope.loadPOST_WORD(Deps);
+      $scope.loadPRE_VERB(Deps);
+      $scope.loadPOST_VERB(Deps);
 
-    if($scope.pos == "Adverb"){
-     if(Deps.hasOwnProperty("SENTENCE")){
-        var freq = Deps.SENTENCE.MOD_TOP_ADV.data[0].frequency;
-        if(freq > 0){
-        $scope.top_count = freq;
-        $("#ADV_EXTRA").show()
-        }
-      }      
+      if($scope.pos == "Adverb"){
+       if(Deps.hasOwnProperty("SENTENCE")){
+          var freq = Deps.SENTENCE.MOD_TOP_ADV.data[0].frequency;
+          if(freq > 0){
+          $scope.top_count = freq;
+          $("#ADV_EXTRA").show()
+          }
+        }      
+      }
+    } 
+    else{
+      scopeApplyService.safeApply($scope, function() {
+        $location.path("/");
+      });
     }
+
   });
+
+  //load the co-occurrence data
   $scope.loadData();
 
   $scope.changeMeasureDeps = function(value) {

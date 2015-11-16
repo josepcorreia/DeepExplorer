@@ -1,6 +1,6 @@
 angular.module('deepApp.services', []).
 
-factory('sharedInfo', function () {
+service('sharedInfo', function () {
         //measures avaiable in the system
         var measures = ['Dice','LogDice','PMI', 'ChiPearson', 'LogLikelihood', 'Significance','Frequency'];
         var word = "";
@@ -73,7 +73,7 @@ factory('sharedInfo', function () {
         };
 }).
 
-factory('postPHPservice', function (sharedInfo, $location, $rootScope, $route) {
+service('postPHPservice', function (sharedInfo, scopeApplyService, $location, $rootScope, $route) {
             return {
                 postWordPhp:function(request) {
                     $("body").css('overflow', 'hidden');
@@ -131,9 +131,10 @@ factory('postPHPservice', function (sharedInfo, $location, $rootScope, $route) {
                                 $route.reload();  
                             } 
                             else {
-                                $location.path(destinyURL);
+                                scopeApplyService.safeApply($rootScope, function() {
+                                    $location.path(destinyURL);
+                                });
                             }
-                            $rootScope.$apply();
                           }
                         } 
                      });//request done
@@ -149,6 +150,20 @@ factory('postPHPservice', function (sharedInfo, $location, $rootScope, $route) {
                     });//fail
                 }//postPhp
             };
+}).
+service('scopeApplyService', function() {
+     return {
+         safeApply: function ($scope, fn) {
+             var phase = $scope.$root.$$phase;
+             if (phase == '$apply' || phase == '$digest') {
+                 if (fn && typeof fn === 'function') {
+                     fn();
+                 }
+             } else {
+                 $scope.$apply(fn);
+             }
+         },
+     };
 });
 
         

@@ -193,10 +193,21 @@ font-size: 16px;
   font-size: 14px;
   font-weight: normal;
 }
-.image_text{
+.text_container >.image_text{
   margin-top: 10px;
   margin-bottom: 10px; 
 }
+
+.text_container > .table_text{
+  width: 60%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: white; 
+}
+
+
+
+
 .waitFor{
   display: none;
   position: absolute;

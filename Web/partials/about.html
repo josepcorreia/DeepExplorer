@@ -1,35 +1,91 @@
 <div class="jumbotron">
 	<div class="container text_container">
-	  	<p>The analysis of the co-occurrence patterns between words allows due to better understand the use (and meaning) of words its most straightforward application are lexicography and linguist description in general.
-	  	</p>	
-	  	
-	  	<p>
-	  	<a href="#/">DeepString</a> - Syntax Deep Explorer, based on the output of the natural language processing chain <a href="https://string.l2f.inesc-id.pt/w/index.php/Main_Page"> STRING</a>, is a tool that allows to obtain an easy and efficient access to co-occurrence data obtained from Portuguese texts. 
+	  	<p>	The analysis of the co-occurrence patterns between words allows due to better understand the use (and meaning) of words its most straightforward application are lexicography and linguist description in general.
 	  	</p>
 
-	  	<p> 
-	  		The XIP syntactic dependencies analysed in this project are: 
+	  	<p>
+	  		<a href="#/">DeepString</a> - Syntax Deep Explorer, based on the output of the natural language processing chain <a href="https://string.l2f.inesc-id.pt/w/index.php/Main_Page"> STRING</a>, is a tool that allows to obtain an easy and efficient access to co-occurrence data obtained from Portuguese texts.
+	  	</p>
+
+	  	<div class ="image_text" >
+	  		<img src="images/architecture.png" alt="architecture"  class="img-responsive img-rounded">
+	  	</div>
+	  	<p>
+			The co-occurrences extraction from a processed corpus by STRING, finds and stores the patterns in a database. Then, for each co-occurrence are calculated the different association measures to quantify them.
+		</p>
+
+
+	  	<p>
+	  		The XIP syntactic dependencies analysed in this project are:
+
 			<ul>
 	  			<li><strong>SUBJ</strong> dependency: links a verb and its subject;</li>
 	  			<li><strong>CDIR</strong> dependency: links a verb and its direct complement;</li>
 	  			<li><strong>CINDIR</strong>  dependency: links the verb with a prepositional phrase;</li>
 	  			<li><strong>MOD</strong>  dependency: links a modifier with the modified element;</li>
 	  			<li><strong>COMPL</strong>  dependency: links a predicate (verb, noun or adjective) to each of its essential complements;</li>
-	  			<li><strong>QUANTD</strong>  dependency:links a nominal head and a quantifier;</li>
+	  			<li><strong>QUANTD</strong>  dependency: links a nominal head and a quantifier;</li>
 	  			<li><strong>CLASSD</strong>  dependency: links a nominal head and a nominal classifier.</li>
 			</ul>
 
-			A semantic dependency, Named Entity (NE), was also considered. This dependency delimits named entities and assigns them to several general categories.
+			A semantic dependency, Named Entity (NE), was also considered. This dependency delimits named entities and assigns them to several general categories. The categories used in this system are presented in the following table. 
 		</p>
 
-	  	<div class ="image_text" >
-	  		<img src="images/architecture.png" alt="architecture"  class="img-responsive img-rounded">	
-	  	</div>
-	  	<p>
-			The co-occurrences extraction from a processed corpus by STRING, finds and stores the patterns in a database. Then, for each co-occurrence are calculated the different association measures to quantify them. 
-		</p>
+		<div id = "necategory" class= "table_text">
+	  		<table class="table table-striped">
+	  			<tr>
+				  <th>Named Entities' Categories</th>
+				  <th>Symbol</th>
+				</tr>
+				<tr>
+				  <td>Cargo</td>
+				  <td>CARGO</td>
+				</tr>
+				<tr>
+				  <td>People Name</td>
+				  <td>PEOPLE</td>
+				</tr>
+				<tr>
+				  <td>Currency Amount</td>
+				  <td>CURR</td>
+				</tr>
+				<tr>
+				  <td>Event</td>
+				  <td>EVENTO</td>
+				</tr>
+				<tr>
+				  <td>Time Duration</td>
+				  <td>TDUR</td>
+				</tr>
+				<tr>
+				  <td>Time Frequency</td>
+				  <td>TFREQ</td>
+				</tr>
+				<tr>
+				  <td>Physical Location</td>
+				  <td>LOC</td>
+				</tr>
+				<tr>
+				  <td>Virtual location</td>
+				  <td>LVIRT</td>
+				</tr>
+				<tr>
+				  <td>Institution</td>
+				  <td>INST</td>
+				</tr>
+				<tr>
+				  <td>Group Collective</td>
+				  <td>HCOL</td>
+				</tr>
+				<tr>
+				  <td>Administration Collective</td>
+				  <td>INST</td>
+				</tr>
+			</table>
+		</div>
+
 		<p>
-		The web application provides to users an interface that allows to exploit these co-occurrence patterns. 
+		The web application provides to users an interface that allows to exploit these co-occurrence patterns.
 		</p>
 	</div>
 </div>

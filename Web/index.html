@@ -34,7 +34,7 @@
    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
    <title>DeepSTRING</title>
   </head>
-
+<body>
   <div class="container">
     <h2 class="title"> DeepString - Syntax Deep Explorer</h2>
       <div class = "deep_nav">
@@ -46,36 +46,33 @@
       </div>  
       <div class = "deep_content"> 
           <div ng-view></div>
-       </div>   
       </div>   
-
+  </div>   
+  <div class = "waitFor" id ="waitForWord">
+    <div class ="content">  
+      <div class = "waitText">
+        Searching...
+      </div>
+      <div class="sk-circle">
+        <div class="sk-circle1 sk-child"></div>
+        <div class="sk-circle2 sk-child"></div>
+        <div class="sk-circle3 sk-child"></div>
+        <div class="sk-circle4 sk-child"></div>
+        <div class="sk-circle5 sk-child"></div>
+        <div class="sk-circle6 sk-child"></div>
+        <div class="sk-circle7 sk-child"></div>
+        <div class="sk-circle8 sk-child"></div>
+        <div class="sk-circle9 sk-child"></div>
+        <div class="sk-circle10 sk-child"></div>
+        <div class="sk-circle11 sk-child"></div>
+        <div class="sk-circle12 sk-child"></div>
+      </div>
+      <div class = "waitText">
+        <button type="button" class="btn btn-link" ng-click="reloadPage()">
+          New Search
+        </button>
+      </div>
+    </div>
   </div>
-
-<div class = "waitFor" id ="waitForWord">
-  <div class ="content">  
-    <div class = "waitText">
-      Searching...
-    </div>
-    <div class="sk-circle">
-      <div class="sk-circle1 sk-child"></div>
-      <div class="sk-circle2 sk-child"></div>
-      <div class="sk-circle3 sk-child"></div>
-      <div class="sk-circle4 sk-child"></div>
-      <div class="sk-circle5 sk-child"></div>
-      <div class="sk-circle6 sk-child"></div>
-      <div class="sk-circle7 sk-child"></div>
-      <div class="sk-circle8 sk-child"></div>
-      <div class="sk-circle9 sk-child"></div>
-      <div class="sk-circle10 sk-child"></div>
-      <div class="sk-circle11 sk-child"></div>
-      <div class="sk-circle12 sk-child"></div>
-    </div>
-    <div class = "waitText">
-      <button type="button" class="btn btn-link" ng-click="reloadPage()">
-        New Search
-      </button>
-    </div>
-  </div>
-</div>
  </body>
 </html>
