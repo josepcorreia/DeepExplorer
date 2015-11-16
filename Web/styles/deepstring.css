@@ -197,6 +197,10 @@ font-size: 16px;
   margin-top: 10px;
   margin-bottom: 10px; 
 }
+.text_container >.image_text > img{
+  margin-right: auto;
+  margin-left: auto;
+}
 
 .text_container > .table_text{
   width: 60%;
