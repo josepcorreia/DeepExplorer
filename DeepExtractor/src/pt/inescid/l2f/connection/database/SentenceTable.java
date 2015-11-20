@@ -17,6 +17,14 @@ public class SentenceTable extends RelationalTable {
 	}
 
 	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
+
+
+    /**
+     * Add a sentence to the database (table Frase)
+     *
+     * @param sentence - object Sentence
+     *
+     */
 	public void insertNewSentence(Sentence sentence){
 
 		Connection connection = getConnetion();
@@ -52,6 +60,13 @@ public class SentenceTable extends RelationalTable {
 		}//end finally try
   }
 
+    /**
+     * Verify if a word exists in the database (table Palavra)
+     *
+     * @param sentence - object Sentence
+     *
+     * @result true if the sentence already exists
+     */
     public boolean sentenceExists(Sentence sentence){
         Connection connection = getConnetion();
 

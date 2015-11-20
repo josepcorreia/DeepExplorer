@@ -18,8 +18,16 @@ public class WordBelongsTable extends RelationalTable {
 
 	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
 
-	
-	//Insere a palavra na tabela que indica quais as palavras que pertencem a um determinado corpus
+	/**
+	 * Add a word that occurs in a certain corpus to the database (table Pertence)
+	 *
+	 * @param id -  word's id
+     * @param depname - dependency name
+     * @param prop - property
+     * @param freq - frequency of that word
+	 *
+	 * @result true if the word was inserted
+     */
   public boolean insertWordCorpus(long id, String depname, String prop, int freq){
 	  Connection connection = getConnetion();
 	  
@@ -27,13 +35,11 @@ public class WordBelongsTable extends RelationalTable {
 		
 		try{
 			stmt = connection.createStatement();
-			
-			
 
 			String sql = "INSERT INTO Pertence (idPalavra, nomeCorpus, nomeProp, tipoDep, frequencia) VALUES(" +
 												" '" + id + "' , '" +
 												_corpusName + "' , '" + 
-												prop  + "' , '" + 
+												prop  + "' , '" +
 												depname  + "' , " +  
 												freq + ");";
 			stmt.executeUpdate(sql);
@@ -54,7 +60,17 @@ public class WordBelongsTable extends RelationalTable {
 
 		return true;
 	}
-  
+
+    /**
+     * Verify if a word that occurs in a certain corpus exists in the database (table Palavra)
+     *
+     * @param id -  word's id
+     * @param depname - dependency name
+     * @param prop - property
+     *
+     * @result true if this word already occurs in this corpus
+     * @throws WordNotExistCorpus if this word do not occurs in this corpus
+     */
   public boolean wordExistsCorpus(long id, String depname, String prop) throws WordNotExistCorpus{
 	  Connection connection = getConnetion();
 	  
@@ -95,7 +111,16 @@ public class WordBelongsTable extends RelationalTable {
 
 		throw new WordNotExistCorpus();
 	}
-  public void uptadeFrequency(long wordId, String depname, String prop, int freq){
+
+    /**
+     * Update the word's frequency
+     *
+     * @param wordId first word's Id
+     * @param prop cooccurrence's property
+     * @param dep cooccurrence's dependency
+     * @param freq cooccurrence's frequency
+     */
+  public void uptadeFrequency(long wordId, String dep, String prop, int freq){
 	  Connection connection = getConnetion();	
 
 	  Statement stmt = null;
@@ -104,7 +129,7 @@ public class WordBelongsTable extends RelationalTable {
 			String sql = "UPDATE Pertence " +
 					     " SET frequencia = frequencia + "+ freq + " "+
 					     " WHERE idPalavra = "+ wordId +
-					     				" AND tipoDep = '"+ depname +
+					     				" AND tipoDep = '"+ dep +
 					     				"' AND nomeProp = '"+ prop +
 					     				"' AND nomeCorpus= '"+ _corpusName + "';";
 						
@@ -125,8 +150,17 @@ public class WordBelongsTable extends RelationalTable {
 
 		}//end finally try	   
 	}
-  
-  public long getWordFrequency(Long id, String depname, String prop){
+
+    /**
+     * Get the frequency of a word that occurs in a certain corpus
+     *
+     * @param wordId first word's Id
+     * @param prop cooccurrence's property
+     * @param dep cooccurrence's dependency
+     *
+     * @return the frequency of a word
+     */
+  public long getWordFrequency(Long wordId, String dep, String prop){
 	  Connection connection = getConnetion();	
 	  
 	  Statement stmt = null;
@@ -136,8 +170,8 @@ public class WordBelongsTable extends RelationalTable {
 			stmt = connection.createStatement();
 			String sql = "SELECT frequencia " +
 					     "FROM Pertence " +
-					     "Where idPalavra = "+ id + 
-					     		" and tipoDep = '" + depname +  
+					     "Where idPalavra = "+ wordId +
+					     		" and tipoDep = '" + dep +
 					     		"' and nomeProp = '"+ prop +
 					     		"' and nomeCorpus = '"+ _corpusName +"';";
 			ResultSet rs = stmt.executeQuery(sql);
@@ -167,7 +201,16 @@ public class WordBelongsTable extends RelationalTable {
 		return freq;
 		
   	}
-	public long getDepNumberWords(String depname, String prop) {
+
+    /**
+     * Get the frequency of a group of words with the same dependency-property pattern
+     *
+     * @param prop cooccurrence's property
+     * @param dep cooccurrence's dependency
+     *
+     * @return the frequency of a group of words with the same dependency-property pattern
+     */
+	public long getDepNumberWords(String dep, String prop) {
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -177,7 +220,7 @@ public class WordBelongsTable extends RelationalTable {
 
 			String sql = "Select sum(frequencia) as total " +
 					"from Pertence " +
-					"WHERE tipoDep = '" + depname +
+					"WHERE tipoDep = '" + dep +
 					"' and nomeProp = '"+ prop +
 					"' and nomeCorpus = '"+ _corpusName +"'";
 

@@ -9,6 +9,10 @@ public abstract class RelationalTable {
 		_connection = connection;
     }
 
+    /**
+     * Getter.
+     * @return  the connection to teh database
+     */
 	protected Connection getConnetion(){
 		return _connection;	
 	}

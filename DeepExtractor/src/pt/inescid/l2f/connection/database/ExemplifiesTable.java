@@ -19,6 +19,12 @@ public class ExemplifiesTable extends RelationalTable {
 	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
 
 
+    /**
+     * Add a corpus' sentence that exemplifies a cooccurence to the database (table Exemplifica)
+     *
+     * @param exemplifies - object Exemplifies
+     *
+     */
   public void insertNewSetenceExample(Exemplifies exemplifies){
       //table = Exemplifica
 	   Connection connection = getConnetion();
@@ -53,38 +59,4 @@ public class ExemplifiesTable extends RelationalTable {
 	    }//end finally try
 	}
 
-    public long getNumberOfSentencesDep(String dep, String prop) {
-        //total number of sentences in database for dep x and prop y
-        Connection connection = getConnetion();
-
-        Statement stmt = null;
-        long total = 0;
-
-        try{
-            stmt = connection.createStatement();
-            String sql = "SELECT Count(*) FROM (SELECT distinct numeroFrase, nomeFicheiro FROM Exemplifica  Where tipoDep = '"+ dep +"' and nomeProp = '" + prop+ "');";
-            ResultSet rs = stmt.executeQuery(sql);
-            if(rs.next()){
-                total = rs.getLong(1);
-            }
-
-            rs.close();
-
-        }catch(SQLException se){
-            //Handle errors for JDBC
-            System.out.println("|| COO: Numero total de coocorrencias");
-            se.printStackTrace();
-
-        }finally{
-            //finally block used to close resources
-            try{
-                if(stmt!=null)
-                    stmt.close();
-
-            }catch(SQLException se){
-            }// do nothing
-        }//end finally try
-
-        return total;
-    }
 }

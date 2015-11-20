@@ -1,7 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor.dependency;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
-import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
+import pt.inescid.l2f.dependencyExtractor.domain.Cooccurrence;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
@@ -13,7 +13,6 @@ import pt.inescid.l2f.xipapi.domain.XIPNode;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
 
 public abstract class DependencyType{
@@ -61,7 +60,7 @@ public abstract class DependencyType{
         }
 
 		if(words.size()== 2){
-			_storage.checkCoocorrence(new Coocorrence(words.get(0), words.get(1), prop, depname), sentence);
+			_storage.checkCoocorrence(new Cooccurrence(words.get(0), words.get(1), prop, depname), sentence);
 		}
 		else{
 			String path = new File("src/out/depError.txt").getAbsolutePath();

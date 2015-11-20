@@ -1,7 +1,7 @@
 package pt.inescid.l2f.connection.database;
 
-import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
-import pt.inescid.l2f.dependencyExtractor.domain.Coocorrence;
+import pt.inescid.l2f.connection.exception.CooccurrenceNotExist;
+import pt.inescid.l2f.dependencyExtractor.domain.Cooccurrence;
 import pt.inescid.l2f.measures.AssociationMeasures;
 
 import java.sql.*;
@@ -16,7 +16,11 @@ public class CooccurrenceTable extends RelationalTable {
 		_corpusName = corpusName;
 	}
 
-
+    /**
+     * Get the number of rows that cooccurence table has in the database
+     *
+     * @result - return the number of rows that cooccurence table
+     */
 	public int getNumberRows(){
 		Connection connection = getConnetion();
 
@@ -51,7 +55,17 @@ public class CooccurrenceTable extends RelationalTable {
 		return rows;
 	}
 
-	public void insertCoocorrence(long wordId1, long wordId2,String property, String dependencyName, int freq){
+    /**
+     * Add a cooccurrence to the database (table Coocorrencia)
+     *
+     * @param wordId1 first word's Id
+     * @param wordId2 second word's Id
+     * @param property cooccurrence's property
+     * @param dependencyName cooccurrence's dependency
+     * @param freq cooccurrence's frequency
+     *
+     */
+	public void insertCooccurrence(long wordId1, long wordId2, String property, String dependencyName, int freq){
 		Connection connection = getConnetion();
 
 		PreparedStatement preparedStatement = null;
@@ -92,9 +106,20 @@ public class CooccurrenceTable extends RelationalTable {
 			}
 
 		}
-	} 
+	}
 
-	public boolean coocorrenceExists(long wordId1, long wordId2, String prop, String dep) throws CoocorrenceNotExist{
+    /**
+     * Verify if a cooccurrence exists in the database (table Coocorrencia)
+     *
+     * @param wordId1  - first word's Id
+     * @param wordId2 - second word's Id
+     * @param prop - cooccurrence's property
+     * @param dep - cooccurrence's dependency
+     *
+     * @result true if this cooccurence exists
+     * @throws CooccurrenceNotExist if this cooccurence do not exists
+     */
+	public boolean cooccurrenceExists(long wordId1, long wordId2, String prop, String dep) throws CooccurrenceNotExist {
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -102,19 +127,19 @@ public class CooccurrenceTable extends RelationalTable {
 		try{
 			stmt = connection.createStatement();
 			String sql = "SELECT EXISTS(SELECT 1 FROM Coocorrencia WHERE idPalavra1 ='" + wordId1 +
-					"' AND idPalavra2 ='" + wordId2 + 
-					"' AND nomeProp='"+ prop + 
-					"' AND tipoDep='" + dep + 
+					"' AND idPalavra2 ='" + wordId2 +
+					"' AND nomeProp='"+ prop +
+					"' AND tipoDep='" + dep +
 					"' AND nomeCorpus='" + _corpusName + "' LIMIT 1)";
 			ResultSet rs = stmt.executeQuery(sql);
 			rs.next();
 			if(rs.getInt(1)==1){
-				rs.close(); 
+				rs.close();
 				return true;
 			}
 
 			//caso nao exista
-			rs.close(); 
+			rs.close();
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
@@ -126,14 +151,21 @@ public class CooccurrenceTable extends RelationalTable {
 			try{
 				if(stmt!=null)
 					stmt.close();
-				
+
 			}catch(SQLException se){
 			}// do nothing
 		}//end finally try
 
-		throw new CoocorrenceNotExist();
+		throw new CooccurrenceNotExist();
 	}
 
+    /**
+     * Get the number of cooccurrences with a certain dependency-property pattern
+     *
+     * @param prop - cooccurrence's property
+     * @param dep - cooccurrence's dependency
+     * @return number of cooccurences with a certain dependency-property pattern
+     */
     public long getDepNumberCoocorrences(String dep, String prop){
         //total number of coocorrences in database for dep x and prop y
         Connection connection = getConnetion();
@@ -169,11 +201,17 @@ public class CooccurrenceTable extends RelationalTable {
         return total;
     }
 
-	public int getCoocorrenceFrequency(Coocorrence coocorrence){
-		long wordId1 = coocorrence.getWordId1();
-		long wordId2 = coocorrence.getWordId2();
-		String prop = coocorrence.getProperty();
-		String dep = coocorrence.getDependency();
+    /**
+     * Get the frequency of a cooccurrence
+     *
+     * @param cooccurrence - cooccurrence's property
+     * @return the frequency of a cooccurrence
+     */
+	public int getCoocorrenceFrequency(Cooccurrence cooccurrence){
+		long wordId1 = cooccurrence.getWordId1();
+		long wordId2 = cooccurrence.getWordId2();
+		String prop = cooccurrence.getProperty();
+		String dep = cooccurrence.getDependency();
 
 		Connection connection = getConnetion();
 
@@ -214,6 +252,15 @@ public class CooccurrenceTable extends RelationalTable {
 		return freq ;
 	}
 
+    /**
+     * Update the cooccurrence's frequency
+     *
+     * @param wordId1 first word's Id
+     * @param wordId2 second word's Id
+     * @param prop cooccurrence's property
+     * @param dep cooccurrence's dependency
+     * @param freq cooccurrence's frequency
+     */
     public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep, int freq){
         Connection connection = getConnetion();
 
@@ -246,14 +293,30 @@ public class CooccurrenceTable extends RelationalTable {
         }//end finally try
     }
 
-	public String uptadeAssociationMeasure(long wordId1, long wordId2, String prop, String dep,
-                                                                                    double pmi,
-                                                                                    double dice,
-                                                                                    double logDice,
-                                                                                    double chisquarePearson,
-                                                                                    double loglikelihood,
-                                                                                    double significance
-                                                                                    ) throws SQLException{
+
+    /**
+     * Update the cooccurrence's fequency
+     *
+     * @param wordId1 first word's Id
+     * @param wordId2 second word's Id
+     * @param prop - cooccurrence's property
+     * @param dep - cooccurrence's dependency
+     * @param pmi - cooccurrence's value of pmi
+     * @param dice - cooccurrence's value of dice
+     * @param logDice -  cooccurrence's value of logDice
+     * @param chisquarePearson - cooccurrence's value of chisquarePearson
+     * @param loglikelihood - cooccurrence's value of loglikelihood
+     * @param significance - cooccurrence's value of significance
+     * @throws SQLException
+     */
+	public String uptadeAssociationMeasures(long wordId1, long wordId2, String prop, String dep,
+                                            double pmi,
+                                            double dice,
+                                            double logDice,
+                                            double chisquarePearson,
+                                            double loglikelihood,
+                                            double significance
+    ) throws SQLException{
 
 		String sql = "UPDATE Coocorrencia "+ 
 				"SET PMI = '" + pmi + "' , Dice = '" + dice + "' , LogDice = '" + logDice +
@@ -268,12 +331,18 @@ public class CooccurrenceTable extends RelationalTable {
 		return sql;
 	}
 
+    /**
+     * Get all the cooccurrences stored in the database, and for each one, it is calculated the six systems' measures
+     *  - the calculation of association measures is performed by set of 2000 cooccurrences
+     *
+     */
 	public void updateMeasures(){
 		Connection connection = getConnetion(); 
 		Statement s;
         WordBelongsTable wordBelongsTable = RelationalFactory.getWordBelongs();
         ExemplifiesTable exemplifiesTable = RelationalFactory.getExemplifies();
 
+        //
 		int intervall = 2000;
 		int totalrows =  getNumberRows();
 
@@ -297,6 +366,7 @@ public class CooccurrenceTable extends RelationalTable {
 				
 				while(rs.next()){
 
+                    //the necessary information for the measures's calculation
 					long word1 = rs.getLong("idPalavra1");
 					long word2 = rs.getLong("idPalavra2");
                     long depfreq = rs.getLong("frequencia");
@@ -316,7 +386,8 @@ public class CooccurrenceTable extends RelationalTable {
                     long totalCoocorenceDep = 0;
                     long totalSentencesDep = 0;
 
-                    //HAshmap WORDS (others measures)
+                    //Hashmap: Word's frequency for each dependency-property pattern
+                    // (Measures that use this information: pmi)
                     if(totalWordsDeps.containsKey(depProp)){
 						numberWordDep = totalWordsDeps.get(depProp);
 					}
@@ -325,22 +396,14 @@ public class CooccurrenceTable extends RelationalTable {
                         totalWordsDeps.put(depProp, numberWordDep);
                     }
 
-                    //HAshmap COOCORRENCES (chisquare perason)
+                    //Hashmap:  Cooccurence's frequency for each dependency-property pattern
+                    // (Measures that use this information: chisquarePerason and Significance)
                     if(totalCoocorrenceDeps.containsKey(depProp)){
                         totalCoocorenceDep = totalCoocorrenceDeps.get(depProp);
                     }
                     else{
                         totalCoocorenceDep = getDepNumberCoocorrences(dep, prop);
                         totalCoocorrenceDeps.put(depProp, totalCoocorenceDep);
-                    }
-
-                    //HAshmap SENTENCES (significance)
-                    if(totalSentencesDeps.containsKey(depProp)){
-                        totalSentencesDep = totalSentencesDeps.get(depProp);
-                    }
-                    else{
-                        totalSentencesDep = exemplifiesTable.getNumberOfSentencesDep(dep, prop);
-                        totalSentencesDeps.put(depProp, totalSentencesDep);
                     }
 
                     double pmi = AssociationMeasures.PMI(numberWordDep, depfreq, word1freq, word2freq);
@@ -353,10 +416,10 @@ public class CooccurrenceTable extends RelationalTable {
 
 					double loglikelihood = AssociationMeasures.logLikelihood(numberWordDep, depfreq, word1freq, word2freq);
 
-                    double significance = AssociationMeasures.significance(word1freq,word2freq,depfreq, totalSentencesDep);
+                    double significance = AssociationMeasures.significance(word1freq,word2freq,depfreq, totalCoocorenceDep);
 
-					s.addBatch(uptadeAssociationMeasure(word1, word2, prop, dep, pmi, dice, logDice, chisquarePearson,
-							loglikelihood, significance));
+					s.addBatch(uptadeAssociationMeasures(word1, word2, prop, dep, pmi, dice, logDice, chisquarePearson,
+                            loglikelihood, significance));
 
 				}
 				rs.close(); 

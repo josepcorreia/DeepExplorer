@@ -10,6 +10,13 @@ public class FileTable extends RelationalTable {
         _corpusName =  corpusName;
 	}
 
+    /**
+     * Verify if a file exists in the database (table Ficheiro)
+     *
+     * @param fileName - file namename
+     *
+     * @result true if the file already exists
+     */
 	public boolean fileExists(String fileName){
         Connection connection = getConnetion();
         Statement stmt = null;
@@ -48,6 +55,11 @@ public class FileTable extends RelationalTable {
         return false;
     }
 
+    /**
+     * Add new File in the database (table Ficheiro)
+     *
+     * @param fileName - file name
+     */
 	public void insertNewFile(String fileName){
 		Connection connection = getConnetion();
 

@@ -19,6 +19,14 @@ public class WordTable extends RelationalTable {
 
 	//In SQL, single quotes will be escaped by using double single quotes. ' --> ''
 
+
+    /**
+     * Add a word to the database (table Palavra)
+     *
+     * @param word - object Word
+     *
+     * @result the word's id
+     */
 	public Long insertNewWord(Word  word){
 
 		Connection connection = getConnetion();
@@ -63,7 +71,14 @@ public class WordTable extends RelationalTable {
 		return id;
   }
 
-	//verifica se uma palavra existe na bd
+    /**
+     * Verify if a word exists in the database (table Palavra)
+     *
+     * @param word - object Word
+     *
+     * @result the word's id
+     * @throws WordNotExist if this word do not exists in the database
+     */
 	public Long wordExists(Word word) throws WordNotExist{
 		Connection connection = getConnetion();
 

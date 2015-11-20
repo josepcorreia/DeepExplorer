@@ -1,6 +1,6 @@
 package pt.inescid.l2f.connection.exception;
 
-public class CoocorrenceNotExist extends Exception{
+public class CooccurrenceNotExist extends Exception{
 
 	/**
 	 * 

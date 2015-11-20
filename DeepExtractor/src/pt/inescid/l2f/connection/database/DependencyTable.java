@@ -9,7 +9,14 @@ public class DependencyTable extends RelationalTable {
 		super(_connection);
 	}
 
-	public boolean insertNew(String tipodepedencia){
+    /**
+     * Add new Dependency in the database (table Dependencia)
+     *
+     * @param dependencyName - dependency name
+     *
+     * @result true if the Dependency was correctly inserted
+     */
+	public boolean insertNew(String dependencyName){
 		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
@@ -17,7 +24,7 @@ public class DependencyTable extends RelationalTable {
 		
 		try {
 			stmt = connection.createStatement();
-			String sql = "SELECT EXISTS(SELECT 1 FROM Dependencia WHERE tipoDep = '"+ tipodepedencia  + "' LIMIT 1)";
+			String sql = "SELECT EXISTS(SELECT 1 FROM Dependencia WHERE tipoDep = '"+ dependencyName  + "' LIMIT 1)";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if(rs.next()){
@@ -29,7 +36,7 @@ public class DependencyTable extends RelationalTable {
 			rs.close();
 			
 			preparedStatement = connection.prepareStatement("insert into  Dependencia values (?)");
-			preparedStatement.setString(1, tipodepedencia);
+			preparedStatement.setString(1, dependencyName);
 			preparedStatement.executeUpdate();
 
 			System.out.println("Record is inserted into Depedencia table!");

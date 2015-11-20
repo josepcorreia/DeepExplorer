@@ -1,14 +1,14 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
 public class Exemplifies {
-	private Coocorrence _coocorrence;
+	private Cooccurrence _cooccurrence;
     private Sentence _sentence;
 
 
 
-    public Exemplifies(Sentence sentence, Coocorrence coocorrence) {
+    public Exemplifies(Sentence sentence, Cooccurrence cooccurrence) {
         this._sentence= sentence;
-        this._coocorrence = coocorrence;
+        this._cooccurrence = cooccurrence;
     }
 
     public int getSentenceNumber() {
@@ -20,23 +20,23 @@ public class Exemplifies {
     }
 
     public Long getIdPalavra1() {
-        return _coocorrence.getWordId1();
+        return _cooccurrence.getWordId1();
     }
 
     public Long getIdPalavra2() {
-        return _coocorrence.getWordId2();
+        return _cooccurrence.getWordId2();
     }
 
     public String getDependency() {
-        return _coocorrence.getDependency();
+        return _cooccurrence.getDependency();
     }
 
     public String getProperty() {
-        return _coocorrence.getProperty();
+        return _cooccurrence.getProperty();
     }
 
-    public Coocorrence getCoocorrence(){
-        return _coocorrence;
+    public Cooccurrence getCoocorrence(){
+        return _cooccurrence;
     }
 
     public Sentence getSentence(){
@@ -50,14 +50,14 @@ public class Exemplifies {
 
         Exemplifies that = (Exemplifies) o;
 
-        if (_coocorrence != null ? !_coocorrence.equals(that._coocorrence) : that._coocorrence != null) return false;
+        if (_cooccurrence != null ? !_cooccurrence.equals(that._cooccurrence) : that._cooccurrence != null) return false;
         return !(_sentence != null ? !_sentence.equals(that._sentence) : that._sentence != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = _coocorrence != null ? _coocorrence.hashCode() : 0;
+        int result = _cooccurrence != null ? _cooccurrence.hashCode() : 0;
         result = 31 * result + (_sentence != null ? _sentence.hashCode() : 0);
         return result;
     }

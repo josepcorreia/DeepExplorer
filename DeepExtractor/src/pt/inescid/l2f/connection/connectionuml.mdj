@@ -20495,7 +20495,7 @@
 																			"_parent": {
 																				"$ref": "AAAAAAFPvk6HCqqYDQg="
 																			},
-																			"name": "coocorrence",
+																			"name": "cooccurrence",
 																			"visibility": "public",
 																			"isStatic": false,
 																			"isLeaf": false,
@@ -24268,7 +24268,7 @@
 																					"height": 13,
 																					"autoResize": false,
 																					"underline": false,
-																					"text": "+getCoocorrenceFrequency(coocorrence: Coocorrence): int",
+																					"text": "+getCoocorrenceFrequency(cooccurrence: Coocorrence): int",
 																					"horizontalAlignment": 0,
 																					"verticalAlignment": 5
 																				},
@@ -34231,7 +34231,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+getCoocorrenceFrequency(coocorrence: Coocorrence): int",
+											"text": "+getCoocorrenceFrequency(cooccurrence: Coocorrence): int",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},

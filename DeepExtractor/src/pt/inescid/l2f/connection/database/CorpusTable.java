@@ -9,7 +9,19 @@ public class CorpusTable extends RelationalTable {
 		super(_connection);
 	}
 
-	public boolean insertNew(String nome, String  fonte, String ano, String genero, Boolean update){
+
+	/**
+	 * Add new Corpus in the database (table Corpus)
+	 *
+	 * @param name - corpus' name
+	 * @param source - corpus' source
+	 * @param year - corpus' year
+	 * @param type - corpus' type
+	 * @param update - corpus' state
+	 *
+     * @result true if the corpus was correctly inserted
+	 */
+	public boolean insertNew(String name, String  source, String year, String type, Boolean update){
 		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
@@ -17,7 +29,7 @@ public class CorpusTable extends RelationalTable {
 			
 		try {
 			stmt = connection.createStatement();
-			String sql = "SELECT EXISTS(SELECT 1 FROM Corpus WHERE nome = '"+ nome + "' LIMIT 1)";
+			String sql = "SELECT EXISTS(SELECT 1 FROM Corpus WHERE nome = '"+ name + "' LIMIT 1)";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if(rs.next()){
@@ -30,10 +42,10 @@ public class CorpusTable extends RelationalTable {
 			
 			preparedStatement = connection.prepareStatement("insert into  Corpus values (?, ?, ?, ? , ?)");
 
-			preparedStatement.setString(1, nome);
-			preparedStatement.setString(2, fonte);
-			preparedStatement.setString(3, ano);
-			preparedStatement.setString(4, genero);
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(2, source);
+			preparedStatement.setString(3, year);
+			preparedStatement.setString(4, type);
 			preparedStatement.setBoolean(5, update);
 
 		

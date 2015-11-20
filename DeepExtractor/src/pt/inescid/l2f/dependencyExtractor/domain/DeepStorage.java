@@ -1,7 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
 import pt.inescid.l2f.connection.database.*;
-import pt.inescid.l2f.connection.exception.CoocorrenceNotExist;
+import pt.inescid.l2f.connection.exception.CooccurrenceNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
 
@@ -12,14 +12,14 @@ import java.util.Map.Entry;
 public class DeepStorage {
 	private HashMap<String, Word> wordsMap;
 	private HashMap<WordBelongs, Integer> wordBelongsMap;
-	private HashMap<Coocorrence, Integer> coocorrenceMap;
+	private HashMap<Cooccurrence, Integer> coocorrenceMap;
 	private HashMap<Sentence, String> sentenceMap;
 	private HashSet<Exemplifies> exemplifiesSet;
 	
 	public DeepStorage() {
 		this.wordsMap = new HashMap<String, Word>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
-		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
+		this.coocorrenceMap = new HashMap<Cooccurrence, Integer>();
         this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
@@ -48,21 +48,21 @@ public class DeepStorage {
             wordBelongsMap.put(wb,1);
         }
     }
-	public void checkCoocorrence(Coocorrence coocorrence, Sentence sentence){
-        if(coocorrenceMap.containsKey(coocorrence)){
-			int freq = coocorrenceMap.get(coocorrence) + 1;
-			coocorrenceMap.put(coocorrence, freq);
+	public void checkCoocorrence(Cooccurrence cooccurrence, Sentence sentence){
+        if(coocorrenceMap.containsKey(cooccurrence)){
+			int freq = coocorrenceMap.get(cooccurrence) + 1;
+			coocorrenceMap.put(cooccurrence, freq);
 		} else{
-			coocorrenceMap.put(coocorrence, 1);
+			coocorrenceMap.put(cooccurrence, 1);
 		}
-        checkSetence(sentence, coocorrence);
+        checkSetence(sentence, cooccurrence);
 	}
 
-    public void checkSetence(Sentence sentence, Coocorrence coocorrence){
+    public void checkSetence(Sentence sentence, Cooccurrence cooccurrence){
         if(!sentenceMap.containsKey(sentence)){
             sentenceMap.put(sentence, sentence.getSentenceText());
         }
-        Exemplifies ex = new Exemplifies(sentence, coocorrence);
+        Exemplifies ex = new Exemplifies(sentence, cooccurrence);
 
         if(!exemplifiesSet.contains(ex)){
             exemplifiesSet.add(ex);
@@ -105,21 +105,21 @@ public class DeepStorage {
 			}	
 		}
 		
-		for (Entry<Coocorrence, Integer>  entry : coocorrenceMap.entrySet() ) {
-			Coocorrence coocorrence = entry.getKey();
+		for (Entry<Cooccurrence, Integer>  entry : coocorrenceMap.entrySet() ) {
+			Cooccurrence cooccurrence = entry.getKey();
 			int freq = entry.getValue();
 			
-			Long id1 = coocorrence.getWordId1();
-			Long id2 = coocorrence.getWordId2();
-			String prop = coocorrence.getProperty();
-			String dep = coocorrence.getDependency();
+			Long id1 = cooccurrence.getWordId1();
+			Long id2 = cooccurrence.getWordId2();
+			String prop = cooccurrence.getProperty();
+			String dep = cooccurrence.getDependency();
 			
 			try {
-				if(coo.coocorrenceExists(id1, id2, prop, dep)){
+				if(coo.cooccurrenceExists(id1, id2, prop, dep)){
 					coo.uptadeFrequency(id1, id2, prop, dep, freq);
 				}
-			} catch (CoocorrenceNotExist e) {
-				coo.insertCoocorrence(id1, id2, prop, dep, freq);
+			} catch (CooccurrenceNotExist e) {
+				coo.insertCooccurrence(id1, id2, prop, dep, freq);
 			}
 			
 		}
@@ -127,9 +127,9 @@ public class DeepStorage {
        for( Exemplifies ex : exemplifiesSet){
 
            Sentence sentence = ex.getSentence();
-           Coocorrence coocorrence = ex.getCoocorrence();
+           Cooccurrence cooccurrence = ex.getCoocorrence();
 
-           if(coo.getCoocorrenceFrequency(coocorrence) < 16) {
+           if(coo.getCoocorrenceFrequency(cooccurrence) < 16) {
                sentence.setSentenceText(sentenceMap.get(sentence));
                if(!sentenceDB.sentenceExists(sentence)){
                    sentenceDB.insertNewSentence(sentence);
@@ -143,7 +143,7 @@ public class DeepStorage {
 	public void cleanMaps(){
 		this.wordsMap = new HashMap<String,Word>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
-		this.coocorrenceMap = new HashMap<Coocorrence, Integer>();
+		this.coocorrenceMap = new HashMap<Cooccurrence, Integer>();
         this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}

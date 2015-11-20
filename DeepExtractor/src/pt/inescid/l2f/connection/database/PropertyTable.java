@@ -7,13 +7,29 @@ public class PropertyTable extends RelationalTable {
 	public PropertyTable(Connection _connection) {
 		super(_connection);
 	}
-	
+
+    /**
+     * If the Property does not exist, it is inserted the new one
+     *
+     * @param prop - property
+     * @param dep - property's dependency name
+     *
+     */
 	public void checkProperty(String prop, String dep){
 		if(!propertyExists(prop, dep)){
 			insertPropriedade(prop,dep);
 		}
 	}
-	public void insertPropriedade(String propriedade, String tipodepedencia){
+
+
+    /**
+     * Add a Property to the database (table Propriedade)
+     *
+     * @param prop - property
+     * @param dep - property's dependency name
+     *
+     */
+	public void insertPropriedade(String prop, String dep){
 		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
@@ -21,13 +37,13 @@ public class PropertyTable extends RelationalTable {
 		try {
 			preparedStatement = connection.prepareStatement("insert into Propriedade values (?, ?)");
 
-			preparedStatement.setString(1, propriedade);
-			preparedStatement.setString(2, tipodepedencia);
+			preparedStatement.setString(1, prop);
+			preparedStatement.setString(2, dep);
 			
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("|| propriedade");
+			System.out.println("|| property");
 			System.out.println(e.getMessage());
 
 		} finally {
@@ -42,6 +58,13 @@ public class PropertyTable extends RelationalTable {
 			}
 	}
 
+    /**
+     * Verify if a Property exists in the database (table Propriedade)
+     *
+     * @param prop - property
+     * @param dep - property's dependency name
+     *
+     */
 	public boolean propertyExists(String prop, String dep){
 		Connection connection = getConnetion();
 		

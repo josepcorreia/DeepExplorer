@@ -1,13 +1,13 @@
 package pt.inescid.l2f.dependencyExtractor.domain;
 
-public class Coocorrence {
+public class Cooccurrence {
 	private String _property;
 	private String _depedency;
 	private Word _word1;
 	private Word _word2;
 
 
-	public Coocorrence(Word word1, Word word2, String _property, String _depedency) {
+	public Cooccurrence(Word word1, Word word2, String _property, String _depedency) {
 		this._word1 = word1;
 		this._word2 = word2;
 		this._property = _property;
@@ -40,9 +40,9 @@ public class Coocorrence {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Coocorrence)) return false;
+		if (!(o instanceof Cooccurrence)) return false;
 
-		Coocorrence that = (Coocorrence) o;
+		Cooccurrence that = (Cooccurrence) o;
 
 		if (_property != null ? !_property.equals(that._property) : that._property != null) return false;
 		if (_depedency != null ? !_depedency.equals(that._depedency) : that._depedency != null) return false;
@@ -62,7 +62,7 @@ public class Coocorrence {
 
 	@Override
 	public String toString() {
-		return "Coocorrence [idPalavra1=" + _word1.getWordId() + ", idPalavra2="
+		return "Cooccurrence [idPalavra1=" + _word1.getWordId() + ", idPalavra2="
 				+ _word2.getWordId() + ", property=" + _property + ", depedency="
 				+ _depedency + "]";
 	}
