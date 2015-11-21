@@ -4,28 +4,60 @@ public class Word {
 	private Long _wordId;
 	private String _lemma;
 	private String _pos;
-	
+
+
+    /**
+     * Constructor.
+     *
+     * @param lemma - word's lemma
+     * @param pos  - word's POS (Part of Speech)
+     */
 	public Word(String lemma, String pos) {
 		this._lemma = lemma;
 		this._pos = pos;
 	}
-	
+
+    /**
+     * Setter
+     *
+     * @param id - word's Id
+     */
 	public void setWordId(Long id) {
 		_wordId = id;
 	}
-	
+
+	/**
+	 * Getter
+	 *
+	 * @return word's Id
+	 */
 	public Long getWordId() {
 		return _wordId;
 	}
 
+    /**
+     * Getter
+     *
+     * @return word's Lemma
+     */
 	public String getLemma() {
 		return _lemma;
 	}
 
+    /**
+     * Getter
+     *
+     * @return word's POS
+     */
 	public String getPOS() {
 		return _pos;
 	}
 
+    /**
+     * HashCode
+     *
+     * @return the object's HashCode
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -35,6 +67,12 @@ public class Word {
 		return result;
 	}
 
+    /**
+     * Equals
+     *
+     * @param o - Object to compare
+     * @return true if this object is equals with the Object o
+     */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -57,6 +95,11 @@ public class Word {
 		return true;
 	}
 
+    /**
+     * toString
+     *
+     * @return the object's string
+     */
 	@Override
 	public String toString() {
 		return "Word [idPalavra=" + _wordId + ", lemma=" + _lemma

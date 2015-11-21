@@ -11,10 +11,10 @@ import java.util.Map.Entry;
 
 public class NE extends DependencyType{
 
-    /** */
+    /** list with the named entities of a certain sentence */
 	private HashMap<String, String> _namedEntetiesNodes;
 
-	/** list with the named entities from the file named_enteties.txt*/
+	/** list with the named entities present in this system. The NEs was present in the file named_enteties.txt*/
 	private LinkedHashMap<String, String> _namedEntetiesTable; 
 
 	public NE(){
@@ -24,6 +24,12 @@ public class NE extends DependencyType{
 
 	}
 
+    /**
+     * In the case of the XIPDependency NE (named entity) be present in the list with with the system's NE,
+     * it is added to the map _namedEntetiesNodes the XIPNode which this NE applies and its category.
+     *
+     * @param  dep - Xip Dependency - NE (XIPAPI)
+     * */
 	public void getDependencyInformation(Dependency dep){
 		Boolean flagBreak;
 
@@ -72,7 +78,12 @@ public class NE extends DependencyType{
 
 	}
 
-
+    /**
+     * Get the list with the named entities present in this system.
+     * The NEs was present in the file named_enteties.txt
+     *
+     * @return List with the named entities present in this system.
+     * */
 	private LinkedHashMap<String, String> getNamedEntetiesTable() {
 		LinkedHashMap<String, String> namedEntetiesTable = new LinkedHashMap<String, String>();
 
@@ -101,10 +112,19 @@ public class NE extends DependencyType{
 
 	}
 
+    /**
+     * Clear the list that has the named entities of a certain sentence
+     *
+     * */
 	public void ClearNamedEntetiesNodes(){
 		_namedEntetiesNodes = new HashMap<String, String>();
 	}
 
+    /**
+     * Get the list that has the named entities of a certain sentence
+     *
+     * @return list with the named entities of a certain sentence
+     * */
 	public HashMap<String, String> getnamedEntetiesNodes(){
 		return _namedEntetiesNodes;
 	}

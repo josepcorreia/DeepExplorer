@@ -15,7 +15,11 @@ public class DeepStorage {
 	private HashMap<Cooccurrence, Integer> coocorrenceMap;
 	private HashMap<Sentence, String> sentenceMap;
 	private HashSet<Exemplifies> exemplifiesSet;
-	
+
+	/**
+	 * Constructor.
+	 *
+	 */
 	public DeepStorage() {
 		this.wordsMap = new HashMap<String, Word>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
@@ -23,7 +27,17 @@ public class DeepStorage {
         this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
-	
+
+    /**
+     * Checks if the word exists in the word's Map.
+     *
+     * @param lemma - word's lemma
+     * @param pos - word's POS
+     * @param dep - cooccurrence's dependency name where the word occurs
+     * @param prop - cooccurrence's property where the word occurs
+     *
+     * @return the WOrd Object
+     */
 	public Word checkWord(String lemma, String pos, String dep, String prop){
         String key = lemma +"_"+ pos;
         Word word;
@@ -38,6 +52,15 @@ public class DeepStorage {
         checkWordBelongs(word, dep, prop);
         return word;
 	}
+
+    /**
+     * Checks if the word exists in the wordBelongs' Map.
+     *
+     * @param word - Word object
+     * @param depName - cooccurrence's dependency name where the word occurs
+     * @param prop - cooccurrence's property where the word occurs
+     *
+     */
     public void checkWordBelongs(Word word, String depName,  String prop){
         WordBelongs wb = new WordBelongs(word, depName, prop);
 
@@ -48,7 +71,15 @@ public class DeepStorage {
             wordBelongsMap.put(wb,1);
         }
     }
-	public void checkCoocorrence(Cooccurrence cooccurrence, Sentence sentence){
+
+    /**
+     * Checks if the cooccurrence already exists in the cooccurrence's Map.
+     *
+     * @param cooccurrence - cooccurrence object
+     * @param sentence - sentence object
+     *
+     */
+	public void checkCooccurrence(Cooccurrence cooccurrence, Sentence sentence){
         if(coocorrenceMap.containsKey(cooccurrence)){
 			int freq = coocorrenceMap.get(cooccurrence) + 1;
 			coocorrenceMap.put(cooccurrence, freq);
@@ -58,6 +89,13 @@ public class DeepStorage {
         checkSetence(sentence, cooccurrence);
 	}
 
+    /**
+     * Checks if the sentence already exists in the sentence's Map and in the exemplifies' Map.
+     *
+     * @param sentence - sentence object
+     * @param cooccurrence - cooccurrence object
+     *
+     */
     public void checkSetence(Sentence sentence, Cooccurrence cooccurrence){
         if(!sentenceMap.containsKey(sentence)){
             sentenceMap.put(sentence, sentence.getSentenceText());
@@ -69,7 +107,12 @@ public class DeepStorage {
         }
     }
 
-	
+    /**
+     * Store the information present in the maps (wordsMap, wordBelongsMap,
+     * coocorrenceMap, sentenceMap, exemplifiesSet) in the database
+     *
+     *
+     */
 	public void storeInDatabase(){
 
 		WordTable worddb = RelationalFactory.getWord();
@@ -139,7 +182,12 @@ public class DeepStorage {
        }
 
 	}
-	
+
+    /**
+     * Clean the information present in the maps (wordsMap, wordBelongsMap,
+     * coocorrenceMap, sentenceMap, exemplifiesSet)
+     *
+     */
 	public void cleanMaps(){
 		this.wordsMap = new HashMap<String,Word>();
 		this.wordBelongsMap = new HashMap<WordBelongs, Integer>();
@@ -147,7 +195,12 @@ public class DeepStorage {
         this.sentenceMap = new HashMap<Sentence,String>();
         this.exemplifiesSet = new HashSet<Exemplifies>();
 	}
-	
+
+    /**
+     * Print the size of the maps (wordsMap, wordBelongsMap,
+     * coocorrenceMap, sentenceMap, exemplifiesSet)
+     *
+     */
 	public void printSizes(){
 		System.out.println("WOrd: " + wordsMap.size());
 		System.out.println("WOrdBelongs: " + wordBelongsMap.size());
@@ -156,6 +209,10 @@ public class DeepStorage {
         System.out.println("exemplifica: " + exemplifiesSet.size());
 	}
 
+    /**
+     * commit the information to the database
+     *
+     */
 	public void commit() {
 		RelationalFactory.commit();
 		

@@ -14,13 +14,21 @@ import java.util.Vector;
 
 public class DependencyExtractor {
 	private DependencyFactory _dependencyFactory;
-	private DeepStorage _storage;
+
+    /** where the information is temporarily stored*/
+    private DeepStorage _storage;
 
 	public DependencyExtractor(){
 		_storage = new DeepStorage();
 		_dependencyFactory = new DependencyFactory(_storage);
 	}
-	
+
+	/**
+	 * Extract te information in a certain XIP document
+	 *
+	 * @param  document  XipDocument (XIPAPI), XML File from XIP
+	 * @param  filename - filename
+	 */
 	public void Extract(XipDocument document, String filename){
 		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
 		
@@ -59,13 +67,16 @@ public class DependencyExtractor {
 			}*/
 
 		}
-		
+
+        //store in the database
 		//_storage.printSizes();
 		_storage.storeInDatabase();
 		_storage.cleanMaps();
 
+        //insert filename in the database (It means that the file has already been analyzed)
 		RelationalFactory.getFile().insertNewFile(filename);
-		_storage.commit();
+        //commit the information to the database
+        _storage.commit();
 	}
 
 }

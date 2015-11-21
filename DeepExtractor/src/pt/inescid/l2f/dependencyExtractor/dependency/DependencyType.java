@@ -75,7 +75,7 @@ public abstract class DependencyType{
 
 		if(words.size()== 2){
             //submit in the storage the cooccurrence
-			_storage.checkCoocorrence(new Cooccurrence(words.get(0), words.get(1), prop, depname), sentence);
+			_storage.checkCooccurrence(new Cooccurrence(words.get(0), words.get(1), prop, depname), sentence);
 		}
 		else{
             //write in a file in teh case of some error in de XIPDependency

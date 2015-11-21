@@ -5,25 +5,53 @@ public class WordBelongs {
 	private String _depName;
 	private String _prop;
 
-	public WordBelongs(Word word, String depName, String prop) {
+    /**
+     * Constructor.
+     *
+     * @param word - Object Word
+     * @param dep  - cooccurrence's dependency name
+     * @param prop - cooccurrence's property
+     */
+	public WordBelongs(Word word, String dep, String prop) {
 		super();
 		this._word = word;
-		this._depName = depName;
+		this._depName = dep;
 		this._prop = prop;
 	}
 
+	/**
+	 * Getter
+	 *
+	 * @return word's Id
+	 */
 	public Long getWordId() {
 		return _word.getWordId();
 	}
 
+    /**
+     * Getter
+     *
+     * @return cooccurrence's dependency name where the word occurs
+     */
 	public String getDepName() {
 		return _depName;
 	}
 
+    /**
+     * Getter
+     *
+     * @return cooccurrence's property name where the word occurs
+     */
 	public String getProp() {
 		return _prop;
 	}
 
+    /**
+     * Equals
+     *
+     * @param o - Object to compare
+     * @return true if this object is equals with the Object o
+     */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -37,6 +65,11 @@ public class WordBelongs {
 
 	}
 
+    /**
+     * HashCode
+     *
+     * @return the object's HashCode
+     */
 	@Override
 	public int hashCode() {
 		int result = _word != null ? _word.hashCode() : 0;
@@ -45,6 +78,11 @@ public class WordBelongs {
 		return result;
 	}
 
+    /**
+     * toString
+     *
+     * @return the object's string
+     */
 	@Override
 	public String toString() {
 		return "WordBelongs [idPalavra=" + _word.getWordId() + ", depName="
