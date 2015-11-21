@@ -25,7 +25,7 @@ public class WordTable extends RelationalTable {
      *
      * @param word - object Word
      *
-     * @result the word's id
+     * @return the word's id
      */
 	public Long insertNewWord(Word  word){
 
@@ -76,7 +76,7 @@ public class WordTable extends RelationalTable {
      *
      * @param word - object Word
      *
-     * @result the word's id
+     * @return the word's id
      * @throws WordNotExist if this word do not exists in the database
      */
 	public Long wordExists(Word word) throws WordNotExist{

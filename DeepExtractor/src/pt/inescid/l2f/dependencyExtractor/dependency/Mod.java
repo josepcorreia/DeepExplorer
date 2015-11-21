@@ -9,7 +9,14 @@ public class Mod extends DependencyType{
 	public Mod(DeepStorage _storage) {
 		super(_storage);
 	}
-	
+
+    /**
+     * Get the XIP dependency's Mod property
+     *
+     * @param  dep  Xip Dependency (XIPAPI)
+     *
+     * @result MOD's property
+     */
 	@Override
 	protected String getProperty(Dependency dep) {
 		String prop = "";

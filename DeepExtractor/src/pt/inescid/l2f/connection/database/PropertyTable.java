@@ -64,6 +64,7 @@ public class PropertyTable extends RelationalTable {
      * @param prop - property
      * @param dep - property's dependency name
      *
+     * @return true if the property already exists
      */
 	public boolean propertyExists(String prop, String dep){
 		Connection connection = getConnetion();

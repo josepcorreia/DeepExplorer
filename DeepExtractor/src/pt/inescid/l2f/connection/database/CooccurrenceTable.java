@@ -19,7 +19,7 @@ public class CooccurrenceTable extends RelationalTable {
     /**
      * Get the number of rows that cooccurence table has in the database
      *
-     * @result - return the number of rows that cooccurence table
+     * @return - return the number of rows that cooccurence table
      */
 	public int getNumberRows(){
 		Connection connection = getConnetion();
@@ -116,7 +116,7 @@ public class CooccurrenceTable extends RelationalTable {
      * @param prop - cooccurrence's property
      * @param dep - cooccurrence's dependency
      *
-     * @result true if this cooccurence exists
+     * @return true if this cooccurence exists
      * @throws CooccurrenceNotExist if this cooccurence do not exists
      */
 	public boolean cooccurrenceExists(long wordId1, long wordId2, String prop, String dep) throws CooccurrenceNotExist {
@@ -307,7 +307,8 @@ public class CooccurrenceTable extends RelationalTable {
      * @param chisquarePearson - cooccurrence's value of chisquarePearson
      * @param loglikelihood - cooccurrence's value of loglikelihood
      * @param significance - cooccurrence's value of significance
-     * @throws SQLException
+     * @return "SQL query"
+     * @throws SQLException if occurs some error
      */
 	public String uptadeAssociationMeasures(long wordId1, long wordId2, String prop, String dep,
                                             double pmi,

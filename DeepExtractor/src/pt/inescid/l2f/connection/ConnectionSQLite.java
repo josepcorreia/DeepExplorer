@@ -10,7 +10,7 @@ public class ConnectionSQLite {
 
   private static String status = "Not connected"; 
   
-  //Método de Conexão// 
+
   public static Connection getConnectionSQLite(String dirDB) { 
 	  
 	  try { 

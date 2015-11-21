@@ -26,7 +26,7 @@ public class WordBelongsTable extends RelationalTable {
      * @param prop - property
      * @param freq - frequency of that word
 	 *
-	 * @result true if the word was inserted
+	 * @return true if the word was inserted
      */
   public boolean insertWordCorpus(long id, String depname, String prop, int freq){
 	  Connection connection = getConnetion();
@@ -68,7 +68,7 @@ public class WordBelongsTable extends RelationalTable {
      * @param depname - dependency name
      * @param prop - property
      *
-     * @result true if this word already occurs in this corpus
+     * @return true if this word already occurs in this corpus
      * @throws WordNotExistCorpus if this word do not occurs in this corpus
      */
   public boolean wordExistsCorpus(long id, String depname, String prop) throws WordNotExistCorpus{

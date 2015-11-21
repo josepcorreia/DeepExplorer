@@ -36,19 +36,19 @@ public class DependencyExtractor {
 
 			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
 			for (Dependency dependency : deps) {
-				if("NE".equals(dependency.getName())){
-					_dependencyFactory.NE().getDependencyInformation(dependency);
+				if("getNE".equals(dependency.getName())){
+					_dependencyFactory.getNE().getDependencyInformation(dependency);
 				}
 			}
 			
 			for (Dependency dependency : deps) {
 			
 				if(map.containsKey(dependency.getName())){
-					map.get(dependency.getName()).getDependencyInformation(dependency, _dependencyFactory.NE().getnamedEntetiesNodes(), sentence);
+					map.get(dependency.getName()).getDependencyInformation(dependency, _dependencyFactory.getNE().getnamedEntetiesNodes(), sentence);
 				}
 			}
 			
-			_dependencyFactory.NE().ClearNamedEntetiesNodes();
+			_dependencyFactory.getNE().ClearNamedEntetiesNodes();
 
 			/*if(sentenceNumber==1){
                 _storage.printSizes();

@@ -17,14 +17,22 @@ public class DependencyFactory {
 		_dependenciesMap.put("MOD", new Mod(_storage));
 		_dependenciesMap.put("SUBJ", new Subj(_storage));
 		
-		_ne = new NE(); 
-	}	
-	
+		_ne = new NE();
+	}
+
+    /**
+     * Getter.
+     * @return the HashMap with the different objects that analyse the XIP dependencies
+     */
 	public HashMap<String,DependencyType> getDependenciesMap(){
 		return _dependenciesMap;
 	}
-	
-	public NE NE(){
+
+    /**
+     * Getter.
+     * @return the ne object
+     */
+	public NE getNE(){
 		return _ne;
 	}
 }

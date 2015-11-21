@@ -14,7 +14,7 @@ public class DependencyTable extends RelationalTable {
      *
      * @param dependencyName - dependency name
      *
-     * @result true if the Dependency was correctly inserted
+     * @return true if the Dependency was correctly inserted
      */
 	public boolean insertNew(String dependencyName){
 		Connection connection = getConnetion();

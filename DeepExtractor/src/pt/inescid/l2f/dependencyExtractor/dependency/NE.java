@@ -10,8 +10,11 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 public class NE extends DependencyType{
+
+    /** */
 	private HashMap<String, String> _namedEntetiesNodes;
-	//originada a partir do ficheiro named_enteties.txt
+
+	/** list with the named entities from the file named_enteties.txt*/
 	private LinkedHashMap<String, String> _namedEntetiesTable; 
 
 	public NE(){
@@ -62,12 +65,13 @@ public class NE extends DependencyType{
 							continue depLoop;
 						}
 					}	
-					//caso se deseje fazer alguma coisa com as features nao detectadas, será aqui
+					//caso se deseje fazer alguma coisa com as features não detectadas, será aqui
 					
 				}
 			}
 
 	}
+
 
 	private LinkedHashMap<String, String> getNamedEntetiesTable() {
 		LinkedHashMap<String, String> namedEntetiesTable = new LinkedHashMap<String, String>();

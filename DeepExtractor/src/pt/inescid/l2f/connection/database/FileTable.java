@@ -15,7 +15,7 @@ public class FileTable extends RelationalTable {
      *
      * @param fileName - file namename
      *
-     * @result true if the file already exists
+     * @return true if the file already exists
      */
 	public boolean fileExists(String fileName){
         Connection connection = getConnetion();

@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public abstract class DependencyType{
-	private DeepStorage _storage;
-	private HashMap<String,String> _depPropTable;
+	/** where the information is temporarily stored*/
+    private DeepStorage _storage;
+
+    /** list of dependency-property patterns that are relevant for the system*/
+    private HashMap<String,String> _depPropTable;
 	
 	public DependencyType(){
 	}
@@ -28,12 +31,20 @@ public abstract class DependencyType{
 		 depInformation();
 	}
 
+    /**
+     * Extract te information in a certain XIP dependence
+     *
+     * @param  dep  Xip Dependency (XIPAPI)
+     * @param  namedEnteties - set of name enteties in this sentence
+     * @param sentence - Sentence object (with string that represent the sentence)
+     */
 	public void getDependencyInformation(Dependency dep, HashMap<String, String> namedEnteties, Sentence sentence){
 		String depname = dep.getName();
 		String prop = getProperty(dep);
 
 
-		//para completar a propriedade inicial
+		//to complete the initial property
+        //result: PROP_POS1_POS2
         for (XIPNode node : dep.getNodes()){
 			String pos = getPOS(node);
 
@@ -42,9 +53,11 @@ public abstract class DependencyType{
 			prop += pos;
 		}
 
+        //dependency-property pattern -> DEP PROP_POS1_POS2
         String depProp = depname+" "+prop;
 
 
+        //it is checked if this pattern is present in the list with the relevant system's patterns
         if(!_depPropTable.containsKey(depProp)) {
             return;
         }
@@ -53,6 +66,7 @@ public abstract class DependencyType{
         depname = newDepProp[0];
         prop = newDepProp[1];
 
+        //two words of the cooccurrence
         ArrayList<Word> words = new ArrayList<Word>();
         for (XIPNode node : dep.getNodes()){
             String pos = getPOS(node);
@@ -60,15 +74,17 @@ public abstract class DependencyType{
         }
 
 		if(words.size()== 2){
+            //submit in the storage the cooccurrence
 			_storage.checkCoocorrence(new Cooccurrence(words.get(0), words.get(1), prop, depname), sentence);
 		}
 		else{
+            //write in a file in teh case of some error in de XIPDependency
 			String path = new File("src/out/depError.txt").getAbsolutePath();
 			
 			BufferedWriter writer = null;
 	        try {
 	            writer = new BufferedWriter(new FileWriter(path, true));
-	            writer.write("Depedencia com erro " + depname +" na frase " + dep.getSentenceNumber() + "\n");
+	            writer.write("Dependência com erro " + depname +" na frase " + dep.getSentenceNumber() + "\n");
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -80,18 +96,34 @@ public abstract class DependencyType{
 	        }
 		}
 	}
-	
-	private String CheckNomedEntity(XIPNode node, HashMap<String, String> namedEnteties){
+
+    /**
+     * Verify if this XipNode or other parent of this was present in some named entity
+     *
+     * @param  node  Xip Dependency (XIPAPI)
+     * @param  namedEntities - set of name entities in this sentence
+     *
+     * @result
+     */
+	private String CheckNamedEntity(XIPNode node, HashMap<String, String> namedEntities){
 		if(node == null)
 			return "noNE";
 
-		if(namedEnteties.containsKey(node.getNodeNumber())){
-			return namedEnteties.get(node.getNodeNumber()).toUpperCase();		
+		if(namedEntities.containsKey(node.getNodeNumber())){
+			return namedEntities.get(node.getNodeNumber()).toUpperCase();
 		}
 
-		return CheckNomedEntity(node.getParent(), namedEnteties);
+		return CheckNamedEntity(node.getParent(), namedEntities);
 	}
 
+
+    /**
+     * Get the XIP dependency's generic property
+     *
+     * @param  dep - Xip Dependency (XIPAPI)
+     *
+     * @result
+     */
 	protected String getProperty(Dependency dep) {
 		String prop = "";
 		for (Feature f : dep.getFeatures()){
@@ -104,6 +136,13 @@ public abstract class DependencyType{
 		return prop;
 	}
 
+    /**
+     * Get the XIP dependency's Mod property
+     *
+     * @param  node - XipNODE (XIPAPI): word
+     *
+     * @result word's pos
+     */
 	protected String getPOS(XIPNode node) {
 		String pos = node.getName();
 
@@ -113,12 +152,25 @@ public abstract class DependencyType{
 		
 		return pos;
 	}
-	protected Word getWord(XIPNode node, String pos, String depname, String prop, HashMap<String, String> namedEnteties) {
-		String lemma = CheckNomedEntity(node, namedEnteties);
+
+    /**
+     * Get the object word
+     *
+     * @param  node - XipNODE (XIPAPI)
+     * @param  pos - word's pos
+     * @param dep - XIPDependency's name
+     * @param prop - XIPDependency's property
+     *
+     * @result object for this word
+     */
+	protected Word getWord(XIPNode node, String pos, String dep, String prop, HashMap<String, String> namedEnteties) {
+		//check if this XipNode or other parent of this was present in some named entity
+        String lemma = CheckNamedEntity(node, namedEnteties);
 
         if (pos.equals("TOP")) {
             lemma = "Frase";
         } else {
+            //if this node has no named entity
             if (lemma.equals("noNE")) {
                 for (Token token : node.getTokens()) {
                     lemma = "";
@@ -130,10 +182,15 @@ public abstract class DependencyType{
                 }
             }
         }
-		return _storage.checkWord(lemma, pos, depname, prop);
+		return _storage.checkWord(lemma, pos, dep, prop);
 	}
 
-
+    /**
+     * Get the list of relevant dependency-property patterns for the system (patterns present in a file)
+     *
+     *
+     * @result list of dependency-property patterns that are relevant for the system
+     */
 	private HashMap<String, String> getDepPropTable() {
 		HashMap<String, String> depPropTable = new HashMap<String, String>();
 		
@@ -164,7 +221,11 @@ public abstract class DependencyType{
 		}
 		return depPropTable;
 	}
-	
+
+    /**
+     * Insert the relevants XIPDependency's names and properties in the database
+     *
+     */
 	private void depInformation() {
         for (Entry<String, String> entry : _depPropTable.entrySet()) {
             String split[] =  entry.getValue().split(" ");

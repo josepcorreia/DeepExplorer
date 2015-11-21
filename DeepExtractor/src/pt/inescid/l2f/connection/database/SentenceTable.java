@@ -65,7 +65,7 @@ public class SentenceTable extends RelationalTable {
      *
      * @param sentence - object Sentence
      *
-     * @result true if the sentence already exists
+     * @return true if the sentence already exists
      */
     public boolean sentenceExists(Sentence sentence){
         Connection connection = getConnetion();

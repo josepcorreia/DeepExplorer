@@ -19,7 +19,7 @@ public class CorpusTable extends RelationalTable {
 	 * @param type - corpus' type
 	 * @param update - corpus' state
 	 *
-     * @result true if the corpus was correctly inserted
+     * @return true if the corpus was correctly inserted
 	 */
 	public boolean insertNew(String name, String  source, String year, String type, Boolean update){
 		Connection connection = getConnetion();

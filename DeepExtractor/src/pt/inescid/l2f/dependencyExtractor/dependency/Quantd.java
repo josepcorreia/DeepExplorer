@@ -9,6 +9,14 @@ public class Quantd extends DependencyType{
 		super(_storage);
 	}
 
+
+	/**
+	 * Get the XIP dependency's QUANTD property
+	 *
+	 * @param  dep - Xip Dependency (XIPAPI)
+	 *
+	 * @result QUANTD's property
+	 */
 	protected String getProperty(Dependency dep) {
 		//neste caso não interessa se a prop é pre ou post
 		String prop = "";

@@ -9,6 +9,13 @@ public class Subj extends DependencyType{
 		super(_storage);
 	}
 
+	/**
+	 * Get the XIP dependency's SUBJ property
+	 *
+	 * @param  dep - Xip Dependency (XIPAPI)
+	 *
+	 * @result SUBJ's property
+	 */
 	protected String getProperty(Dependency dep) {
 		//neste caso não interessa se a prop é pre ou post
 		String prop = "";
