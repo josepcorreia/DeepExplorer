@@ -170,8 +170,8 @@ public class CooccurrenceTable extends RelationalTable {
      * @return number of cooccurences with a certain dependency-property pattern
      * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-    public long getDepNumberCoocorrences(String dep, String prop) throws DatabaseException {
-        //total number of coocorrences in database for dep x and prop y
+    public long getDepNumberCooccurrences(String dep, String prop) throws DatabaseException {
+        //total number of cooccurrences in database for dep x and prop y
         Connection connection = getConnetion();
 
         Statement stmt = null;
@@ -179,7 +179,7 @@ public class CooccurrenceTable extends RelationalTable {
 
         try{
             stmt = connection.createStatement();
-            String sql = "SELECT sum(frequencia) as total FROM Coocorrencia Where tipoDep = '"+ dep +"' and nomeProp = '" + prop+ "';";
+            String sql = "SELECT sum(frequencia) as total FROM Coocorrencia Where tipoDep = '"+ dep +"' and nomeProp = '" + prop + "';";
             ResultSet rs = stmt.executeQuery(sql);
             if(rs.next()){
                 total = rs.getLong("total");
@@ -190,7 +190,7 @@ public class CooccurrenceTable extends RelationalTable {
         }catch(SQLException se){
             //Handle errors for JDBC
             se.printStackTrace();
-            throw new DatabaseException("Coocorrência", "getDepNumberCoocorrences");
+            throw new DatabaseException("Coocorrência", "getDepNumberCooccurrences");
 
         }finally{
             //finally block used to close resources
@@ -346,7 +346,6 @@ public class CooccurrenceTable extends RelationalTable {
 		Connection connection = getConnetion(); 
 		Statement s;
         WordBelongsTable wordBelongsTable = RelationalFactory.getWordBelongs();
-        ExemplifiesTable exemplifiesTable = RelationalFactory.getExemplifies();
 
         //
 		int intervall = 2000;
@@ -355,7 +354,7 @@ public class CooccurrenceTable extends RelationalTable {
         int alreadyDone = 0;
 
 		HashMap<String, Long> totalWordsDeps = new HashMap<String, Long>();
-        HashMap<String, Long> totalCoocorrenceDeps = new HashMap<String, Long>();
+        HashMap<String, Long> totalCooccurrenceDeps = new HashMap<String, Long>();
 
 		int index = 0;
 		while(index < totalrows){
@@ -388,8 +387,8 @@ public class CooccurrenceTable extends RelationalTable {
 
 
                     long numberWordDep = 0;
-                    long totalCoocorenceDep = 0;
-                    long totalSentencesDep = 0;
+                    long totalCooccurenceDep = 0;
+
 
                     //Hashmap: Word's frequency for each dependency-property pattern
                     // (Measures that use this information: pmi)
@@ -402,13 +401,13 @@ public class CooccurrenceTable extends RelationalTable {
                     }
 
                     //Hashmap:  Cooccurence's frequency for each dependency-property pattern
-                    // (Measures that use this information: chisquarePerason and Significance)
-                    if(totalCoocorrenceDeps.containsKey(depProp)){
-                        totalCoocorenceDep = totalCoocorrenceDeps.get(depProp);
+                    // (Measures that use this information: chisquarePearson and Significance)
+                    if(totalCooccurrenceDeps.containsKey(depProp)){
+                        totalCooccurenceDep = totalCooccurrenceDeps.get(depProp);
                     }
                     else{
-                        totalCoocorenceDep = getDepNumberCoocorrences(dep, prop);
-                        totalCoocorrenceDeps.put(depProp, totalCoocorenceDep);
+                        totalCooccurenceDep = getDepNumberCooccurrences(dep, prop);
+                        totalCooccurrenceDeps.put(depProp, totalCooccurenceDep);
                     }
 
                     double pmi = AssociationMeasures.PMI(numberWordDep, depfreq, word1freq, word2freq);
@@ -417,11 +416,11 @@ public class CooccurrenceTable extends RelationalTable {
 
                     double logDice = AssociationMeasures.LogDice(depfreq, word1freq, word2freq);
 
-                    double chisquarePearson = AssociationMeasures.chiSquarePearson(totalCoocorenceDep, depfreq, word1CococorrenceFreq, word2CococorrenceFreq);
+                    double chisquarePearson = AssociationMeasures.chiSquarePearson(totalCooccurenceDep, depfreq, word1CococorrenceFreq, word2CococorrenceFreq);
 
 					double loglikelihood = AssociationMeasures.logLikelihood(numberWordDep, depfreq, word1freq, word2freq);
 
-                    double significance = AssociationMeasures.significance(word1freq,word2freq,depfreq, totalCoocorenceDep);
+                    double significance =  AssociationMeasures.significance(word1freq,word2freq,depfreq, totalCooccurenceDep);
 
 					s.addBatch(uptadeAssociationMeasures(word1, word2, prop, dep, pmi, dice, logDice, chisquarePearson,
                             loglikelihood, significance));
