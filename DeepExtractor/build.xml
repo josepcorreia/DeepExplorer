@@ -78,6 +78,7 @@
             <classpath refid="classpath"/>
             <arg value="/Users/josecorreia/Projects/DB/"/>
         </java>
+	</target>
 	<target name="runInesc" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
