@@ -1,5 +1,7 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
+
 import java.sql.*;
 
 public class CorpusTable extends RelationalTable {
@@ -20,8 +22,10 @@ public class CorpusTable extends RelationalTable {
 	 * @param update - corpus' state
 	 *
      * @return true if the corpus was correctly inserted
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
 	 */
-	public boolean insertNew(String name, String  source, String year, String type, Boolean update){
+	public boolean insertNew(String name, String  source, String year, String type, Boolean update) throws DatabaseException {
 		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
@@ -56,7 +60,7 @@ public class CorpusTable extends RelationalTable {
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
-			return false;
+			throw new DatabaseException("Corpus", "insertNew");
 
 		} finally {
 

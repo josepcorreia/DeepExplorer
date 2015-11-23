@@ -1,6 +1,7 @@
 package pt.inescid.l2f;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.dependencyExtractor.DependencyExtractor;
 import pt.inescid.l2f.xipapi.XipDocumentFactory;
 import pt.inescid.l2f.xipapi.domain.XipDocument;
@@ -13,7 +14,8 @@ public class DeepExtractor {
 	/**
 	 * Main function.
 	 *
-	 * @param args path/filename of the file that contains the XML output from XIP.
+	 * @param args path/filename of the file that contains the XML output from XIP and
+	 *             the path to the database
 	 */
 	public static void main(String[] args) {
 		System.out.println("Inicio");
@@ -21,13 +23,18 @@ public class DeepExtractor {
 		String corpusName = "CETEMPúblico";
 
 		RelationalFactory rf = new RelationalFactory(corpusName, args[0]);
-        rf.getCorpus().insertNew(corpusName, "Público", "2000", "Noticíario", false);
-
         DependencyExtractor de = new DependencyExtractor();
-		
-		XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
-					
-		//Path dir = Paths.get(args[1]);
+        XipDocumentFactory xipDocumentFactory = XipDocumentFactory.getInstance();
+
+
+        try {
+            rf.getCorpus().insertNew(corpusName, "Público", "2000", "Noticíario", false);
+        } catch (DatabaseException e) {
+
+            System.err.println(e.getMessage());
+            System.exit(0);
+        }
+
         File[] dir = new File(args[1]).listFiles();
 
         inspectDirectory(dir, xipDocumentFactory, de);
@@ -55,7 +62,15 @@ public class DeepExtractor {
                         BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file.toString()), "UTF-8"));
                         document = xipdc.getXipResult(buffer);
 
-                        de.Extract(document, filename);
+                        try {
+                            de.Extract(document, filename);
+                        } catch (DatabaseException e) {
+                            System.err.println(e.getMessage());
+
+                            //if a database's problem was occurred, the connection is closed and the program exits
+                            RelationalFactory.closeConnection();
+                            System.exit(0);
+                        }
                     }
 
 				}

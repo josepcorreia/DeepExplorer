@@ -1,5 +1,6 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
 
 import java.sql.Connection;
@@ -27,8 +28,9 @@ public class WordBelongsTable extends RelationalTable {
      * @param freq - frequency of that word
 	 *
 	 * @return true if the word was inserted
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-  public boolean insertWordCorpus(long id, String depname, String prop, int freq){
+  public boolean insertWordCorpus(long id, String depname, String prop, int freq) throws DatabaseException {
 	  Connection connection = getConnetion();
 	  
 	  Statement stmt = null;
@@ -45,9 +47,9 @@ public class WordBelongsTable extends RelationalTable {
 			stmt.executeUpdate(sql);
   
 	    }catch(SQLException se){
-	    	System.out.println("|| Palavra insere no corpus");
 			System.out.println(se.getMessage());
-			return false;
+			throw new DatabaseException("Pertence", "insertWordCorpus");
+
 	    }finally{
 	       //finally block used to close resources
 	       try{
@@ -71,7 +73,7 @@ public class WordBelongsTable extends RelationalTable {
      * @return true if this word already occurs in this corpus
      * @throws WordNotExistCorpus if this word do not occurs in this corpus
      */
-  public boolean wordExistsCorpus(long id, String depname, String prop) throws WordNotExistCorpus{
+  public boolean wordExistsCorpus(long id, String depname, String prop) throws WordNotExistCorpus, DatabaseException {
 	  Connection connection = getConnetion();
 	  
 	  Statement stmt = null;
@@ -97,8 +99,8 @@ public class WordBelongsTable extends RelationalTable {
   
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
-	    	System.out.println("Pertence ao Coupus?");
-	       se.printStackTrace();
+	        se.printStackTrace();
+			throw new DatabaseException("Pertence", "wordExistsCorpus (wordid "+ id +")");
 	    }finally{
 	       //finally block used to close resources
 	       try{
@@ -119,8 +121,10 @@ public class WordBelongsTable extends RelationalTable {
      * @param prop cooccurrence's property
      * @param dep cooccurrence's dependency
      * @param freq cooccurrence's frequency
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-  public void uptadeFrequency(long wordId, String dep, String prop, int freq){
+  public void uptadeFrequency(long wordId, String dep, String prop, int freq) throws DatabaseException {
 	  Connection connection = getConnetion();	
 
 	  Statement stmt = null;
@@ -137,8 +141,8 @@ public class WordBelongsTable extends RelationalTable {
 	
 		}catch(SQLException se){
 		      //Handle errors for JDBC
-			System.out.println("|| Update Frequency error");
-		      se.printStackTrace();
+			  se.printStackTrace();
+			  throw new DatabaseException("Pertence", "uptadeFrequency (wordid "+ wordId +")");
 		}finally{
 		      //finally block used to close resources
 		      try{
@@ -159,8 +163,10 @@ public class WordBelongsTable extends RelationalTable {
      * @param dep cooccurrence's dependency
      *
      * @return the frequency of a word
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-  public long getWordFrequency(Long wordId, String dep, String prop){
+  public long getWordFrequency(Long wordId, String dep, String prop) throws DatabaseException {
 	  Connection connection = getConnetion();	
 	  
 	  Statement stmt = null;
@@ -185,8 +191,8 @@ public class WordBelongsTable extends RelationalTable {
 
 		}catch(SQLException se){
 		      //Handle errors for JDBC
-			System.out.println("word freq");
 		      se.printStackTrace();
+			throw new DatabaseException("Pertence", "getWordFrequency (wordid "+ wordId +")");
 		}finally{
 		      //finally block used to close resources
 		      try{
@@ -209,8 +215,10 @@ public class WordBelongsTable extends RelationalTable {
      * @param dep cooccurrence's dependency
      *
      * @return the frequency of a group of words with the same dependency-property pattern
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public long getDepNumberWords(String dep, String prop) {
+	public long getDepNumberWords(String dep, String prop) throws DatabaseException {
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -235,8 +243,10 @@ public class WordBelongsTable extends RelationalTable {
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
-			System.out.println("||numero total de palavras");
 			se.printStackTrace();
+			throw new DatabaseException("Pertence", "getDepNumberWords");
+
+
 		}finally{
 			//finally block used to close resources
 			try{

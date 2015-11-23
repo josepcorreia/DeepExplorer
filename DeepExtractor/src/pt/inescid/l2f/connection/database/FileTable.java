@@ -1,5 +1,7 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
+
 import java.sql.*;
 
 public class FileTable extends RelationalTable {
@@ -16,8 +18,9 @@ public class FileTable extends RelationalTable {
      * @param fileName - file namename
      *
      * @return true if the file already exists
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public boolean fileExists(String fileName){
+	public boolean fileExists(String fileName) throws DatabaseException {
         Connection connection = getConnetion();
         Statement stmt = null;
 
@@ -41,7 +44,7 @@ public class FileTable extends RelationalTable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new DatabaseException("File", "fileExists");
         } finally {
 
             if (stmt != null)
@@ -59,8 +62,10 @@ public class FileTable extends RelationalTable {
      * Add new File in the database (table Ficheiro)
      *
      * @param fileName - file name
+     *
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public void insertNewFile(String fileName){
+	public void insertNewFile(String fileName) throws DatabaseException {
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -76,6 +81,7 @@ public class FileTable extends RelationalTable {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+            throw new DatabaseException("File", "insertNewFile");
 		} finally {
 
 			if (stmt != null)

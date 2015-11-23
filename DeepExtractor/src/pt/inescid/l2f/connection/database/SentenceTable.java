@@ -1,5 +1,6 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 
 import java.sql.Connection;
@@ -43,8 +44,6 @@ public class SentenceTable extends RelationalTable {
 
 			stmt.executeUpdate(query);
 
-			//System.out.println("Record is inserted into Frase table!");
-
 		} catch (SQLException e) {
 			System.out.println("Inserir Nova Frase: "+ sentenceNumber + " " +filename);
 			System.out.println(e.getMessage());
@@ -66,8 +65,9 @@ public class SentenceTable extends RelationalTable {
      * @param sentence - object Sentence
      *
      * @return true if the sentence already exists
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-    public boolean sentenceExists(Sentence sentence){
+    public boolean sentenceExists(Sentence sentence) throws DatabaseException {
         Connection connection = getConnetion();
 
         Statement stmt = null;
@@ -91,8 +91,10 @@ public class SentenceTable extends RelationalTable {
 
         }catch(SQLException se){
             //Handle errors for JDBC
-            System.out.println("||Sentence Exists? " + sentence.getFilename() + " " + sentence.getSentenceNumber() );
             se.printStackTrace();
+            throw new DatabaseException("Coocorrência", "sentenceExists ( Filename "+sentence.getFilename()
+                    + " Sentence Number" + sentence.getSentenceNumber() +")");
+
         }finally{
             //finally block used to close resources
             try{

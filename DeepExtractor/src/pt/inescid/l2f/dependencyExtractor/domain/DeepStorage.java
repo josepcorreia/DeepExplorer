@@ -2,6 +2,7 @@ package pt.inescid.l2f.dependencyExtractor.domain;
 
 import pt.inescid.l2f.connection.database.*;
 import pt.inescid.l2f.connection.exception.CooccurrenceNotExist;
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.connection.exception.WordNotExistCorpus;
 
@@ -111,9 +112,9 @@ public class DeepStorage {
      * Store the information present in the maps (wordsMap, wordBelongsMap,
      * coocorrenceMap, sentenceMap, exemplifiesSet) in the database
      *
-     *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public void storeInDatabase(){
+	public void storeInDatabase() throws DatabaseException {
 
 		WordTable worddb = RelationalFactory.getWord();
 		WordBelongsTable wordBelongsdb = RelationalFactory.getWordBelongs();

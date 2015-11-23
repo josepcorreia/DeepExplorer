@@ -1,6 +1,7 @@
 package pt.inescid.l2f.connection.database;
 
 import pt.inescid.l2f.connection.exception.CooccurrenceNotExist;
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.dependencyExtractor.domain.Cooccurrence;
 import pt.inescid.l2f.measures.AssociationMeasures;
 
@@ -20,8 +21,9 @@ public class CooccurrenceTable extends RelationalTable {
      * Get the number of rows that cooccurence table has in the database
      *
      * @return - return the number of rows that cooccurence table
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public int getNumberRows(){
+	public int getNumberRows() throws DatabaseException {
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -39,8 +41,8 @@ public class CooccurrenceTable extends RelationalTable {
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
-			System.out.println("|| COOO - a verificar se so ha 1");
 			se.printStackTrace();
+			throw new DatabaseException("Coocorrência", "getNumberRows");
 
 		}finally{
 			//finally block used to close resources
@@ -63,9 +65,9 @@ public class CooccurrenceTable extends RelationalTable {
      * @param property cooccurrence's property
      * @param dependencyName cooccurrence's dependency
      * @param freq cooccurrence's frequency
-     *
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public void insertCooccurrence(long wordId1, long wordId2, String property, String dependencyName, int freq){
+	public void insertCooccurrence(long wordId1, long wordId2, String property, String dependencyName, int freq) throws DatabaseException {
 		Connection connection = getConnetion();
 
 		PreparedStatement preparedStatement = null;
@@ -92,8 +94,8 @@ public class CooccurrenceTable extends RelationalTable {
 			//System.out.println("Record is inserted into Coocorrencia table!");
 
 		} catch (SQLException e) {
-			System.out.println("|| COOO A INSERIR" + wordId2);
 			System.out.println(e.getMessage());
+            throw new DatabaseException("Coocorrência", "insertCooccurrence( wordId1:" + wordId1 + ", wordId2:" +wordId2+")");
 
 		} finally {
 
@@ -118,8 +120,9 @@ public class CooccurrenceTable extends RelationalTable {
      *
      * @return true if this cooccurence exists
      * @throws CooccurrenceNotExist if this cooccurence do not exists
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public boolean cooccurrenceExists(long wordId1, long wordId2, String prop, String dep) throws CooccurrenceNotExist {
+	public boolean cooccurrenceExists(long wordId1, long wordId2, String prop, String dep) throws CooccurrenceNotExist, DatabaseException {
 		Connection connection = getConnetion();
 
 		Statement stmt = null;
@@ -143,8 +146,8 @@ public class CooccurrenceTable extends RelationalTable {
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
-			System.out.println("|| COOO - a verificar se so ha 1");
 			se.printStackTrace();
+            throw new DatabaseException("Coocorrência", "cooccurrenceExists (wordId1:" + wordId1 + ", wordId2:" +wordId2+")");
 
 		}finally{
 			//finally block used to close resources
@@ -165,8 +168,9 @@ public class CooccurrenceTable extends RelationalTable {
      * @param prop - cooccurrence's property
      * @param dep - cooccurrence's dependency
      * @return number of cooccurences with a certain dependency-property pattern
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-    public long getDepNumberCoocorrences(String dep, String prop){
+    public long getDepNumberCoocorrences(String dep, String prop) throws DatabaseException {
         //total number of coocorrences in database for dep x and prop y
         Connection connection = getConnetion();
 
@@ -185,8 +189,8 @@ public class CooccurrenceTable extends RelationalTable {
 
         }catch(SQLException se){
             //Handle errors for JDBC
-            System.out.println("|| COO: Numero total de coocorrencias");
             se.printStackTrace();
+            throw new DatabaseException("Coocorrência", "getDepNumberCoocorrences");
 
         }finally{
             //finally block used to close resources
@@ -206,8 +210,9 @@ public class CooccurrenceTable extends RelationalTable {
      *
      * @param cooccurrence - cooccurrence's property
      * @return the frequency of a cooccurrence
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public int getCoocorrenceFrequency(Cooccurrence cooccurrence){
+	public int getCoocorrenceFrequency(Cooccurrence cooccurrence) throws DatabaseException {
 		long wordId1 = cooccurrence.getWordId1();
 		long wordId2 = cooccurrence.getWordId2();
 		String prop = cooccurrence.getProperty();
@@ -236,8 +241,8 @@ public class CooccurrenceTable extends RelationalTable {
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
-			System.out.println("Frequencia duma dependencia");
 			se.printStackTrace();
+            throw new DatabaseException("Coocorrência", "getCoocorrenceFrequency");
 
 		}finally{
 			//finally block used to close resources
@@ -260,8 +265,9 @@ public class CooccurrenceTable extends RelationalTable {
      * @param prop cooccurrence's property
      * @param dep cooccurrence's dependency
      * @param freq cooccurrence's frequency
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-    public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep, int freq){
+    public void uptadeFrequency(long wordId1, long wordId2, String prop, String dep, int freq) throws DatabaseException {
         Connection connection = getConnetion();
 
         Statement stmt = null;
@@ -279,8 +285,8 @@ public class CooccurrenceTable extends RelationalTable {
 
         }catch(SQLException se){
             //Handle errors for JDBC
-            System.out.println("|| COOO frequencia");
             se.printStackTrace();
+            throw new DatabaseException("Coocorrência", "uptadeFrequency");
         }finally{
             //finally block used to close resources
             try{
@@ -292,7 +298,6 @@ public class CooccurrenceTable extends RelationalTable {
 
         }//end finally try
     }
-
 
     /**
      * Update the cooccurrence's fequency
@@ -307,8 +312,7 @@ public class CooccurrenceTable extends RelationalTable {
      * @param chisquarePearson - cooccurrence's value of chisquarePearson
      * @param loglikelihood - cooccurrence's value of loglikelihood
      * @param significance - cooccurrence's value of significance
-     * @return "SQL query"
-     * @throws SQLException if occurs some error
+     * @return "SQL query" to update the association measures
      */
 	public String uptadeAssociationMeasures(long wordId1, long wordId2, String prop, String dep,
                                             double pmi,
@@ -317,7 +321,7 @@ public class CooccurrenceTable extends RelationalTable {
                                             double chisquarePearson,
                                             double loglikelihood,
                                             double significance
-    ) throws SQLException{
+    ){
 
 		String sql = "UPDATE Coocorrencia "+ 
 				"SET PMI = '" + pmi + "' , Dice = '" + dice + "' , LogDice = '" + logDice +
@@ -336,8 +340,9 @@ public class CooccurrenceTable extends RelationalTable {
      * Get all the cooccurrences stored in the database, and for each one, it is calculated the six systems' measures
      *  - the calculation of association measures is performed by set of 2000 cooccurrences
      *
+     * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public void updateMeasures(){
+	public void updateMeasures() throws DatabaseException {
 		Connection connection = getConnetion(); 
 		Statement s;
         WordBelongsTable wordBelongsTable = RelationalFactory.getWordBelongs();
@@ -351,7 +356,6 @@ public class CooccurrenceTable extends RelationalTable {
 
 		HashMap<String, Long> totalWordsDeps = new HashMap<String, Long>();
         HashMap<String, Long> totalCoocorrenceDeps = new HashMap<String, Long>();
-        HashMap<String, Long> totalSentencesDeps = new HashMap<String, Long>();
 
 		int index = 0;
 		while(index < totalrows){
@@ -429,8 +433,8 @@ public class CooccurrenceTable extends RelationalTable {
 
 			}catch(SQLException se){
 				//Handle errors for JDBC
-				System.out.println("ERROR: Update measures");
 				se.printStackTrace();
+                throw new DatabaseException("Coocorrência", "updateMeasures");
 
 			}finally{
 				//finally block used to close resources

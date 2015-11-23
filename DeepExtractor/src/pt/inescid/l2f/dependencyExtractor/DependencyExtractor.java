@@ -1,6 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
 import pt.inescid.l2f.dependencyExtractor.dependency.DependencyFactory;
@@ -28,8 +29,9 @@ public class DependencyExtractor {
 	 *
 	 * @param  document  XipDocument (XIPAPI), XML File from XIP
 	 * @param  filename - filename
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
 	 */
-	public void Extract(XipDocument document, String filename){
+	public void Extract(XipDocument document, String filename) throws DatabaseException {
 		HashMap<String, DependencyType> map = _dependencyFactory.getDependenciesMap(); 
 		
 		int sentenceNumber = 0;
@@ -44,7 +46,7 @@ public class DependencyExtractor {
 
 			Vector<Dependency> deps = document.getSentenceDependecies(sentenceNumber);
 			for (Dependency dependency : deps) {
-				if("getNE".equals(dependency.getName())){
+				if("NE".equals(dependency.getName())){
 					_dependencyFactory.getNE().getDependencyInformation(dependency);
 				}
 			}

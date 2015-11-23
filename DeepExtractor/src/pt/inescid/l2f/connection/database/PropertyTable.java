@@ -1,5 +1,7 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
+
 import java.sql.*;
 
 public class PropertyTable extends RelationalTable {
@@ -14,13 +16,13 @@ public class PropertyTable extends RelationalTable {
      * @param prop - property
      * @param dep - property's dependency name
      *
-     */
-	public void checkProperty(String prop, String dep){
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
+	 */
+	public void checkProperty(String prop, String dep) throws DatabaseException {
 		if(!propertyExists(prop, dep)){
-			insertPropriedade(prop,dep);
+			insertProperty(prop, dep);
 		}
 	}
-
 
     /**
      * Add a Property to the database (table Propriedade)
@@ -28,8 +30,9 @@ public class PropertyTable extends RelationalTable {
      * @param prop - property
      * @param dep - property's dependency name
      *
-     */
-	public void insertPropriedade(String prop, String dep){
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
+	 */
+	public void insertProperty(String prop, String dep) throws DatabaseException {
 		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
@@ -43,8 +46,9 @@ public class PropertyTable extends RelationalTable {
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("|| property");
 			System.out.println(e.getMessage());
+			throw new DatabaseException("Propriedade", "insertProperty");
+
 
 		} finally {
 			try {
@@ -65,8 +69,10 @@ public class PropertyTable extends RelationalTable {
      * @param dep - property's dependency name
      *
      * @return true if the property already exists
-     */
-	public boolean propertyExists(String prop, String dep){
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
+	 */
+	public boolean propertyExists(String prop, String dep) throws DatabaseException {
 		Connection connection = getConnetion();
 		
 		Statement stmt = null;
@@ -87,8 +93,8 @@ public class PropertyTable extends RelationalTable {
     
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
-	    	System.out.println("|| propriedade");
 	    	se.printStackTrace();
+			throw new DatabaseException("Propriedade", "propertyExists");
 	     
 	    }finally{
 	       //finally block used to close resources

@@ -1,0 +1,1 @@
+java -cp jar/DeepExtractor.jar:lib/* pt.inescid.l2f.DeepExtractor /Users/josecorreia/Projects/DB/ /Users/josecorreia/Projects/Parte1

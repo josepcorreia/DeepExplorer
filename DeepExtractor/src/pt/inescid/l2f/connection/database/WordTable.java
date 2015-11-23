@@ -1,5 +1,6 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.connection.exception.WordNotExist;
 import pt.inescid.l2f.dependencyExtractor.domain.Word;
 
@@ -26,8 +27,10 @@ public class WordTable extends RelationalTable {
      * @param word - object Word
      *
      * @return the word's id
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public Long insertNewWord(Word  word){
+	public Long insertNewWord(Word  word) throws DatabaseException {
 
 		Connection connection = getConnetion();
 
@@ -55,8 +58,8 @@ public class WordTable extends RelationalTable {
 			//System.out.println("Record is inserted into Palavra table!");
 
 		} catch (SQLException e) {
-			System.out.println("Inserir Nova Palavra: "+ lemma);
 			System.out.println(e.getMessage());
+			throw new DatabaseException("Palavra", "insertNewWord (word:" + lemma + ", pos:" +pos+")");
 
 		} finally {
 			//finally block used to close resources
@@ -78,8 +81,9 @@ public class WordTable extends RelationalTable {
      *
      * @return the word's id
      * @throws WordNotExist if this word do not exists in the database
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public Long wordExists(Word word) throws WordNotExist{
+	public Long wordExists(Word word) throws WordNotExist, DatabaseException {
 		Connection connection = getConnetion();
 
 		String lemma = word.getLemma().replace("'","''");
@@ -106,8 +110,8 @@ public class WordTable extends RelationalTable {
 
 	    }catch(SQLException se){
 	       //Handle errors for JDBC
-	    	System.out.println("||wordExists Palavra " + word);
 	       se.printStackTrace();
+			throw new DatabaseException("Palavra", "wordExists (word:" + lemma + ", pos:" +pos+")");
 	    }finally{
 	       //finally block used to close resources
 	       try{

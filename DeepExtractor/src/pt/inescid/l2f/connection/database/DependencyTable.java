@@ -1,5 +1,7 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
+
 import java.sql.*;
 
 public class DependencyTable extends RelationalTable {
@@ -15,8 +17,10 @@ public class DependencyTable extends RelationalTable {
      * @param dependencyName - dependency name
      *
      * @return true if the Dependency was correctly inserted
+	 *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-	public boolean insertNew(String dependencyName){
+	public boolean insertNew(String dependencyName) throws DatabaseException {
 		Connection connection = getConnetion();
 		
 		PreparedStatement preparedStatement = null;
@@ -42,9 +46,8 @@ public class DependencyTable extends RelationalTable {
 			System.out.println("Record is inserted into Depedencia table!");
 
 		} catch (SQLException e) {
-
 			System.out.println(e.getMessage());
-			return false;
+			throw new DatabaseException("Dependência", "insertNew");
 
 		} finally {
 			try {

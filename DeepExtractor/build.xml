@@ -5,7 +5,7 @@
 	<property name="classes.dir"        value="${build.dir}"/>
 	<property name="doc.dir"            value="${basedir}/doc" />
 	<property name="lib.dir"            value="${basedir}/lib"/>
-	<property name="jar.dir"            value="${basedir}/dist"/>
+	<property name="jar.dir"            value="${basedir}/jar"/>
 	<property name="bin.dir"            value="${basedir}/bin"/>
 	<property name="package"            value="pt.inescid.l2f"/>
 	<property name="main"  				value="${package}.DeepExtractor"/>
@@ -17,7 +17,7 @@
 	  	
 	 <path id="classpath">
 	  	<pathelement location="${classes.dir}"/>
-	  	<path refid="external.jars" />
+	  	<path refid="external.jars"/>
 	 </path>
 	
 	<target name="clean">
@@ -26,6 +26,7 @@
 	        <delete dir="${jar.dir}"/>
 			<!--eclipse-->
 			<delete dir="${bin.dir}"/>
+
 	</target>
 	
 	 <target name="build" depends="clean" description="compile the source " >
@@ -35,8 +36,12 @@
 	 </target>
 
 	 <target name="compress" depends="build">
-	        <mkdir dir="${jar.dir}"/>
-	        <jar destfile="${jar.dir}/DeepExtractor.jar" basedir="${classes.dir}" />
+		 <mkdir dir="${jar.dir}"/>
+		 <copy todir="${jar.dir}/resources/">
+				 <fileset dir="src/resources"/>
+		 </copy>
+
+		 <jar destfile="${jar.dir}/DeepExtractor.jar" basedir="${classes.dir}" />
 	    </target>	
 
     <target name="javadoc">
@@ -61,45 +66,18 @@
     <target name="main" depends="clean,build,compress"/>
 	<target name="mainJD" depends="clean,build,compress,javadoc"/>
 	
- 	<target name="runParte1" depends="main" description="run" >
+ 	<target name="runParte1Mac" depends="main" description="run" >
     <java classname="${main}" fork="true">
         <classpath refid="classpath"/>
         <arg value="/Users/josecorreia/Projects/DB/"/>
         <arg value="/Users/josecorreia/Projects/Parte1"/>
     </java>
 </target>
-	<target name="runParte1Inesc" depends="main" description="run" >
-		<java classname="${main}" fork="true">
-			<classpath refid="classpath"/>
-			<arg value="/afs/l2f/home/jcorreia/Projects/DB/"/>
-			<arg value="/afs/l2f/home/jcorreia/Projects/Parte1/"/>
-		</java>
-	</target>
-    <target name="runParte1InescBDS" depends="main" description="run" >
-        <java classname="${main}" fork="true">
-            <classpath refid="classpath"/>
-            <arg value="/tmp/deepString_tmp/"/>
-            <arg value="/ffs/tmp/string/CORPUS/Parte01/"/>
-        </java>
-    </target>
     <target name="runMedidasMac" depends="main" description="run" >
         <java classname="${main1}" fork="true">
             <classpath refid="classpath"/>
             <arg value="/Users/josecorreia/Projects/DB/"/>
         </java>
-    </target><target name="runMedidasMacSite" depends="main" description="run" >
-	<java classname="${main1}" fork="true">
-		<classpath refid="classpath"/>
-		<arg value="/Users/josecorreia/Projects/DB_site/"/>
-	</java>
-</target>
-	<target name="runTudo" depends="main" description="run" >
-		    <java classname="${main}" fork="true">
-				<classpath refid="classpath"/>
-		    	<arg value="/Users/josecorreia/Projects/DB/"/>
-				<arg value="/Users/josecorreia/Projects/CETEMPublico"/>
-			</java>
-		</target>
 	<target name="runInesc" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>
@@ -113,12 +91,4 @@
 			<arg value="${db}"/>
 		</java>
 	</target>
-	<target name="runCorpus" depends="main" description="run">
-		    <java  classname="${main}" fork="true">
-				<classpath refid="classpath"/>
-		    	<arg value="/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/"/>
-				<arg value="/ffs/tmp/string/CORPUS/"/>
-			</java>
-	</target>
-
 </project>

@@ -1,5 +1,6 @@
 package pt.inescid.l2f.connection.database;
 
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.dependencyExtractor.domain.Exemplifies;
 
 import java.sql.Connection;
@@ -24,8 +25,9 @@ public class ExemplifiesTable extends RelationalTable {
      *
      * @param exemplifies - object Exemplifies
      *
+	 * @throws DatabaseException in the case of a problem in the database/database's connection
      */
-  public void insertNewSetenceExample(Exemplifies exemplifies){
+  public void insertNewSetenceExample(Exemplifies exemplifies) throws DatabaseException {
       //table = Exemplifica
 	   Connection connection = getConnetion();
 
@@ -46,8 +48,8 @@ public class ExemplifiesTable extends RelationalTable {
 			stmt.executeUpdate(sql);
 
 	    }catch(SQLException se){
-	    	System.out.println("|| Exemplifica: nova entrada");
 			System.out.println(se.getMessage());
+			throw new DatabaseException("Exemplifica", "insertNewSetenceExample");
 	    }finally{
 	       //finally block used to close resources
 	       try{

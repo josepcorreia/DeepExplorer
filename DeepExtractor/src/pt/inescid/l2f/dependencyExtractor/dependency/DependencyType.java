@@ -1,6 +1,7 @@
 package pt.inescid.l2f.dependencyExtractor.dependency;
 
 import pt.inescid.l2f.connection.database.RelationalFactory;
+import pt.inescid.l2f.connection.exception.DatabaseException;
 import pt.inescid.l2f.dependencyExtractor.domain.Cooccurrence;
 import pt.inescid.l2f.dependencyExtractor.domain.DeepStorage;
 import pt.inescid.l2f.dependencyExtractor.domain.Sentence;
@@ -32,70 +33,66 @@ public abstract class DependencyType{
 	}
 
     /**
-     * Extract te information in a certain XIP dependence
+     * Get the list of relevant dependency-property patterns for the system (patterns present in a file)
      *
-     * @param  dep  Xip Dependency (XIPAPI)
-     * @param  namedEnteties - set of name enteties in this sentence
-     * @param sentence - Sentence object (with string that represent the sentence)
+     *
+     * @result list of dependency-property patterns that are relevant for the system
      */
-	public void getDependencyInformation(Dependency dep, HashMap<String, String> namedEnteties, Sentence sentence){
-		String depname = dep.getName();
-		String prop = getProperty(dep);
+    private HashMap<String, String> getDepPropTable() {
+        HashMap<String, String> depPropTable = new HashMap<String, String>();
 
+        try {
+            String path = new File("src/resources/dep_prop.txt").getAbsolutePath();
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
 
-		//to complete the initial property
-        //result: PROP_POS1_POS2
-        for (XIPNode node : dep.getNodes()){
-			String pos = getPOS(node);
+            String line;
+            while ((line = buffer.readLine()) != null) {
+                if(line.contains("##") || line.equals("")) {
+                    continue;
+                }
 
-			if(!prop.isEmpty())
-				prop += "_";
-			prop += pos;
-		}
+                String aux[] = line.split(",");
 
-        //dependency-property pattern -> DEP PROP_POS1_POS2
-        String depProp = depname+" "+prop;
+                depPropTable.put(aux[0], aux[1]);
+            }
 
-
-        //it is checked if this pattern is present in the list with the relevant system's patterns
-        if(!_depPropTable.containsKey(depProp)) {
-            return;
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        return depPropTable;
+    }
 
-        String newDepProp[] = _depPropTable.get(depProp).split(" ");
-        depname = newDepProp[0];
-        prop = newDepProp[1];
+    /**
+     * Insert the relevants XIPDependency's names and properties in the database
+     *
+     * @throws DatabaseException in the case of a problem in the database/database's connectione1991
+     *
+     */
+    private void depInformation(){
+        for (Entry<String, String> entry : _depPropTable.entrySet()) {
+            String split[] =  entry.getValue().split(" ");
+            String depname = split[0];
+            String prop = split[1];
 
-        //two words of the cooccurrence
-        ArrayList<Word> words = new ArrayList<Word>();
-        for (XIPNode node : dep.getNodes()){
-            String pos = getPOS(node);
-            words.add(getWord(node, pos, depname,prop,namedEnteties));
+            try {
+                RelationalFactory.getDependency().insertNew(depname);
+                RelationalFactory.getProperty().checkProperty(prop, depname);
+            } catch (DatabaseException e) {
+                System.err.println(e.getMessage());
+
+                //if a database's problem was occurred, the connection is closed and the program exits
+                RelationalFactory.closeConnection();
+                System.exit(0);
+            }
         }
-
-		if(words.size()== 2){
-            //submit in the storage the cooccurrence
-			_storage.checkCooccurrence(new Cooccurrence(words.get(0), words.get(1), prop, depname), sentence);
-		}
-		else{
-            //write in a file in teh case of some error in de XIPDependency
-			String path = new File("src/out/depError.txt").getAbsolutePath();
-			
-			BufferedWriter writer = null;
-	        try {
-	            writer = new BufferedWriter(new FileWriter(path, true));
-	            writer.write("Dependência com erro " + depname +" na frase " + dep.getSentenceNumber() + "\n");
-
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            try {
-	                writer.close();
-	            } catch (Exception e) {
-	            }
-	        }
-		}
-	}
+    }
 
     /**
      * Verify if this XipNode or other parent of this was present in some named entity
@@ -186,55 +183,68 @@ public abstract class DependencyType{
 	}
 
     /**
-     * Get the list of relevant dependency-property patterns for the system (patterns present in a file)
+     * Extract te information in a certain XIP dependence
      *
-     *
-     * @result list of dependency-property patterns that are relevant for the system
+     * @param  dep  Xip Dependency (XIPAPI)
+     * @param  namedEnteties - set of name enteties in this sentence
+     * @param sentence - Sentence object (with string that represent the sentence)
      */
-	private HashMap<String, String> getDepPropTable() {
-		HashMap<String, String> depPropTable = new HashMap<String, String>();
-		
-		try {
-			String path = new File("src/resources/dep_prop.txt").getAbsolutePath();
-			BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
-			
-			String line;
-		    while ((line = buffer.readLine()) != null) {
-                if(line.contains("##") || line.equals("")) {
-                    continue;
+    public void getDependencyInformation(Dependency dep, HashMap<String, String> namedEnteties, Sentence sentence){
+        String depname = dep.getName();
+        String prop = getProperty(dep);
+
+
+        //to complete the initial property
+        //result: PROP_POS1_POS2
+        for (XIPNode node : dep.getNodes()){
+            String pos = getPOS(node);
+
+            if(!prop.isEmpty())
+                prop += "_";
+            prop += pos;
+        }
+
+        //dependency-property pattern -> DEP PROP_POS1_POS2
+        String depProp = depname+" "+prop;
+
+
+        //it is checked if this pattern is present in the list with the relevant system's patterns
+        if(!_depPropTable.containsKey(depProp)) {
+            return;
+        }
+
+        String newDepProp[] = _depPropTable.get(depProp).split(" ");
+        depname = newDepProp[0];
+        prop = newDepProp[1];
+
+        //two words of the cooccurrence
+        ArrayList<Word> words = new ArrayList<Word>();
+        for (XIPNode node : dep.getNodes()){
+            String pos = getPOS(node);
+            words.add(getWord(node, pos, depname,prop,namedEnteties));
+        }
+
+        if(words.size()== 2){
+            //submit in the storage the cooccurrence
+            _storage.checkCooccurrence(new Cooccurrence(words.get(0), words.get(1), prop, depname), sentence);
+        }
+        else{
+            //write in a file in teh case of some error in de XIPDependency
+            String path = new File("src/out/depError.txt").getAbsolutePath();
+
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(path, true));
+                writer.write("Dependência com erro " + depname +" na frase " + dep.getSentenceNumber() + "\n");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    writer.close();
+                } catch (Exception e) {
                 }
-
-                String aux[] = line.split(",");
-
-                depPropTable.put(aux[0], aux[1]);
-		    }
-
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return depPropTable;
-	}
-
-    /**
-     * Insert the relevants XIPDependency's names and properties in the database
-     *
-     */
-	private void depInformation() {
-        for (Entry<String, String> entry : _depPropTable.entrySet()) {
-            String split[] =  entry.getValue().split(" ");
-            String depname = split[0];
-            String prop = split[1];
-
-			RelationalFactory.getDependency().insertNew(depname);
-            RelationalFactory.getProperty().checkProperty(prop, depname);
-		}
-
-	}
+            }
+        }
+    }
 }
