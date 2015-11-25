@@ -338,7 +338,7 @@ public class CooccurrenceTable extends RelationalTable {
 
     /**
      * Get all the cooccurrences stored in the database, and for each one, it is calculated the six systems' measures
-     *  - the calculation of association measures is performed by set of 2000 cooccurrences
+     *  - the calculation of association measures is performed by a set of 2000 cooccurrences
      *
      * @throws DatabaseException in the case of a problem in the database/database's connection
      */
