@@ -67,7 +67,7 @@ public class DeepExtractor {
                         } catch (DatabaseException e) {
                             System.err.println(e.getMessage());
 
-                            //if a database's problem occurred, the connection is closed and the program exits
+                            //if a problem occurs in the database, the connection is closed and the program exits
                             RelationalFactory.closeConnection();
                             System.exit(0);
                         }

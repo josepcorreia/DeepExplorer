@@ -1,0 +1,12 @@
+Inicio
+Record is inserted into Depedencia table!
+Record is inserted into Depedencia table!
+Record is inserted into Depedencia table!
+Record is inserted into Depedencia table!
+Record is inserted into Depedencia table!
+Record is inserted into Depedencia table!
+Record is inserted into Depedencia table!
+Record is inserted into Corpus table!
+FILE Parte01aaa.xml
+Record is inserted into File table!
+FIM

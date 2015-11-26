@@ -1,18 +1,16 @@
 #!/bin/bash
 
-#/ffs/tmp/string/CORPUS/
+#localicação do corpus (/ffs/tmp/string/CORPUS/)
 corpus='/ffs/tmp/string/CORPUS'
-#corpus='/Users/josecorreia/Projects/CetemPublico'
 
-#/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB/
+#localização da base de dados durante a extração
 db='/tmp/deepString_tmp/'
-#db='/Users/josecorreia/Projects/DB/'
 
+#localização da base de dados após a extração
 db_final='/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB_F/'
 #db_final='/afs/l2f.inesc-id.pt/projects/tools/string/deepString/DB_SF/'
-#db_final='/Users/josecorreia/Projects/DB/'
 
-
+#o script deve-se encpntrar na mesma directoria que o DeepExplorer/
 
 mkdir logDeepExtractor
 cd DeepExplorer/DeepExtractor
