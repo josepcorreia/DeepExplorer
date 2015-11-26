@@ -1,4 +1,0 @@
-Inicio
-FILE Parte01aab.xml
-Record is inserted into File table!
-FIM

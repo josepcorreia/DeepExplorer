@@ -1,1 +1,0 @@
-ant runLinInesc -Dcorpus_dir=/ffs/tmp/string/CORPUS/Parte20 > Parte20.txt
