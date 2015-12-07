@@ -1,11 +1,100 @@
 angular.module('deepApp.controllers', []).
 
-controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location, $window, $route) {
-   //changes in the nav bar
-   $('#search').tab('show');
-
+run(function($rootScope, scopeApplyService, $location, sharedInfo, $route) {
    // Variable to hold request (requet to php)
    var request;
+
+   $rootScope.goToHomePage = function() {
+    // Abort any pending request
+        if (request) {
+          request.abort();
+        }
+      $("body").css('overflow', 'auto');
+      $("#waitForWord").hide();
+      scopeApplyService.safeApply($rootScope, function() {
+          $location.path("/#/");
+      });
+      
+    };
+
+    $rootScope.postWordPhp = function() {
+                    $("body").css('overflow', 'hidden');
+                    $("#waitForWord").show();
+
+                    var word = sharedInfo.getWord();
+                    var pos = sharedInfo.getDatabasePOS();
+                    var measure = sharedInfo.getMeasure();
+                    var limit = sharedInfo.getMaxWords();
+                    var minfreq = sharedInfo.getMinFreq();
+
+                    var data = {
+                                'request_type':'word',
+                                'word': word,
+                                'pos': pos,
+                                'measure':measure,
+                                'limit':limit,
+                                'minfreq':minfreq
+                      };
+
+                    var url = 'server-side/deepApp.php';            
+                    // Abort any pending request
+                    if (request) {
+                      request.abort();
+                    }
+                    request = $.ajax({
+                                type: 'POST',
+                                url: url,
+                                dataType: "json",
+                                data: data,
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                async: true
+                    });//request
+
+                    // Callback handler that will be called on success
+                    request.done(function (response, textStatus, jqXHR){
+                        if(response.hasOwnProperty("wordNotExist")){
+                          $("#waitForWord").hide();
+                          alert("The lemma " +word+ "("+sharedInfo.getNormalPOS(pos)+") does not exist in the database");
+                        }              
+                        else{
+                          if(jQuery.isEmptyObject(response)){
+                                $("#waitForWord").hide();
+                                alert("No results have been found for the lemma  " +word+ "("+sharedInfo.getNormalPOS(pos)+")  with the selected options");
+                          }
+                          else{
+                            sharedInfo.setDeps(response);
+                            
+                            $("body").css('overflow', 'scroll');
+                            $("#waitForWord").hide(); 
+
+                            var destinyURL = "/wordexplorer";
+                            
+                            if($location.url() == destinyURL){
+                                $route.reload();  
+                            } 
+                            else {
+                                scopeApplyService.safeApply($rootScope, function() {
+                                    $location.path(destinyURL);
+                                });
+                            }
+                          }
+                        } 
+                     });//request done
+
+                    // Callback handler that will be called on failure
+                    request.fail(function (jqXHR, textStatus, errorThrown){
+                    //return false;
+                    console.error(
+                        "The following error occurred: "+
+                        textStatus, errorThrown
+                    );
+                    });//fail
+              };//postPhp
+}).
+
+controller("searchCtrl", function($scope, $rootScope, sharedInfo, $location, $window, $route) {
+   //changes in the nav bar
+   $('#search').tab('show');
 
    $scope.pos="Active";  
 
@@ -39,14 +128,6 @@ controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location,
        $(".showlessOptionButtons").hide();    
    };
   
-  $scope.reloadHomePage = function() {
-    // Abort any pending request
-        if (request) {
-          request.abort();
-        }
-    $route.reload();
-  };
-
    $scope.searchWord = function() {
 
       if(angular.isString($scope.word)){
@@ -58,7 +139,7 @@ controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location,
             sharedInfo.setMinFreq($scope.minfreq);
             sharedInfo.setMaxWords($scope.maxword);
 
-            postPHPservice.postWordPhp(request);
+            $rootScope.postWordPhp();
           }
           else{
             $window.alert("Select the Association Measure");
@@ -73,7 +154,7 @@ controller("searchCtrl", function($scope, sharedInfo, postPHPservice, $location,
    };
 }).
 
-controller("deepCtrl", function($scope, sharedInfo, postPHPservice, scopeApplyService, $route,  $location) {
+controller("deepCtrl", function($scope, $rootScope, sharedInfo, scopeApplyService, $route,  $location) {
   //changes in the nav bar
    $('#search').tab('show');
 
@@ -167,7 +248,8 @@ controller("deepCtrl", function($scope, sharedInfo, postPHPservice, scopeApplySe
     $scope.measure = value;
     sharedInfo.setMeasure($scope.measure);
 
-    postPHPservice.postWordPhp(request);
+    $rootScope.postWordPhp();
+
   };
 
   $scope.reloadPage = function() {

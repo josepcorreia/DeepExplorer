@@ -7,6 +7,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 $dir = "/Users/josecorreia/Projects/DB_site" ;
+//$dir = "/Volumes/DATA/DBs/DB_completa" ;
 $filename = "db_deep.db";
 
 // Create connection
