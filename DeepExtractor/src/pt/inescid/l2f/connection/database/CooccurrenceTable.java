@@ -359,7 +359,7 @@ public class CooccurrenceTable extends RelationalTable {
 		int index = 0;
 		while(index < totalrows){
 			Statement stmt = null;
-
+			System.out.println("aqui");
 			try{
 
 				stmt = connection.createStatement();

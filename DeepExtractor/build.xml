@@ -79,6 +79,12 @@
             <arg value="/Users/josecorreia/Projects/DB/"/>
         </java>
 	</target>
+	<target name="runMedidasMacParte1" depends="main" description="run" >
+		<java classname="${main1}" fork="true">
+			<classpath refid="classpath"/>
+			<arg value="/Users/josecorreia/Projects/DB/parte1/"/>
+		</java>
+	</target>
 	<target name="runInesc" description="run" >
 			    <java  classname="${main}" fork="true">
 					<classpath refid="classpath"/>

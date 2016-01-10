@@ -34,12 +34,11 @@ public class AssociationMeasures {
         //ocorrence of not_word1 && not_word2
         long O22 = ntotalCoocorrences - O11 - O12 - O21 ;
 
-        double num = ntotalCoocorrences * Math.pow((O11 * O22) - (O12 * O21), 2);
+        double num = (double)ntotalCoocorrences * Math.pow((O11 * O22) - (O12 * O21), 2);
 
-        double den = (plusChi(O11,O12))*(plusChi(O11,O21))*(plusChi(O12,O22))*(plusChi(O21,O22));
-		Double result =  num/den;
+        double den = (double)(plusChi(O11,O12))*(plusChi(O11,O21))*(plusChi(O12,O22))*(plusChi(O21,O22));
 
-        return result;
+        return num/den;
 	}
     private static long plusChi(long op1 , long op2){
         long result = op1 + op2;
